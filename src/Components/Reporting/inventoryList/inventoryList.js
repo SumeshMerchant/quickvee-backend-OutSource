@@ -65,7 +65,7 @@ export default function InventoryList({ hide = false }) {
           </Grid>
         </Grid>
       </Grid>
-      <InventoryTable />
+      {/* <InventoryTable /> */}
       {/* <Grid container className="box_shadow_div ">
         <Grid item xs={12}>
           <Pagination

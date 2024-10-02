@@ -131,7 +131,7 @@ const InventorySummaryMain = () => {
     },
     {
       sku: "003",
-      name: "Product C kkk",
+      name: "Product C",
       closing_inventory: 200,
       items_sold: 30,
       days_cover: 10,

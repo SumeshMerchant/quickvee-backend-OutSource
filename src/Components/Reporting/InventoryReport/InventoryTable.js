@@ -485,7 +485,32 @@ const InventoryTable = ({initialColumns,initialData}) => {
 
 <tfoot>
                 <tr>
-                  <td>Totals</td>
+                  <td>Totals</td>  
+                  {columns.slice(1).map((col) => {
+    if (col.id === "closing_inventory") {
+      return <td key={col.id}>900</td>;
+    } else if (col.id === "sell_through_rate") {
+      return <td key={col.id}>700</td>;
+    } else if (col.id === "inventory_cost") {
+      return <td key={col.id}>700</td>;
+    } else if (col.id === "retail_value") {
+      return <td key={col.id}>600</td>;
+    } else if (col.id === "revenue") { 
+      return <td key={col.id}>600</td>;
+    }
+    else if (col.id === "items_sold") { 
+      return <td key={col.id}>600</td>;
+    }
+    else if (col.id === "gross_profit") { 
+      return <td key={col.id}>600</td>;
+    }
+    else if (col.id === "items_sold_per_day") {
+      return <td key={col.id}>600</td>;
+    }
+    else {
+      return <td key={col.id}></td>;
+    }
+  })}
                 </tr>
               </tfoot>
 
