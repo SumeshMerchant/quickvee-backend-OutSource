@@ -13,12 +13,38 @@
         
     }
 }
+
+
+
 .custom-table {
     width: 100%;
     overflow-x: auto;
     max-width: 100%;
     overflow: auto;
     position: relative;
+    .doubale-header-table {
+      thead {
+        tr:first-child {
+          border-bottom: 1px solid #444E51;
+          th:not(:first-child) {
+            text-align: center;
+          }
+        }
+      }
+      tr:not(:first-child){
+        th:nth-child(2n) {
+          border-right: 0;
+        }
+      }
+      th {
+        border-right: 1px solid #444E51;
+      }
+      tbody tr {
+        td:not(:nth-child(2n)) {
+          border-right: 1px solid rgba(224, 224, 224, 1);
+        }
+      }
+    }
     &::-webkit-scrollbar {
         width: 8px;
         height: 8px;
