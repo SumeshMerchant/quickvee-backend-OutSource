@@ -3,6 +3,7 @@ import InventorySummaryList from "./InventorySummaryList";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import InventoryTable from "../InventoryReport/InventoryTable";
 const InventorySummaryMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
@@ -89,6 +90,7 @@ const InventorySummaryMain = () => {
       <Grid container sx={{}}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
+      <InventoryTable />
     </>
   );
 };

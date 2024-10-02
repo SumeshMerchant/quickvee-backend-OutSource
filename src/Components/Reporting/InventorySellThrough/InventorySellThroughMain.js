@@ -3,6 +3,8 @@ import InventorySellThroughList from "./InventorySellThroughList";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import InventoryTable from "../InventoryReport/InventoryTable";
+
 const InventorySellThroughMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
@@ -89,6 +91,7 @@ const InventorySellThroughMain = () => {
       <Grid container sx={{}}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
+      <InventoryTable />
     </>
   );
 };

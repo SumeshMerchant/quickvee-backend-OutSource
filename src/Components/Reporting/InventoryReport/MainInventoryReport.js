@@ -42,8 +42,6 @@ const MainItemSales = () => {
         {/* { !debouncedValue ? ( <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />):("")}
          */}
         {/* <NetSalesFilter /> */}
-
-        <InventoryTable />
       </div>
     </>
   );

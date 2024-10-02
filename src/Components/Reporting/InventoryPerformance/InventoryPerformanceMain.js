@@ -4,6 +4,7 @@ import InventoryPerformanceList from "./InventoryPerformanceList";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import { Grid } from "@mui/material";
+import InventoryTable from "../InventoryReport/InventoryTable";
 
 const InventroyPerformanceMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -91,6 +92,7 @@ const InventroyPerformanceMain = () => {
       <Grid container sx={{}}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
+      <InventoryTable />
     </>
   );
 };

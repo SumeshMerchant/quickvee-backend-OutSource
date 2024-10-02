@@ -5,6 +5,8 @@ import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import InventoryLogic from "./InventoryLogic";
 import Pagination from "./pagination";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
+import InventoryTable from "../InventoryReport/InventoryTable";
+
 export default function InventoryList({ hide = false }) {
   const {
     handleChangeInventory,
@@ -63,7 +65,8 @@ export default function InventoryList({ hide = false }) {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container className="box_shadow_div ">
+      <InventoryTable />
+      {/* <Grid container className="box_shadow_div ">
         <Grid item xs={12}>
           <Pagination
             searchProduct={searchProduct}
@@ -75,7 +78,7 @@ export default function InventoryList({ hide = false }) {
             endOfDataList={endOfDataList}
           />
         </Grid>
-      </Grid>
+      </Grid> */}
     </>
   );
 }
