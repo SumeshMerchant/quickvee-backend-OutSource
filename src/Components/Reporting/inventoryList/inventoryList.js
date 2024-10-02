@@ -2,12 +2,62 @@ import React from "react";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
-import InventoryLogic from "./InventoryLogic";
+import InventoryListData from "./InventoryListData";
 import Pagination from "./pagination";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
-import InventoryTable from "../InventoryReport/InventoryTable";
+import InventoryLogic from "./InventoryLogic";
 
 export default function InventoryList({ hide = false }) {
+
+  const InventoryDataForList = [
+    {
+      "product_name": "Crazy Candy Freeze Dried Fun Tangy Tarts",
+      "category": "Drinks & Snacks",
+      "quantity": 2,
+      "cost_per_item": "10.00",
+      "price": "20.00",
+      "margin": "50.00%",
+      "profit": "10.00"
+    },
+    {
+      "product_name": "Crazy Candy Freeze Dried Fun Tangy Tarts",
+      "category": "Drinks & Snacks",
+      "quantity": 2,
+      "cost_per_item": "10.00",
+      "price": "20.00",
+      "margin": "50.00%",
+      "profit": "10.00"
+    },
+    {
+      "product_name": "Crazy Candy Freeze Dried Fun Tangy Tarts",
+      "category": "Drinks & Snacks",
+      "quantity": 2,
+      "cost_per_item": "10.00",
+      "price": "20.00",
+      "margin": "50.00%",
+      "profit": "10.00"
+    },
+    {
+      "product_name": "Crazy Candy Freeze Dried Fun Tangy Tarts",
+      "category": "Drinks & Snacks",
+      "quantity": 2,
+      "cost_per_item": "10.00",
+      "price": "20.00",
+      "margin": "50.00%",
+      "profit": "10.00"
+    },
+    {
+      "product_name": "Crazy Candy Freeze Dried Fun Tangy Tarts",
+      "category": "Drinks & Snacks",
+      "quantity": 2,
+      "cost_per_item": "10.00",
+      "price": "20.00",
+      "margin": "50.00%",
+      "profit": "10.00"
+    }
+  ]
+  
+
   const {
     handleChangeInventory,
     inventory,
@@ -65,7 +115,7 @@ export default function InventoryList({ hide = false }) {
           </Grid>
         </Grid>
       </Grid>
-      {/* <InventoryTable /> */}
+      <InventoryListData InventoryListData={InventoryDataForList}/>
       {/* <Grid container className="box_shadow_div ">
         <Grid item xs={12}>
           <Pagination

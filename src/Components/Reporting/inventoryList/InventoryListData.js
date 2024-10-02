@@ -42,12 +42,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
   "&:last-child td, &:last-child th": {},
   "& td, & th": {
+    // border: "none",
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(224, 224, 224, 1)',
   },
 }));
 
-const InventoryStocktateHistoryReportList = ({productData}) => {
+const InventoryListData = ({InventoryListData}) => {
   const dispatch = useDispatch();
   const {
     LoginGetDashBoardRecordJson,
@@ -128,12 +129,9 @@ const InventoryStocktateHistoryReportList = ({productData}) => {
     );
     setSortOrder(newOrder);
   };
-
- 
-  
   return (
     <>
-           <Grid container className="box_shadow_div">
+        <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
@@ -159,7 +157,7 @@ const InventoryStocktateHistoryReportList = ({productData}) => {
                           className="flex items-center"
                           // onClick={() => sortByItemName("str", "fullName")}
                         >
-                          <p>Product</p>
+                          <p>Product Name</p>
                           <img src={sortIcon} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>
@@ -168,7 +166,7 @@ const InventoryStocktateHistoryReportList = ({productData}) => {
                           className="flex items-center"
                           // onClick={() => sortByItemName("num", "pin")}
                         >
-                          <p>GoH</p>
+                          <p>Category</p>
                           <img src={sortIcon} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>
@@ -177,7 +175,7 @@ const InventoryStocktateHistoryReportList = ({productData}) => {
                             className="flex items-center"
                             // onClick={() => sortByItemName("num", "pin")}
                           >
-                            <p>Cost</p>
+                            <p>Quantity</p>
                             <img src={sortIcon} alt="" className="pl-1" />
                           </button>
                       </StyledTableCell>
@@ -186,27 +184,62 @@ const InventoryStocktateHistoryReportList = ({productData}) => {
                           className="flex items-center"
                           // onClick={() => sortByItemName("str", "email")}
                         >
-                          <p>Total Value</p>
+                          <p>Cost Per Item</p>
                           <img src={sortIcon} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>
-                      
+                      <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            // onClick={() => sortByItemName("num", "pin")}
+                          >
+                            <p>Price</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            // onClick={() => sortByItemName("num", "pin")}
+                          >
+                            <p>Margin</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            // onClick={() => sortByItemName("num", "pin")}
+                          >
+                            <p>Profit</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                      </StyledTableCell>
                     </TableHead>
                     <TableBody>
-                      {productData && productData?.length >= 1 ? (
-                        productData?.map((employee, index) => (
+                      {InventoryListData && InventoryListData?.length >= 1 ? (
+                        InventoryListData?.map((employee, index) => (
                           <StyledTableRow key={index}>
                             <StyledTableCell>
-                              <p>{employee?.product}</p>
+                              <p >{employee?.product_name}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{employee?.qoh}</p>
+                              <p>{employee?.category}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{employee?.cost}</p>
+                              <p>{employee?.quantity}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{employee?.totalValue}</p>
+                              <p>${employee?.cost_per_item}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                            <p>${employee?.price}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                            <p>{employee?.margin}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                            <p>${employee?.profit}</p>
                             </StyledTableCell>
                           </StyledTableRow>
                         ))
@@ -226,4 +259,4 @@ const InventoryStocktateHistoryReportList = ({productData}) => {
   );
 };
 
-export default InventoryStocktateHistoryReportList;
+export default InventoryListData;
