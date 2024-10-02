@@ -44,13 +44,14 @@ const ReorderInventoryMain = () => {
   ];
 
   const initialColumns = [
-    { id: "sku", name: "SKU" },
+    { id: "sku", name: "SKU name" },
     { id: "plus_after_sku", name: "+" },
-    { id: "name", name: "Name" },
     { id: "closing_inventory", name: "Closing Inventory" },
+    { id: "items_sold_per_day", name: "Items sold per day" },
     { id: "items_sold", name: "Items Sold" },
-    { id: "days_cover", name: "Days Cover" },
-    { id: "avg_cost", name: "Avg Cost" },
+    { id: "inbound_inventory", name: "Inbound Inventory" },
+    { id: "days_cover", name: "Days cover" },
+    { id: "avg_cost", name: "Avg. cost" },
     { id: "plus_after_avg_cost", name: "+" },
   ];
   return (
@@ -101,7 +102,7 @@ const ReorderInventoryMain = () => {
       <Grid container sx={{}}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-      <InventoryTable />
+      <InventoryTable initialColumns={initialColumns}/>
     </>
   );
 };
