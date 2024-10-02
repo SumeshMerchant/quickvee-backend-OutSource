@@ -113,6 +113,11 @@
             }
             
         }
+        td:empty + td {
+          border-right: 1px solid rgba(224, 224, 224, 1);
+          border-left: 1px solid rgba(224, 224, 224, 1);
+
+        }
         .left-sticky {
             position: sticky;
             width: 60px;
@@ -120,6 +125,8 @@
             text-align: center;
             background-color: #253338;
             cursor: pointer;
+            width: 50px;
+            padding-right: 6px;
             &:after {
                 content: "";
                 border-right: 1px solid #444E51;
@@ -127,7 +134,7 @@
                 right: 0;
                 height: 20px;
                 top: 50%;
-                right: 8px;
+                right: 0;
                 transform: translate(-50%, -50%);
             }
             img {
