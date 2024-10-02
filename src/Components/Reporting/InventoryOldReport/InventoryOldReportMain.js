@@ -4,7 +4,7 @@ import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeCo
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import { Grid } from "@mui/material";
 
-const NewItemCreatedBetweenMain = () => {
+const InventoryOldReportMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
@@ -94,4 +94,4 @@ const NewItemCreatedBetweenMain = () => {
   );
 };
 
-export default NewItemCreatedBetweenMain;
+export default InventoryOldReportMain;

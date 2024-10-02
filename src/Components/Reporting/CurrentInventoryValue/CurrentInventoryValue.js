@@ -8,8 +8,6 @@ import Skeleton from "react-loading-skeleton";
 import PasswordShow from "../../../Common/passwordShow";
 
 const CurrentInventoryValue = ({ hide = false }) => {
-  console.log("sadadasdassss");
-
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =

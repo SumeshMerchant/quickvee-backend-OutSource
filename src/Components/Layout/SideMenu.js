@@ -740,7 +740,7 @@ const menuItems = [
       {
         id: 2,
         text: "Inventory Reports",
-        link: "/store-reporting/inventory-report/current-inventory-value",
+        link: "/store-reporting/inventory-report/recorder-inventory",
       },
       {
         id: 2,

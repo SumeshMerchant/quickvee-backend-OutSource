@@ -3,7 +3,7 @@ import InventoryQuantityHistoryReportList from "./InventoryQuantityHistoryReport
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import { Grid } from "@mui/material";
 
-const NewItemCreatedBetweenMain = () => {
+const InventoryQuantityHistoryReportMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
@@ -18,4 +18,4 @@ const NewItemCreatedBetweenMain = () => {
   );
 };
 
-export default NewItemCreatedBetweenMain;
+export default InventoryQuantityHistoryReportMain;

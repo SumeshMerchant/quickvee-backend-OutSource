@@ -4,7 +4,7 @@ import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeCo
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 
-const RecentlyOutOfStockMain = () => {
+const InventoryOutOfStockMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
@@ -94,4 +94,4 @@ const RecentlyOutOfStockMain = () => {
   );
 };
 
-export default RecentlyOutOfStockMain;
+export default InventoryOutOfStockMain;

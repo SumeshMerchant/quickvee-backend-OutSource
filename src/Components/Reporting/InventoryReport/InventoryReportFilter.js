@@ -22,32 +22,8 @@ import { CSVLink } from "react-csv";
 
 const selectReportList = [
   {
-    title: "Current Inventory Value",
-    url: "current-inventory-value",
-  },
-  {
-    title: "New Item Created Between",
-    url: "item-create-between",
-  },
-  {
-    title: "Reorder Inventory",
+    title: "Reorder Report",
     url: "recorder-inventory",
-  },
-  {
-    title: "Instant PO Activity Report",
-    url: "instant-activity",
-  },
-  {
-    title: "Check ID verification",
-    url: "id-verification",
-  },
-  {
-    title: "Inventory List",
-    url: "inventory-list",
-  },
-  {
-    title: "Profit Margin Per Item Listing",
-    url: "profit-margin-report",
   },
   {
     title: "Performance",
@@ -63,7 +39,7 @@ const selectReportList = [
   },
   {
     title: "Summary",
-    url: "invantory-summary",
+    url: "inventory-summary",
   },
   {
     title: "Quantity History report",
@@ -73,10 +49,38 @@ const selectReportList = [
     title: "Stocktake History report",
     url: "stocktake-history-report",
   },
+
+  {
+    title: "Inventory Value",
+    url: "current-inventory-value",
+  },
+
+  {
+    title: "New Item Created Between Report",
+    url: "item-create-between",
+  },
+
+  {
+    title: "Instant PO Activity Report",
+    url: "instant-activity",
+  },
+  // {
+  //   title: "Check ID verification",
+  //   url: "id-verification",
+  // },
+  {
+    title: "Inventory List Report",
+    url: "inventory-list",
+  },
   {
     title: "Old Inventory Report",
     url: "old-inventory-report",
   },
+
+  // {
+  //   title: "Profit Margin Per Item Listing",
+  //   url: "profit-margin-report",
+  // },
 ];
 const InventoryReportFilter = () => {
   const navigate = useNavigate();
@@ -141,7 +145,7 @@ const InventoryReportFilter = () => {
         return <RecentlyOutOfStockMain hide={true} />;
       case "sell-through":
         return <SellThroughMain hide={true} />;
-      case "invantory-summary":
+      case "inventory-summary":
         return <InventorySummaryMain hide={true} />;
       case "quantity-history-report":
         return <InventoryQuantityHistoryReportMain hide={true} />;
