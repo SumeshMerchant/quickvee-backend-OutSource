@@ -17,6 +17,8 @@ import sortIcon from "../../../Assests/Category/SortingW.svg";
 import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
+import TableFooter from "@mui/material/TableFooter";
+
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -214,6 +216,20 @@ const InventoryStocktateHistoryReportList = ({productData}) => {
                         ""
                       )}
                     </TableBody>
+                    <TableFooter>
+      <StyledTableRow>
+        <StyledTableCell>
+          <p >Totals</p>
+        </StyledTableCell>
+        <StyledTableCell>
+          <p>{14}</p>
+        </StyledTableCell>
+        <StyledTableCell />
+        <StyledTableCell>
+          <p>{"$70.00"}</p>
+        </StyledTableCell>
+      </StyledTableRow>
+    </TableFooter>
                   </StyledTable>
                   {/* {!employeeData?.length && <NoDataFound />} */}
                 </TableContainer>
