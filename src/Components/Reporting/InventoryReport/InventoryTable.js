@@ -430,13 +430,13 @@ const InventoryTable = ({initialColumns,initialData}) => {
                           
                         </button> */}
 
-                      <button onClick={handleClickOpen}>
+                      <div onClick={handleClickOpen}>
                           <img
                             style={{ height: "40px", width: "40px" }}
                             src={plusIcon}
                             alt="plusIcon"
                           />
-                        </button>
+                        </div>
                         <InventoryTableColumns open={open} handleClose={handleClose} 
                           selectedColumns={selectedColumns}
                           setSelectedColumns={setSelectedColumns}

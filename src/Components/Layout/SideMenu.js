@@ -727,11 +727,11 @@ const menuItems = [
         text: "Sales Report",
         link: "/store-reporting/new-sale-report/sales-summary",
       },
-      // {
-      //   id: 2,
-      //   text: "Inventory Reports",
-      //   link: "/store-reporting/inventory-report/recorder-inventory",
-      // },
+      {
+        id: 2,
+        text: "Inventory Reports",
+        link: "/store-reporting/inventory-report/recorder-inventory",
+      },
       // {
       //   id: 2,
       //   text: "Inventory Reports",

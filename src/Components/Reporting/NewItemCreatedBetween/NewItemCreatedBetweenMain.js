@@ -2,12 +2,46 @@ import React, { useState } from "react";
 import NewItemCreatedBetweenList from "./NewItemCreatedBetweenList";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { Grid } from "@mui/material";
-import InventoryTable from "../InventoryReport/InventoryTable";
+
 const NewItemCreatedBetweenMain = ({ hide = false }) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
+
+  const allNewItemData = [
+    {
+      "date": "October 1, 2024",
+      "category": "Electronics",
+      "item_name": "Wireless Headphones",
+      "price": "$59.99"
+    },
+    {
+      "date": "October 1, 2024",
+      "category": "Books",
+      "item_name": "JavaScript Guide",
+      "price": "$25.99"
+    },
+    {
+      "date": "September 30, 2024",
+      "category": "Groceries",
+      "item_name": "Organic Apples",
+      "price": "$4.99"
+    },
+    {
+      "date": "September 30, 2024",
+      "category": "Home",
+      "item_name": "LED Light Bulbs",
+      "price": "$15.00"
+    },
+    {
+      "date": "September 29, 2024",
+      "category": "Fitness",
+      "item_name": "Yoga Mat",
+      "price": "$30.00"
+    }
+  ];
+  
 
   return (
     <>
@@ -29,7 +63,7 @@ const NewItemCreatedBetweenMain = ({ hide = false }) => {
       <Grid container sx={{ mt: 3.6 }}>
         <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-      <InventoryTable />
+      <NewItemCreatedBetweenList allNewItemData={allNewItemData}/>
       {/* already have data   
       <NewItemCreatedBetweenList selectedDateRange={selectedDateRange} />
       */}
