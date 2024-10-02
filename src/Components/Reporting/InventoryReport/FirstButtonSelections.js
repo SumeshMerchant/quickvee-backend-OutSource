@@ -84,7 +84,7 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
                         color: '#707070'
                     }
                 }}
-            /> All</p>
+            />Select All</p>
            
 
             <Grid container className="mb-3">
