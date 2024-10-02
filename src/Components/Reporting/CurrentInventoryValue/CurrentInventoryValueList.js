@@ -46,7 +46,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const InventoryStocktateHistoryReportList = ({employeeData}) => {
+const InventoryStocktateHistoryReportList = ({productData}) => {
   const dispatch = useDispatch();
   const {
     LoginGetDashBoardRecordJson,
@@ -127,6 +127,9 @@ const InventoryStocktateHistoryReportList = ({employeeData}) => {
     );
     setSortOrder(newOrder);
   };
+
+ 
+  
   return (
     <>
            <Grid container className="box_shadow_div">
@@ -155,7 +158,7 @@ const InventoryStocktateHistoryReportList = ({employeeData}) => {
                           className="flex items-center"
                           // onClick={() => sortByItemName("str", "fullName")}
                         >
-                          <p>Stocktake</p>
+                          <p>Product</p>
                           <img src={sortIcon} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>
@@ -164,7 +167,7 @@ const InventoryStocktateHistoryReportList = ({employeeData}) => {
                           className="flex items-center"
                           // onClick={() => sortByItemName("num", "pin")}
                         >
-                          <p>Status</p>
+                          <p>GoH</p>
                           <img src={sortIcon} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>
@@ -173,7 +176,7 @@ const InventoryStocktateHistoryReportList = ({employeeData}) => {
                             className="flex items-center"
                             // onClick={() => sortByItemName("num", "pin")}
                           >
-                            <p>Total Qty</p>
+                            <p>Cost</p>
                             <img src={sortIcon} alt="" className="pl-1" />
                           </button>
                       </StyledTableCell>
@@ -182,38 +185,27 @@ const InventoryStocktateHistoryReportList = ({employeeData}) => {
                           className="flex items-center"
                           // onClick={() => sortByItemName("str", "email")}
                         >
-                          <p>Total Discrepancy Cost</p>
+                          <p>Total Value</p>
                           <img src={sortIcon} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>
-                      <StyledTableCell>
-                        <button
-                            className="flex items-center"
-                            // onClick={() => sortByItemName("num", "pin")}
-                          >
-                            <p>Date</p>
-                            <img src={sortIcon} alt="" className="pl-1" />
-                          </button>
-                      </StyledTableCell>
+                      
                     </TableHead>
                     <TableBody>
-                      {employeeData && employeeData?.length >= 1 ? (
-                        employeeData?.map((employee, index) => (
+                      {productData && productData?.length >= 1 ? (
+                        productData?.map((employee, index) => (
                           <StyledTableRow key={index}>
                             <StyledTableCell>
-                              <p>{employee?.stocktake}</p>
+                              <p>{employee?.product}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{employee?.status}</p>
+                              <p>{employee?.qoh}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{employee?.tqty}</p>
+                              <p>{employee?.cost}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{employee?.tDiscrepancyCost}</p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                            <p>{employee?.Date}</p>
+                              <p>{employee?.totalValue}</p>
                             </StyledTableCell>
                           </StyledTableRow>
                         ))

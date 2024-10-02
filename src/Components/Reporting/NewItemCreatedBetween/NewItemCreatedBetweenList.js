@@ -46,7 +46,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const NewItemCreatedBetweenList = (props) => {
+const NewItemCreatedBetweenList = ({allNewItemData}) => {
   const dispatch = useDispatch();
   const {
     LoginGetDashBoardRecordJson,
@@ -56,50 +56,11 @@ const NewItemCreatedBetweenList = (props) => {
   } = useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
-  const [allNewItemData, setallNewItemData] = useState([]);
+
   const AllNewItemDataState = useSelector(
     (state) => state.NewItemCreatedBtnList
   );
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-
-  useEffect(() => {
-    getNewItemCreatedBetweenData();
-  }, [props]);
-  const getNewItemCreatedBetweenData = async () => {
-    try {
-      if (props && props.selectedDateRange) {
-        let data = {
-          merchant_id,
-          start_date: props.selectedDateRange.start_date,
-          end_date: props.selectedDateRange.end_date,
-          ...userTypeData,
-        };
-        if (data) {
-          await dispatch(fetchNewItemCreatedBetweenData(data)).unwrap();
-        }
-      }
-    } catch (error) {
-      if (error?.status == 401 || error?.response?.status === 401) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
-      } else if (error.status == "Network Error") {
-        getNetworkError();
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (
-      !AllNewItemDataState.loading &&
-      AllNewItemDataState?.NewItemData &&
-      AllNewItemDataState?.NewItemData?.report_data
-    ) {
-      setallNewItemData(AllNewItemDataState?.NewItemData?.report_data);
-
-    } else {
-      setallNewItemData([]);
-    }
-  }, [AllNewItemDataState, AllNewItemDataState.NewItemData]);
 
   const formatDate = (dateString) => {
     const [day, month, year] = dateString.split("-");
@@ -125,28 +86,9 @@ const NewItemCreatedBetweenList = (props) => {
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
 
   const sortByItemName = (type, name) => {
-    const itemsWithParsedDates = allNewItemData.map((item) => {
-      const dateString = item.created_on;
-      const [day, month, year] = dateString.split("-").map(Number);
-      const date = `${year},${month},${day}`;
-      return { ...item, created_on: date };
-    });
-    const { sortedItems, newOrder } = SortTableItemsHelperFun(
-      itemsWithParsedDates,
-      type,
-      name,
-      sortOrder
-    );
-    setallNewItemData(
-      sortedItems.map((item) => {
-        const dateString = item.created_on;
-        const [year, month, day] = dateString.split(",").map(Number);
-        const customdate = `${day}-${month}-${year}`;
-        return { ...item, created_on: customdate };
-      })
-    );
-    setSortOrder(newOrder);
+  
   };
+  
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -163,7 +105,7 @@ const NewItemCreatedBetweenList = (props) => {
                   <StyledTableCell>
                     <button
                       className="flex items-center"
-                      onClick={() => sortByItemName("date", "created_on")}
+                      // onClick={() => sortByItemName("date", "created_on")}
                     >
                       <p className="whitespace-nowrap">Date</p>
                       <img src={sortIcon} alt="" className="pl-1" />
@@ -172,7 +114,7 @@ const NewItemCreatedBetweenList = (props) => {
                   <StyledTableCell>
                     <button
                       className="flex items-center"
-                      onClick={() => sortByItemName("str", "category")}
+                      // onClick={() => sortByItemName("str", "category")}
                     >
                       <p className="whitespace-nowrap">Category</p>
                       <img src={sortIcon} alt="" className="pl-1" />
@@ -181,7 +123,7 @@ const NewItemCreatedBetweenList = (props) => {
                   <StyledTableCell>
                     <button
                       className="flex items-center"
-                      onClick={() => sortByItemName("str", "item_name")}
+                      // onClick={() => sortByItemName("str", "item_name")}
                     >
                       <p className="whitespace-nowrap">Item Name</p>
                       <img src={sortIcon} alt="" className="pl-1" />
@@ -190,7 +132,7 @@ const NewItemCreatedBetweenList = (props) => {
                   <StyledTableCell>
                     <button
                       className="flex items-center"
-                      onClick={() => sortByItemName("num", "price")}
+                      // onClick={() => sortByItemName("num", "price")}
                     >
                       <p className="whitespace-nowrap">Price</p>
                       <img src={sortIcon} alt="" className="pl-1" />
@@ -202,8 +144,8 @@ const NewItemCreatedBetweenList = (props) => {
                     ? allNewItemData.map((ItemData, index) => (
                         <StyledTableRow key={index}>
                           <StyledTableCell>
-                            <p className="whitespace-nowrap">
-                              {formatDate(ItemData.created_on)}
+                            <p >
+                              {ItemData.date}
                             </p>
                           </StyledTableCell>
                           <StyledTableCell>
@@ -213,7 +155,7 @@ const NewItemCreatedBetweenList = (props) => {
                             <p>{ItemData.item_name}</p>
                           </StyledTableCell>
                           <StyledTableCell>
-                            <p>${priceFormate(ItemData.price ?? "0.00")}</p>
+                            <p>{ItemData.price}</p>
                           </StyledTableCell>
                         </StyledTableRow>
                       ))
