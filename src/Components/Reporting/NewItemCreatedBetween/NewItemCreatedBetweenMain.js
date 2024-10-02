@@ -60,7 +60,7 @@ const NewItemCreatedBetweenMain = ({ hide = false }) => {
           </Grid>
         </Grid>
       </Grid> */}
-      <Grid container sx={{ padding: 0, mt: 3.6 }}>
+      <Grid container sx={{ mt: 3 }}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
       <NewItemCreatedBetweenList allNewItemData={allNewItemData} />

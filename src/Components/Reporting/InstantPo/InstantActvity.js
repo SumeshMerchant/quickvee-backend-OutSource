@@ -107,7 +107,7 @@ const InstantActvity = ({ hide = false }) => {
           </Grid>
         </Grid>
       </Grid> */}
-      <Grid container sx={{ padding: 2.5, mt: 3.6 }}>
+      <Grid container sx={{ mt: 3 }}>
         <Grid item xs={12}>
           <DashDateRangeComponent onDateRangeChange={handleDataFiltered} />
         </Grid>
