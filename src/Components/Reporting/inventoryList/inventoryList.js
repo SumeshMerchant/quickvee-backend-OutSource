@@ -76,9 +76,14 @@ export default function InventoryList({ hide = false }) {
   return (
     <>
       <Grid container className="box_shadow_div">
-        <CustomHeader>Inventory List Report</CustomHeader>
+        {/* <CustomHeader>Inventory List Report</CustomHeader> */}
         <Grid item xs={12}>
-          <Grid container spacing={2} sx={{ px: 2.5, py: 2.5 }}>
+          <Grid container spacing={2} sx={{ px: 2.5, py: 2 }}>
+          <Grid container sx={{ px: 2, pt: 2.3 }}>
+            <Grid item xs={12}>
+              <div className="filter-heading" style={{marginBottom: 0}}>Filter By</div>
+            </Grid>
+          </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <label
                 className="q-details-page-label"
