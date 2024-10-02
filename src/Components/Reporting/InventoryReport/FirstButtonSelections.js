@@ -35,12 +35,13 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
       brand: checked,
       supplier: checked,
       category: checked,
+      tag: checked
     };
     setSelectedColumns(updatedColumns);
   };
 
   useEffect(() => {
-    const allSelected = selectedColumns.supplierCode && selectedColumns.brand && selectedColumns.supplier && selectedColumns.category;
+    const allSelected = selectedColumns.supplierCode && selectedColumns.brand && selectedColumns.supplier && selectedColumns.category  && selectedColumns.tag;
     setSelectAllColumns(allSelected);
   }, [selectedColumns]);
 
@@ -160,6 +161,17 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
                 Category
               
             </Grid>
+            <Grid item xs={6} sm={12} md={6} sx={{gap: 1.5, alignItems: 'center', display: 'flex'}}>
+              
+              <input
+                type="checkbox"
+                name="tag"
+                checked={selectedColumns.tag}
+                onChange={handleCheckboxChange}
+              />
+              Tag
+            
+          </Grid>
           </Grid>
           
       {/* <label>
