@@ -49,7 +49,7 @@ const InventroyPerformanceMain = () => {
     { id: "sku", name: "Product" },
     { id: "plus_after_sku", name: "+" },
     { id: "closing_inventory", name: "Closing Inventory" },
-    { id: "items_sold", name: "Items Sold" },
+    { id: "items_sold", name: "Items sold per day" },
     { id: "days_cover", name: "Days Cover" },
     { id: "sell_through_rate", name: "Sell-through rate" },
     { id: "revenue", name: "Revenue" },

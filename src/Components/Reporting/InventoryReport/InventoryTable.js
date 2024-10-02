@@ -490,7 +490,7 @@ const InventoryTable = ({initialColumns,initialData}) => {
     if (col.id === "closing_inventory") {
       return <td key={col.id}>900</td>;
     } else if (col.id === "sell_through_rate") {
-      return <td key={col.id}>700</td>;
+      return <td key={col.id}>90%</td>;
     } else if (col.id === "inventory_cost") {
       return <td key={col.id}>700</td>;
     } else if (col.id === "retail_value") {
@@ -505,6 +505,9 @@ const InventoryTable = ({initialColumns,initialData}) => {
       return <td key={col.id}>$600</td>;
     }
     else if (col.id === "items_sold_per_day") {
+      return <td key={col.id}>600</td>;
+    }
+    else if (col.id === "current_inventory") {
       return <td key={col.id}>600</td>;
     }
     else {
