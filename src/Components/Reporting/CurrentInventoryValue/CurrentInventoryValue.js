@@ -8,6 +8,7 @@ import Skeleton from "react-loading-skeleton";
 import PasswordShow from "../../../Common/passwordShow";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import InventoryTable from "../InventoryReport/InventoryTable";
+import CurrentInventoryValueList from "./CurrentInventoryValueList";
 
 const CurrentInventoryValue = ({ hide = false }) => {
   console.log("sadadasdassss");
@@ -73,12 +74,51 @@ const CurrentInventoryValue = ({ hide = false }) => {
       : formattedValue;
   };
 
+  const productData = [
+    {
+      product: "Product Name 1",
+      qoh: 4,
+      cost: "$5.00",
+      totalValue: "$20.00"
+    },
+    {
+      product: "Product Name 1",
+      qoh: 2,
+      cost: "$5.00",
+      totalValue: "$10.00"
+    },
+    {
+      product: "Product Name 1",
+      qoh: 2,
+      cost: "$5.00",
+      totalValue: "$10.00"
+    },
+    {
+      product: "Product Name 1",
+      qoh: 2,
+      cost: "$5.00",
+      totalValue: "$10.00"
+    },
+    {
+      product: "Product Name 1",
+      qoh: 2,
+      cost: "$5.00",
+      totalValue: "$10.00"
+    },
+    {
+      product: "Product Name 1",
+      qoh: 2,
+      cost: "$5.00",
+      totalValue: "$10.00"
+    }
+  ];
+
   return (
     <>
       <Grid container sx={{ padding: 0, mt: 3.6 }}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-      <InventoryTable />
+      <CurrentInventoryValueList productData={productData}/>                                                                                        
 
       {/* already dynamic */}
       {/* <Grid container className="box_shadow_div"></Grid>
