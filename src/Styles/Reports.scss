@@ -39,6 +39,20 @@
     overflow: auto;
     position: relative;
     .doubale-header-table {
+      tr {
+        th:first-child {
+          background-color: #253338;
+        }
+        td:first-child {
+          background-color: #fff;
+        }
+        th:first-child, td:first-child{
+          position: sticky;
+          min-width: 200px;
+          left: 0;
+          z-index: 1;
+        }
+      }
       thead {
         tr:first-child {
           border-bottom: 1px solid #444E51;
