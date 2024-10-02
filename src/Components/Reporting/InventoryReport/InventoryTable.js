@@ -324,6 +324,7 @@ const InventoryTable = ({initialColumns,initialData}) => {
 
     setColumns(updatedColumns);
     setShowMeasurePopup(false);
+    setOpen(false);
   };
 
   return (
@@ -469,9 +470,9 @@ const InventoryTable = ({initialColumns,initialData}) => {
                 {row.sku}
               </div>
             </>
-          ) : col.id === "plus_after_sku" ? (
+          ) : col.id === "plus_after_sku" || col.id === "plus_after_avg_cost" ? (
             "" // Display nothing for "plus_after_sku"
-          ) : row[col.id] ? (
+          ) : row[col.id] !== null && row[col.id] !== undefined && row[col.id] !== "" ? (
             row[col.id]
           ) : (
             "-" // Display "-" for other empty fields
@@ -481,6 +482,12 @@ const InventoryTable = ({initialColumns,initialData}) => {
     </tr>
   ))}
 </tbody>
+
+<tfoot>
+                <tr>
+                  <td>Totals</td>
+                </tr>
+              </tfoot>
 
             {/* <tbody>
               {data.map((row, index) => (
