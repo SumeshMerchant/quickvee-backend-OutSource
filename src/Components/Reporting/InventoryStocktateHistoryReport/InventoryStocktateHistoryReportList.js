@@ -46,7 +46,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const NewItemCreatedBetweenList = (props) => {
+const InventoryStocktateHistoryReportList = ({employeeData}) => {
   const dispatch = useDispatch();
   const {
     LoginGetDashBoardRecordJson,
@@ -62,31 +62,31 @@ const NewItemCreatedBetweenList = (props) => {
   );
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
-  useEffect(() => {
-    getNewItemCreatedBetweenData();
-  }, [props]);
-  const getNewItemCreatedBetweenData = async () => {
-    try {
-      if (props && props.selectedDateRange) {
-        let data = {
-          merchant_id,
-          start_date: props.selectedDateRange.start_date,
-          end_date: props.selectedDateRange.end_date,
-          ...userTypeData,
-        };
-        if (data) {
-          await dispatch(fetchNewItemCreatedBetweenData(data)).unwrap();
-        }
-      }
-    } catch (error) {
-      if (error?.status == 401 || error?.response?.status === 401) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
-      } else if (error.status == "Network Error") {
-        getNetworkError();
-      }
-    }
-  };
+  // useEffect(() => {
+  //   getNewItemCreatedBetweenData();
+  // }, [props]);
+  // const getNewItemCreatedBetweenData = async () => {
+  //   try {
+  //     if (props && props.selectedDateRange) {
+  //       let data = {
+  //         merchant_id,
+  //         start_date: props.selectedDateRange.start_date,
+  //         end_date: props.selectedDateRange.end_date,
+  //         ...userTypeData,
+  //       };
+  //       if (data) {
+  //         await dispatch(fetchNewItemCreatedBetweenData(data)).unwrap();
+  //       }
+  //     }
+  //   } catch (error) {
+  //     if (error?.status == 401 || error?.response?.status === 401) {
+  //       getUnAutherisedTokenMessage();
+  //       handleCoockieExpire();
+  //     } else if (error.status == "Network Error") {
+  //       getNetworkError();
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     if (
@@ -101,27 +101,7 @@ const NewItemCreatedBetweenList = (props) => {
     }
   }, [AllNewItemDataState, AllNewItemDataState.NewItemData]);
 
-  const formatDate = (dateString) => {
-    const [day, month, year] = dateString.split("-");
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    return `${monthNames[parseInt(month, 10) - 1]} ${parseInt(
-      day,
-      10
-    )}, ${year}`;
-  };
+
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
 
   const sortByItemName = (type, name) => {
@@ -149,84 +129,108 @@ const NewItemCreatedBetweenList = (props) => {
   };
   return (
     <>
-      <Grid container className="box_shadow_div">
+           <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {AllNewItemDataState.loading ||
-          (AllNewItemDataState.status && !allNewItemData.length) ? (
-            <SkeletonTable
-              columns={["Date", "Category", "Item Name", "Price"]}
-            />
-          ) : (
-            <TableContainer>
-              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                <TableHead>
-                  <StyledTableCell>
-                    <button
-                      className="flex items-center"
-                      onClick={() => sortByItemName("date", "created_on")}
-                    >
-                      <p className="whitespace-nowrap">Date</p>
-                      <img src={sortIcon} alt="" className="pl-1" />
-                    </button>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <button
-                      className="flex items-center"
-                      onClick={() => sortByItemName("str", "category")}
-                    >
-                      <p className="whitespace-nowrap">Category</p>
-                      <img src={sortIcon} alt="" className="pl-1" />
-                    </button>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <button
-                      className="flex items-center"
-                      onClick={() => sortByItemName("str", "item_name")}
-                    >
-                      <p className="whitespace-nowrap">Item Name</p>
-                      <img src={sortIcon} alt="" className="pl-1" />
-                    </button>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <button
-                      className="flex items-center"
-                      onClick={() => sortByItemName("num", "price")}
-                    >
-                      <p className="whitespace-nowrap">Price</p>
-                      <img src={sortIcon} alt="" className="pl-1" />
-                    </button>
-                  </StyledTableCell>
-                </TableHead>
-                <TableBody>
-                  {allNewItemData && allNewItemData.length >= 1
-                    ? allNewItemData.map((ItemData, index) => (
-                        <StyledTableRow key={index}>
-                          <StyledTableCell>
-                            <p className="whitespace-nowrap">
-                              {formatDate(ItemData.created_on)}
-                            </p>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <p>{ItemData.category}</p>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <p>{ItemData.item_name}</p>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <p>${priceFormate(ItemData.price ?? "0.00")}</p>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ))
-                    : ""}
-                </TableBody>
-              </StyledTable>
-              {!allNewItemData.length && <NoDataFound />}
-            </TableContainer>
-          )}
+          <Grid container>
+            <Grid item xs={12}>
+              {/* {AllEmployeeListState.loading ? (
+                <SkeletonTable
+                  columns={[
+                    "Stocktake",
+                    "Status",
+                    "Total Qty",
+                    "Total Discrepancy Cost",
+                    "Date",
+                  ]}
+                />
+              ) : ( */}
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("str", "fullName")}
+                        >
+                          <p>Stocktake</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("num", "pin")}
+                        >
+                          <p>Status</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("num", "pin")}
+                          >
+                            <p>Total Qty</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("str", "email")}
+                        >
+                          <p>Total Discrepancy Cost</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("num", "pin")}
+                          >
+                            <p>Date</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                      </StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {employeeData && employeeData?.length >= 1 ? (
+                        employeeData?.map((employee, index) => (
+                          <StyledTableRow key={index}>
+                            <StyledTableCell>
+                              <p>{employee?.stocktake}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>{employee?.status}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>{employee?.tqty}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>{employee?.tDiscrepancyCost}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                            <p>{employee?.Date}</p>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ))
+                      ) : (
+                        ""
+                      )}
+                    </TableBody>
+                  </StyledTable>
+                  {/* {!employeeData?.length && <NoDataFound />} */}
+                </TableContainer>
+              {/* )} */}
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </>
   );
 };
 
-export default NewItemCreatedBetweenList;
+export default InventoryStocktateHistoryReportList;
