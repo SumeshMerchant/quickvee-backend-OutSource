@@ -216,20 +216,20 @@ const InventoryStocktateHistoryReportList = ({productData}) => {
                         ""
                       )}
                     </TableBody>
-                    <TableFooter>
-      <StyledTableRow>
-        <StyledTableCell>
-          <p >Totals</p>
-        </StyledTableCell>
-        <StyledTableCell>
-          <p>{14}</p>
-        </StyledTableCell>
-        <StyledTableCell />
-        <StyledTableCell>
-          <p>{"$70.00"}</p>
-        </StyledTableCell>
-      </StyledTableRow>
-    </TableFooter>
+                    <TableFooter className="table-footer">
+                      <StyledTableRow>
+                        <StyledTableCell>
+                          <p >Totals</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{14}</p>
+                        </StyledTableCell>
+                        <StyledTableCell />
+                        <StyledTableCell>
+                          <p>{"$70.00"}</p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    </TableFooter>
                   </StyledTable>
                   {/* {!employeeData?.length && <NoDataFound />} */}
                 </TableContainer>
