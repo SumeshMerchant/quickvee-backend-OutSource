@@ -716,11 +716,11 @@ function App() {
               element={<Main visible={"new-item-sales-report"} />}
             />
             {/* inventory performance page add */}
-            <Route
+            {/* <Route
               exact
               path="/store-reporting/inventory-performance"
               element={<Main visible={"inventory-performance"} />}
-            />
+            /> */}
             <Route
               exact
               path="/store-reporting/new-sale-report/:selectedReport"

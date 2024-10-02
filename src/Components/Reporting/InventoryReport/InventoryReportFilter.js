@@ -9,6 +9,10 @@ import CheckIDVerify from "../../../Components/Reporting/CheckIDVerify/CheckIDVe
 import InventoryList from "../../../Components/Reporting/inventoryList/inventoryList";
 import ProfitMarginReport from "../../../Components/Reporting/ProfitMarginReport/profitMarginReport";
 import InventoryPerformanceMain from "../../../Components/Reporting/InventoryPerformance/InventoryPerformanceMain";
+import RecentlyOutOfStockMain from "../../../Components/Reporting/InventoryOutOfStock/InventoryOutOfStockMain";
+import SellThroughMain from "../../../Components/Reporting/InventorySellThrough/InventorySellThroughMain";
+import InventorySummaryMain from "../../../Components/Reporting/InventorySummary/InventorySummaryMain";
+
 import downloadIcon from "../../../Assests/Dashboard/download.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import { CSVLink } from "react-csv";
@@ -53,6 +57,16 @@ const selectReportList = [
     id: 95,
     title: "Performance",
     url: "inventory-performance",
+  },
+  {
+    id: 96,
+    title: "Recently out of Stock",
+    url: "recently-out-of-stock",
+  },
+  {
+    id: 97,
+    title: "Sell through",
+    url: "sell-through",
   },
 ];
 const InventoryReportFilter = () => {
@@ -114,6 +128,12 @@ const InventoryReportFilter = () => {
         return <ProfitMarginReport hide={true} />;
       case "inventory-performance":
         return <InventoryPerformanceMain hide={true} />;
+      case "recently-out-of-stock":
+        return <RecentlyOutOfStockMain hide={true} />;
+      case "sell-through":
+        return <SellThroughMain hide={true} />;
+      case "invantory-summary":
+        return <InventorySummaryMain hide={true} />;
       default:
         break;
     }
