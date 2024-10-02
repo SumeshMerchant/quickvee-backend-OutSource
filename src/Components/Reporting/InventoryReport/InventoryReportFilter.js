@@ -12,6 +12,9 @@ import InventoryPerformanceMain from "../../../Components/Reporting/InventoryPer
 import RecentlyOutOfStockMain from "../../../Components/Reporting/InventoryOutOfStock/InventoryOutOfStockMain";
 import SellThroughMain from "../../../Components/Reporting/InventorySellThrough/InventorySellThroughMain";
 import InventorySummaryMain from "../../../Components/Reporting/InventorySummary/InventorySummaryMain";
+import InventoryQuantityHistoryReportMain from "../../../Components/Reporting/InventoryQuantityHistoryReport/InventoryQuantityHistoryReportMain";
+import InventoryStocktateHistoryReportMain from "../../../Components/Reporting/InventoryStocktateHistoryReport/InventoryStocktateHistoryReportMain";
+import InventoryOldReportMain from "../../../Components/Reporting/InventoryOldReport/InventoryOldReportMain";
 
 import downloadIcon from "../../../Assests/Dashboard/download.svg";
 import { useNavigate, useParams } from "react-router-dom";
@@ -19,54 +22,60 @@ import { CSVLink } from "react-csv";
 
 const selectReportList = [
   {
-    id: 81,
     title: "Current Inventory Value",
     url: "current-inventory-value",
   },
   {
-    id: 73,
     title: "New Item Created Between",
     url: "item-create-between",
   },
   {
-    id: 74,
     title: "Reorder Inventory",
     url: "recorder-inventory",
   },
   {
-    id: 68,
     title: "Instant PO Activity Report",
     url: "instant-activity",
   },
   {
-    id: 65,
     title: "Check ID verification",
     url: "id-verification",
   },
   {
-    id: 93,
     title: "Inventory List",
     url: "inventory-list",
   },
   {
-    id: 94,
     title: "Profit Margin Per Item Listing",
     url: "profit-margin-report",
   },
   {
-    id: 95,
     title: "Performance",
     url: "inventory-performance",
   },
   {
-    id: 96,
     title: "Recently out of Stock",
     url: "recently-out-of-stock",
   },
   {
-    id: 97,
     title: "Sell through",
     url: "sell-through",
+  },
+  {
+    title: "Summary",
+    url: "invantory-summary",
+  },
+  {
+    title: "Quantity History report",
+    url: "quantity-history-report",
+  },
+  {
+    title: "Stocktake History report",
+    url: "stocktake-history-report",
+  },
+  {
+    title: "Old Inventory Report",
+    url: "old-inventory-report",
   },
 ];
 const InventoryReportFilter = () => {
@@ -134,6 +143,12 @@ const InventoryReportFilter = () => {
         return <SellThroughMain hide={true} />;
       case "invantory-summary":
         return <InventorySummaryMain hide={true} />;
+      case "quantity-history-report":
+        return <InventoryQuantityHistoryReportMain hide={true} />;
+      case "stocktake-history-report":
+        return <InventoryStocktateHistoryReportMain hide={true} />;
+      case "old-inventory-report":
+        return <InventoryOldReportMain hide={true} />;
       default:
         break;
     }
