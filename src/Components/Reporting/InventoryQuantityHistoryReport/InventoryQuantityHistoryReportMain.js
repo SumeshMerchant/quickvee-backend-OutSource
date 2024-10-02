@@ -12,7 +12,7 @@ const InventoryQuantityHistoryReportMain = () => {
 
   return (
     <>
-      <Grid container sx={{ mt: 3.6 }}>
+      <Grid container sx={{ mt: 3 }}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
       <QuantityHistoryReportTable />

@@ -212,13 +212,13 @@ const InventorySummaryMain = () => {
   return (
     <>
       <Grid container className="box_shadow_div">
-        <Grid item xs={12}>
-          <Grid container sx={{ px: 2.5, pt: 1 }}>
+      <Grid item xs={12}>
+          <Grid container sx={{ px: 2.5, pt: 2.3 }}>
             <Grid item xs={12}>
-              <div className="heading">Filter By</div>
+              <div className="filter-heading">Filter By</div>
             </Grid>
           </Grid>
-          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
+          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.2 }}>
             <Grid item xs={12} sm={6} md={showcat != 0 ? 4 : 4}>
               <label
                 className="q-details-page-label"
