@@ -48,59 +48,18 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const MainInstantDetails = ({ data }) => {
+const MainInstantDetails = ({ instantactivityDataState }) => {
   const dispatch = useDispatch();
-  const [instantactivity, setinstantactivity] = useState([]);
-  const showNoData = useDelayedNodata(instantactivity)
-  const instantactivityDataState = useSelector(
-    (state) => state.instantactivity
-  );
+
+  // const showNoData = useDelayedNodata(instantactivityDataState)
+  // const instantactivityDataState = useSelector(
+  //   (state) => state.instantactivity
+  // );
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
 
-  const getInstantActivityData = async () => {
-    try {
-      if (data?.merchant_id) {
-        await dispatch(fetchinstantactivityData(data));
-      }
-    } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
-      } else if (error.status == "Network Error") {
-        getNetworkError();
-      }
-    }
-  };
-  useEffect(() => {
-    getInstantActivityData();
-  }, [dispatch, data]);
 
-  useEffect(() => {
-    if (
-      !instantactivityDataState.loading &&
-      Array.isArray(instantactivityDataState.instantactivityData)
-    ) {
-      const AfterAdjustQtyAddedList =
-        instantactivityDataState.instantactivityData.map((item) => {
-          const AfterAdjustQty =
-            parseInt(item.current_qty, 10) + parseInt(item.qty, 10);
 
-          const calculatedTotal =
-            parseFloat(item.qty, 10) * parseFloat(item.price,10);
-
-          return {
-            ...item,
-            afterAdjustQty: AfterAdjustQty,
-            calculatedTotal: calculatedTotal.toFixed(2),
-          };
-        });
-      console.log("AfterAdjustQtyAddedList", AfterAdjustQtyAddedList);
-      setinstantactivity(AfterAdjustQtyAddedList);
-    } else {
-      setinstantactivity([]);
-    }
-  }, [instantactivityDataState, instantactivityDataState.instantactivityData]);
 
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
@@ -111,22 +70,14 @@ const MainInstantDetails = ({ data }) => {
   };
   const [sortOrder, setSortOrder] = useState("asc");
   const sortByItemName = (type, name) => {
-    const { sortedItems, newOrder } = SortTableItemsHelperFun(
-      instantactivity,
-      type,
-      name,
-      sortOrder
-    );
-    console.log(sortedItems);
-    setinstantactivity(sortedItems);
-    setSortOrder(newOrder);
+   
   };
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           {instantactivityDataState.loading ||
-          (instantactivityDataState.status && !instantactivity.length) ? (
+          (instantactivityDataState.status && !instantactivityDataState.length) ? (
             <>
               <SkeletonTable
                 columns={[
@@ -215,25 +166,20 @@ const MainInstantDetails = ({ data }) => {
                     </StyledTableCell>
                   </TableHead>
                   <TableBody>
-                    {instantactivity && instantactivity.length >= 1
-                      ? instantactivity.map((instantactivity, index) => {
-                          const AfterAdjustQty =
-                            parseInt(instantactivity.current_qty, 10) +
-                            parseInt(instantactivity.qty);
-                          const calculatedTotal =
-                            parseInt(instantactivity.qty) *
-                            parseFloat(instantactivity.price);
+                    {instantactivityDataState && instantactivityDataState.length >= 1
+                      ? instantactivityDataState.map((instantactivity, index) => {
+      
                           return (
                             <StyledTableRow key={index}>
                               <StyledTableCell>
                                 <div>
-                                  <p>{instantactivity.title}</p>
+                                  <p>{instantactivity.instant_po_info.title}</p>
                                   <p
                                     style={{
                                       color: "#0A64F9",
                                     }}
                                   >
-                                    {instantactivity.variant}
+                                    {instantactivity.instant_po_info.variant}
                                   </p>
                                   <div className="flex ">
                                     <p
@@ -242,11 +188,11 @@ const MainInstantDetails = ({ data }) => {
                                       }}
                                       className="me-3"
                                     >
-                                      {formatDateTime(
-                                        instantactivity.created_at
-                                      )}
+                                      {
+                                        instantactivity.instant_po_info.created_at
+                                      }
                                     </p>
-                                    <p
+                                    {/* <p
                                       style={{
                                         color: "#818181",
                                       }}
@@ -258,48 +204,36 @@ const MainInstantDetails = ({ data }) => {
                                         minute: "2-digit",
                                         second: "2-digit",
                                       })}
-                                    </p>
+                                    </p> */}
                                   </div>
                                 </div>
                               </StyledTableCell>
 
                               <StyledTableCell>
                                 <p>
-                                  {instantactivity.emp_name === null ||
-                                  instantactivity.emp_name === ""
-                                    ? "Online"
-                                    : instantactivity.emp_name}
+                                  { instantactivity.source}
                                 </p>
                               </StyledTableCell>
 
                               <StyledTableCell>
                                 <p>
-                                  {priceFormate(instantactivity.current_qty)}
+                                  {instantactivity.before_adjust_qty}
                                 </p>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <p>{priceFormate(instantactivity.qty)}</p>
+                                <p>{instantactivity.adjust_qty}</p>
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p>
-                                  {priceFormate(
-                                    isNaN(instantactivity.afterAdjustQty)
-                                      ? 0
-                                      : instantactivity.afterAdjustQty
-                                  )}
+                                  {instantactivity.after_adjust_qty }
                                 </p>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <p>${priceFormate(instantactivity.price)}</p>
+                                <p>{instantactivity.cost_per_item}</p>
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p>
-                                  $
-                                  {priceFormate(
-                                    isNaN(instantactivity.calculatedTotal)
-                                      ? 0
-                                      : instantactivity.calculatedTotal
-                                  )}
+                                  ${instantactivity.total_cost}
                                 </p>
                               </StyledTableCell>
                             </StyledTableRow>
@@ -308,7 +242,7 @@ const MainInstantDetails = ({ data }) => {
                       : ""}
                   </TableBody>
                 </StyledTable>
-                {showNoData && !instantactivity.length && <NoDataFound />}
+                {/* {showNoData && !instantactivity.length && <NoDataFound />} */}
               </TableContainer>
             </>
           )}
