@@ -5,6 +5,7 @@ import { Grid } from "@mui/material";
 import Typography from '@mui/material/Typography';
 import { MdOutlineTune } from "react-icons/md";
 import TuneIcon from '@mui/icons-material/Tune';
+import { width } from "@mui/system";
 const InventoryFilter = (props) => {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -104,7 +105,7 @@ const InventoryFilter = (props) => {
                         )}
                     </Grid>
                     <div style={{ width: '100%', textAlign: 'right', marginTop: 10 }}>
-                        <button className="save_btn">
+                        <button className="save_btn" style={{ width: 100, padding: 0 }}>
                             Apply
                         </button>
                     </div>
