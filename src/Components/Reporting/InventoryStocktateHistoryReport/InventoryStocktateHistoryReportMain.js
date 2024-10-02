@@ -51,7 +51,7 @@ const InventoryStocktateHistoryReportMain = () => {
 
   return (
     <>
-      <Grid container sx={{ padding: 0, mt: 3.6 }}>
+      <Grid container sx={{ padding: 0, mt: 3 }}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
       {/* <InventoryHistoryTable initialColumns={initialColumns} initialData={initialData}/> */}

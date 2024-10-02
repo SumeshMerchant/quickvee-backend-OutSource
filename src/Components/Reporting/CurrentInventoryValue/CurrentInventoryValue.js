@@ -118,7 +118,7 @@ const CurrentInventoryValue = ({ hide = false }) => {
       <Grid container sx={{ padding: 0, mt: 3.6 }}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-      <CurrentInventoryValueList productData={productData}/>                                                                                        
+      <CurrentInventoryValueList productData={productData} />
 
       {/* already dynamic */}
       {/* <Grid container className="box_shadow_div"></Grid>
