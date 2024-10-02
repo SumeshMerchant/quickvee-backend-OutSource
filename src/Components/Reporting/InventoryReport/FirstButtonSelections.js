@@ -10,20 +10,14 @@ import { display } from "@mui/system";
 const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColumns, setShowColumnPopup }) => {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
-
-
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleClose = () => {
         setAnchorEl(null);
     };
-
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
-
-   
     const [selectAllColumns, setSelectAllColumns] = useState(false);
 
     // Handle checkbox changes for column selections
@@ -52,8 +46,6 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
 
   return (
     <>
-    
-            
     <div aria-describedby={id} onClick={handleClick}>
         <img
             style={{ height: "40px", width: "40px" }}
@@ -61,8 +53,6 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
             alt="plusIcon"
         />
     </div>
-    
-
     <Popover
         id={id}
         open={open}
@@ -114,8 +104,8 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
                         </Grid>
                     )
                 )}
-                
-            </Grid> */}
+                Comment added
+            </Grid>   */}
             <p className="mb-3 d-flex align-center mb-20 padding-2"  style={{ backgroundColor: '#F8F8F8',gap: 12, paddingBlock: 9 }}>
               <input
                 type="checkbox"
