@@ -467,7 +467,7 @@ const InventoryTable = ({initialColumns,initialData}) => {
             <>
               <div>{row.name}</div>
               <div style={{ fontSize: "0.9em", color: "gray" }}>
-                {row.sku}
+              {row.sku == "revenue" ? `$ ${row.sku}` : row.sku}
               </div>
             </>
           ) : col.id === "plus_after_sku" || col.id === "plus_after_avg_cost" ? (
@@ -496,13 +496,13 @@ const InventoryTable = ({initialColumns,initialData}) => {
     } else if (col.id === "retail_value") {
       return <td key={col.id}>600</td>;
     } else if (col.id === "revenue") { 
-      return <td key={col.id}>600</td>;
+      return <td key={col.id}>$600</td>;
     }
     else if (col.id === "items_sold") { 
       return <td key={col.id}>600</td>;
     }
     else if (col.id === "gross_profit") { 
-      return <td key={col.id}>600</td>;
+      return <td key={col.id}>$600</td>;
     }
     else if (col.id === "items_sold_per_day") {
       return <td key={col.id}>600</td>;
