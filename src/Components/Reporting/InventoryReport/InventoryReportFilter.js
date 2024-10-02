@@ -160,7 +160,7 @@ const InventoryReportFilter = () => {
 
   return (
     <>
-      <Grid container sx={{ padding: 2.5, mt: 3.6 }} className="box_shadow_div">
+      <Grid container sx={{ paddingBlock: 1.8, paddingInline: 2.6,mt: 3.6 }} className="box_shadow_div">
         <Grid item xs={12}>
           <Grid
             container
@@ -168,7 +168,7 @@ const InventoryReportFilter = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Grid item sx={{ display: "flex", gap: 2 }}>
+            <Grid item sx={{ display: "flex", gap: 2.6 }}>
               <h1
                 style={{ marginBottom: 0 }}
                 className="heading content-center whitespace-nowrap"
@@ -176,7 +176,7 @@ const InventoryReportFilter = () => {
                 Inventory Report
               </h1>
               <SelectDropDown
-                sx={{ pt: 0.5, width: "22.7rem" }}
+                sx={{ width: "22.7rem" }}
                 listItem={selectReportList}
                 onClickHandler={handleOptionClick}
                 selectedOption={selectedReportList}

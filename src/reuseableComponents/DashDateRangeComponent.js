@@ -152,10 +152,10 @@ const DashDateRangeComponent = ({
 
   return (
     <>
-      <Grid container className="q-datarange-bottom-detail-section p-5">
-        <Grid container justifyContent="space-between">
+      <Grid container sx={{ px: 2.5, pt: 1.6}} className="q-datarange-bottom-detail-section">
+        <Grid container justifyContent="space-between" alignItems="center" sx={{mb: 1.2}}>
           <Grid item>
-            <div className="mt_card_header q_dashbaord_netsales">
+            <div className="date-range-title">
               <h1 className="">Date Range</h1>
             </div>
           </Grid>
@@ -183,7 +183,7 @@ const DashDateRangeComponent = ({
             </>
           ) : (
             <>
-              <Grid item className="pt-4">
+              <Grid item>
                 <select
                   className="border-2 p-2 border-customColor rounded bg-white text-blue-500 text-[16px] "
                   onChange={(e) => {
@@ -211,7 +211,7 @@ const DashDateRangeComponent = ({
           )}
         </Grid>
 
-        <Grid container spacing={2} className="py-5 date-range-custom-parent">
+        <Grid container spacing={2}  className="date-range-custom-parent mb-1">
           <Grid item xs={12} sm={6} md={3} className="date-range-custom">
             <div className="q_date_range_start date-picker-font">
               Start Date
