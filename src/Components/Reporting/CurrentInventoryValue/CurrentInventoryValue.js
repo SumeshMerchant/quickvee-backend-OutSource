@@ -6,8 +6,15 @@ import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
 import Skeleton from "react-loading-skeleton";
 import PasswordShow from "../../../Common/passwordShow";
+import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
+import InventoryTable from "../InventoryReport/InventoryTable";
 
 const CurrentInventoryValue = ({ hide = false }) => {
+  console.log("sadadasdassss");
+  const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const handleDateRangeChange = (dateRange) => {
+    setSelectedDateRange(dateRange);
+  };
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -41,7 +48,7 @@ const CurrentInventoryValue = ({ hide = false }) => {
       }
     };
 
-    fetchData();
+    // fetchData();
   }, [dispatch]);
 
   useEffect(() => {
@@ -68,7 +75,13 @@ const CurrentInventoryValue = ({ hide = false }) => {
 
   return (
     <>
-      <Grid container className="box_shadow_div"></Grid>
+      <Grid container sx={{ padding: 0, mt: 3.6 }}>
+        <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
+      </Grid>
+      <InventoryTable />
+
+      {/* already dynamic */}
+      {/* <Grid container className="box_shadow_div"></Grid>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={4}>
           <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
@@ -114,7 +127,7 @@ const CurrentInventoryValue = ({ hide = false }) => {
             </div>
           </div>
         </Grid>
-      </Grid>
+      </Grid> */}
     </>
   );
 };

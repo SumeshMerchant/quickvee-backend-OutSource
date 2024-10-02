@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import NewItemCreatedBetweenList from "./NewItemCreatedBetweenList";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { Grid } from "@mui/material";
-
+import InventoryTable from "../InventoryReport/InventoryTable";
 const NewItemCreatedBetweenMain = ({ hide = false }) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
@@ -26,11 +26,13 @@ const NewItemCreatedBetweenMain = ({ hide = false }) => {
           </Grid>
         </Grid>
       </Grid> */}
-      <Grid container sx={{ padding: 2.5, mt: 3.6 }}>
+      <Grid container sx={{ mt: 3.6 }}>
         <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-
+      <InventoryTable />
+      {/* already have data   
       <NewItemCreatedBetweenList selectedDateRange={selectedDateRange} />
+      */}
     </>
   );
 };

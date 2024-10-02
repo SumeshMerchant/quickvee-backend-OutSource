@@ -4,6 +4,7 @@ import MainInstantDetails from "./MainInstantDetails";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { Grid } from "@mui/material";
+import InventoryTable from "../InventoryReport/InventoryTable";
 
 const InstantActvity = ({ hide = false }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -41,8 +42,8 @@ const InstantActvity = ({ hide = false }) => {
           <DateRangeComponent onDateRangeChange={handleDataFiltered} />
         </Grid>
       </Grid>
-
-      <MainInstantDetails data={filteredData} />
+      <InventoryTable />
+      {/* <MainInstantDetails data={filteredData} /> */}
     </>
   );
 };
