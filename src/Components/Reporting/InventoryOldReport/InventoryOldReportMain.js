@@ -217,9 +217,9 @@ const InventoryOldReportMain = () => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container sx={{ px: 2.5, pt: 1 }}>
+          <Grid container sx={{ px: 2.5, pt: 2.3 }}>
             <Grid item xs={12}>
-              <div className="heading">Filter By</div>
+              <div className="filter-heading">Filter By</div>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
@@ -258,7 +258,7 @@ const InventoryOldReportMain = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container sx={{}}>
+      <Grid container sx={{mt: 3}}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
       <InventoryTable initialColumns={initialColumns} initialData={initialData} />
