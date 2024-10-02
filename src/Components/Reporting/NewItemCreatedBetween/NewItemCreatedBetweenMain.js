@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import NewItemCreatedBetweenList from "./NewItemCreatedBetweenList";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { Grid } from "@mui/material";
-
+import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 const NewItemCreatedBetweenMain = ({ hide = false }) => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
@@ -41,7 +41,7 @@ const NewItemCreatedBetweenMain = ({ hide = false }) => {
       "price": "$30.00"
     }
   ];
-  
+
 
   return (
     <>
@@ -60,10 +60,10 @@ const NewItemCreatedBetweenMain = ({ hide = false }) => {
           </Grid>
         </Grid>
       </Grid> */}
-      <Grid container sx={{ mt: 3.6 }}>
-        <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+      <Grid container sx={{ padding: 0, mt: 3.6 }}>
+        <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-      <NewItemCreatedBetweenList allNewItemData={allNewItemData}/>
+      <NewItemCreatedBetweenList allNewItemData={allNewItemData} />
       {/* already have data   
       <NewItemCreatedBetweenList selectedDateRange={selectedDateRange} />
       */}

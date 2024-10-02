@@ -5,6 +5,7 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { Grid } from "@mui/material";
 import InventoryTable from "../InventoryReport/InventoryTable";
+import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 
 const InstantActvity = ({ hide = false }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -88,7 +89,7 @@ const InstantActvity = ({ hide = false }) => {
       "total_cost": 12.99
     }
   ]
-  
+
   return (
     <>
       {/* <Grid
@@ -108,10 +109,10 @@ const InstantActvity = ({ hide = false }) => {
       </Grid> */}
       <Grid container sx={{ padding: 2.5, mt: 3.6 }}>
         <Grid item xs={12}>
-          <DateRangeComponent onDateRangeChange={handleDataFiltered} />
+          <DashDateRangeComponent onDateRangeChange={handleDataFiltered} />
         </Grid>
       </Grid>
-      <MainInstantDetails instantactivityDataState={instantactivityDataState}/>
+      <MainInstantDetails instantactivityDataState={instantactivityDataState} />
       {/* <MainInstantDetails data={filteredData} /> */}
     </>
   );
