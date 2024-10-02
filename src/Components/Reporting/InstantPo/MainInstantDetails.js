@@ -75,23 +75,9 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
   return (
     <>
       <Grid container className="box_shadow_div">
+      <Grid container>
         <Grid item xs={12}>
-          {instantactivityDataState.loading ||
-          (instantactivityDataState.status && !instantactivityDataState.length) ? (
-            <>
-              <SkeletonTable
-                columns={[
-                  "Instant PO Info",
-                  "	Source",
-                  "Before Adjust Qty",
-                  "Adjust Qty",
-                  "After Adjust Qty",
-                  "Per Item Cost",
-                  "Total Cost",
-                ]}
-              />
-            </>
-          ) : (
+
             <>
               <TableContainer>
                 <StyledTable
@@ -102,7 +88,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        onClick={() => sortByItemName("date", "created_at")}
+                        // onClick={() => sortByItemName("date", "created_at")}
                       >
                         <p>Instant PO Info</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -112,7 +98,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        onClick={() => sortByItemName("str", "emp_name")}
+                        // onClick={() => sortByItemName("str", "emp_name")}
                       >
                         <p>Source</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -122,7 +108,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        onClick={() => sortByItemName("num", "current_qty")}
+                        // onClick={() => sortByItemName("num", "current_qty")}
                       >
                         <p>Before Adjust Qty</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -131,7 +117,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        onClick={() => sortByItemName("num", "qty")}
+                        // onClick={() => sortByItemName("num", "qty")}
                       >
                         <p>Adjust Qty</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -149,7 +135,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        onClick={() => sortByItemName("num", "price")}
+                        // onClick={() => sortByItemName("num", "price")}
                       >
                         <p>Per Item Cost</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -158,7 +144,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        onClick={() => sortByItemName("num", "calculatedTotal")}
+                        // onClick={() => sortByItemName("num", "calculatedTotal")}
                       >
                         <p>Total Cost</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -245,7 +231,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                 {/* {showNoData && !instantactivity.length && <NoDataFound />} */}
               </TableContainer>
             </>
-          )}
+          </Grid>
         </Grid>
       </Grid>
     </>
