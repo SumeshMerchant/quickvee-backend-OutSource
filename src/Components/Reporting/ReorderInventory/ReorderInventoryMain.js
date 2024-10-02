@@ -10,7 +10,7 @@ const ReorderInventoryMain = () => {
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
-  const [selectedOrderSource, setSelectedOrderSource] = useState("SKU name");
+  const [selectedOrderSource, setSelectedOrderSource] = useState("SKU Name");
   const [selectedOrderType, setSelectedOrderType] =
     useState("All inventory");
 
@@ -31,7 +31,7 @@ const ReorderInventoryMain = () => {
   const showcat = 0;
   const reportTypeList = [
     "Product",
-    "SKU name",
+    "SKU Name",
     "Brand",
     "Outlet",
     "Supplier",

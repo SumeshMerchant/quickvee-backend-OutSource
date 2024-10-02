@@ -77,7 +77,7 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
         }}
     >
 
-        <div style={{ paddingBlock: 8, paddingInline: 16, borderRadius: 8, fontSize: 14 }}>
+        <div style={{ paddingBlock: 8, paddingInline: 8, borderRadius: 8, fontSize: 14 }}>
             {/* <p className="mb-3" style={{ backgroundColor: '#F8F8F8', }}>              <Checkbox
                 sx={{
                     "& .MuiSvgIcon-root": {
@@ -107,7 +107,7 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
                 )}
                 Comment added
             </Grid>   */}
-            <p className="mb-3 d-flex align-center mb-20 padding-2"  style={{ backgroundColor: '#F8F8F8',gap: 12, paddingBlock: 9 }}>
+            <p className="mb-3 d-flex align-center mb-20 padding-2"  style={{ backgroundColor: '#F8F8F8',gap: 12, padding: 9 }}>
               <input
                 type="checkbox"
                 checked={selectAllColumns}
@@ -116,7 +116,7 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
               Select All
           </p>
           
-          <Grid container className="mb-3" spacing={3}>
+          <Grid container className="mb-3" sx={{ pl: 1 }} spacing={3}>
             <Grid item xs={6} sm={12} md={6} sx={{gap: 1.5, alignItems: 'center', display: 'flex'}}>
               
                 <input
@@ -211,6 +211,7 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
         Category
       </label> */}
             <div style={{ width: '100%', marginTop: 10, paddingBottom: 8 }}>
+
                 <button className="btn_blue" style={{ fontSize: 14 }} onClick={() => { applyColumns(); handleClose(); }}>
                     Apply
                 </button>
