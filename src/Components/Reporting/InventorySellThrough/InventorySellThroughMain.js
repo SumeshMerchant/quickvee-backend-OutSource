@@ -10,7 +10,7 @@ const InventorySellThroughMain = () => {
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
-  const [selectedOrderSource, setSelectedOrderSource] = useState("Product category");
+  const [selectedOrderSource, setSelectedOrderSource] = useState("Product Category");
   const [selectedOrderType, setSelectedOrderType] =
     useState("All inventory");
 
@@ -35,7 +35,7 @@ const InventorySellThroughMain = () => {
     "Brand",
     "Outlet",
     "Supplier",
-    "Product category",
+    "Product Category",
   ];
   const measureTypeList = [
     "On-hand-inventory",
@@ -52,7 +52,7 @@ const InventorySellThroughMain = () => {
     // { id: "items_sold", name: "Items Sold" },
     // { id: "inbound_inventory", name: "Inbound Inventory" },
     { id: "days_cover", name: "Days cover" },
-    { id: "self_through_rate", name: "Sell-through rate" },
+    { id: "sell_through_rate", name: "Sell-through rate" },
     { id: "plus_after_avg_cost", name: "+" },
   ];
   const initialData = [
@@ -88,7 +88,7 @@ const InventorySellThroughMain = () => {
       items_sold_per_day: 0.5,
       inventory_cost:70,
       avg_cost_measure: 12,
-      self_through_rate: "90%",
+      sell_through_rate: "90%",
       created: "2023-01-01",
       first_sale: "2023-02-01",
       last_sale: "2023-03-01",
@@ -126,7 +126,7 @@ const InventorySellThroughMain = () => {
       items_sold_per_day: 0.5,
       inventory_cost:70,
       avg_cost_measure: 12,
-      self_through_rate: "90%",
+      sell_through_rate: "90%",
       created: "2023-01-01",
       first_sale: "2023-02-01",
       last_sale: "2023-03-01",
@@ -164,7 +164,7 @@ const InventorySellThroughMain = () => {
       items_sold_per_day: 0.5,
       inventory_cost:70,
       avg_cost_measure: 12,
-      self_through_rate: "90%",
+      sell_through_rate: "90%",
       created: "2023-01-01",
       first_sale: "2023-02-01",
       last_sale: "2023-03-01",
@@ -202,7 +202,7 @@ const InventorySellThroughMain = () => {
       items_sold_per_day: 0,
       inventory_cost:70,
       avg_cost_measure: 12,
-      self_through_rate: "",
+      sell_through_rate: "",
       created: "2023-01-01",
       first_sale: "2023-02-01",
       last_sale: "2023-03-01",
@@ -240,7 +240,7 @@ const InventorySellThroughMain = () => {
       items_sold_per_day: 0,
       inventory_cost:70,
       avg_cost_measure: 12,
-      self_through_rate: "",
+      sell_through_rate: "",
       created: "2023-01-01",
       first_sale: "2023-02-01",
       last_sale: "2023-03-01",
