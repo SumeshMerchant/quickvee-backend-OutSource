@@ -199,7 +199,7 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
         Category
       </label> */}
             <div style={{ width: '100%', marginTop: 10, paddingBottom: 8 }}>
-                <button className="btn_blue" style={{ fontSize: 14 }} onClick={() => { applyColumns();  }}>
+                <button className="btn_blue" style={{ fontSize: 14 }} onClick={() => { applyColumns(); handleClose(); }}>
                     Apply
                 </button>
                 {/* <button onClick={() => setShowColumnPopup(false)}>Close</button> */}
