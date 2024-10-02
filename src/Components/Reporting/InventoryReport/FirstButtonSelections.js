@@ -104,8 +104,8 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
                         </Grid>
                     )
                 )}
-                
-            </Grid> Will make dynamic later  */}
+                Comment added
+            </Grid>   */}
             <p className="mb-3 d-flex align-center mb-20 padding-2"  style={{ backgroundColor: '#F8F8F8',gap: 12, paddingBlock: 9 }}>
               <input
                 type="checkbox"
