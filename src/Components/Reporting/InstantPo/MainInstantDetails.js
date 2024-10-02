@@ -40,11 +40,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
+    // backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {},
   "& td, & th": {
-    border: "none",
+    // border: "none",
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(224, 224, 224, 1)',
   },
 }));
 
@@ -175,18 +177,18 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                                 <div>
                                   <p>{instantactivity.instant_po_info.title}</p>
                                   <p
-                                    style={{
-                                      color: "#0A64F9",
-                                    }}
+                                    className="text-[#0A64F9]"
+                                    
                                   >
                                     {instantactivity.instant_po_info.variant}
                                   </p>
                                   <div className="flex ">
                                     <p
+                                      className="text-[#818181] me-3"
                                       style={{
                                         color: "#818181",
                                       }}
-                                      className="me-3"
+                                      
                                     >
                                       {
                                         instantactivity.instant_po_info.created_at
