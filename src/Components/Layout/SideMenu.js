@@ -251,74 +251,14 @@ const SideMenu = () => {
         <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
           {isMenuOpenRedux
             ? (LoginGetDashBoardRecordJson?.final_login == 1
-                ? temp["superadmin"]
-                : temp[LoginGetDashBoardRecordJson?.data?.login_type]
-              ) // admin
-                ?.map((item) => (
-                  <div
-                    key={item.id}
-                    className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${
-                      activeItem === item.link ? "active" : ""
-                    }`}
-                  >
-                    {item.dropdownItems ? (
-                      <DropdownMenuItem
-                        setHoveredItem={setHoveredItem}
-                        item={item}
-                        isMenuOpenRedux={isMenuOpenRedux}
-                        activeItem={activeItem}
-                        setActiveItem={setActiveItem}
-                        hoveredItem={hoveredItem}
-                        isDropdownOpen={isDropdownOpen}
-                        setIsDropdownOpen={setIsDropdownOpen}
-                        currentDropDownItem={currentDropDownItem}
-                        activeDropDownItem={activeDropDownItem}
-                        activeNestedItem={activeNestedItem}
-                        setActiveNestedItem={setActiveNestedItem}
-                        getFirstTwoSegmentsPath={getFirstTwoSegmentsPath}
-                      />
-                    ) : (
-                      <div
-                        onMouseEnter={() => setHoveredItem(item.id)}
-                        onMouseLeave={() => setHoveredItem(null)}
-                        onClick={() => handleItemClick(item)}
-                        style={{ cursor: "pointer" }}
-                        className={`flex items-center ${
-                          getFirstTwoSegmentsPathIsStoreAvtive(activeItem) ===
-                          item.link.trim()
-                            ? "bg-[#414F54] text-[#FFC400]"
-                            : ""
-                              ? "text-[#FFC400] active:bg-[#414F54] hover:bg-[#414F54] px-0"
-                              : ""
-                        }`}
-                      >
-                        {getFirstTwoSegmentsPathIsStoreAvtive(activeItem) ===
-                          item.link.trim() || hoveredItem === item.id
-                          ? item.activeIcon
-                          : item.icon}
-                        <Link
-                          className={`ml-2 menu-item text-[14px] Admin_std ${
-                            activeItem === item.link.trim()
-                              ? "bg-[#414F54]"
-                              : ""
-                          }`}
-                          to={item.link}
-                        >
-                          {item.text}
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                ))
-            : (LoginGetDashBoardRecordJson?.final_login == 1
-                ? temp["superadmin"]
-                : temp[LoginGetDashBoardRecordJson?.data?.login_type]
-              )?.map((item) => (
+              ? temp["superadmin"]
+              : temp[LoginGetDashBoardRecordJson?.data?.login_type]
+            ) // admin
+              ?.map((item) => (
                 <div
                   key={item.id}
-                  className={`mb-1 text-base cursor-pointer ${
-                    activeItem === item.link ? "active" : ""
-                  }`}
+                  className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${activeItem === item.link ? "active" : ""
+                    }`}
                 >
                   {item.dropdownItems ? (
                     <DropdownMenuItem
@@ -338,26 +278,81 @@ const SideMenu = () => {
                     />
                   ) : (
                     <div
-                      className={`flex flex-col items-center ${
-                        activeItem === item.link
-                          ? "text-[#FFC400] active"
-                          : "text-gray-400 hover-text-yellow hover:bg-[#414F54] px-0"
-                      }`}
                       onMouseEnter={() => setHoveredItem(item.id)}
                       onMouseLeave={() => setHoveredItem(null)}
-                      onClick={() => {
-                        handleItemClick(item);
-                      }}
+                      onClick={() => handleItemClick(item)}
+                      style={{ cursor: "pointer" }}
+                      className={`flex items-center ${getFirstTwoSegmentsPathIsStoreAvtive(activeItem) ===
+                        item.link.trim()
+                        ? "bg-[#414F54] text-[#FFC400]"
+                        : ""
+                          ? "text-[#FFC400] active:bg-[#414F54] hover:bg-[#414F54] px-0"
+                          : ""
+                        }`}
                     >
-                      {/* {activeItem === item.id ? item.activeIcon : item.icon} */}
                       {getFirstTwoSegmentsPathIsStoreAvtive(activeItem) ===
                         item.link.trim() || hoveredItem === item.id
                         ? item.activeIcon
                         : item.icon}
+                      <Link
+                        className={`ml-2 menu-item text-[14px] Admin_std ${activeItem === item.link.trim()
+                          ? "bg-[#414F54]"
+                          : ""
+                          }`}
+                        to={item.link}
+                      >
+                        {item.text}
+                      </Link>
                     </div>
                   )}
                 </div>
-              ))}
+              ))
+            : (LoginGetDashBoardRecordJson?.final_login == 1
+              ? temp["superadmin"]
+              : temp[LoginGetDashBoardRecordJson?.data?.login_type]
+            )?.map((item) => (
+              <div
+                key={item.id}
+                className={`mb-1 text-base cursor-pointer ${activeItem === item.link ? "active" : ""
+                  }`}
+              >
+                {item.dropdownItems ? (
+                  <DropdownMenuItem
+                    setHoveredItem={setHoveredItem}
+                    item={item}
+                    isMenuOpenRedux={isMenuOpenRedux}
+                    activeItem={activeItem}
+                    setActiveItem={setActiveItem}
+                    hoveredItem={hoveredItem}
+                    isDropdownOpen={isDropdownOpen}
+                    setIsDropdownOpen={setIsDropdownOpen}
+                    currentDropDownItem={currentDropDownItem}
+                    activeDropDownItem={activeDropDownItem}
+                    activeNestedItem={activeNestedItem}
+                    setActiveNestedItem={setActiveNestedItem}
+                    getFirstTwoSegmentsPath={getFirstTwoSegmentsPath}
+                  />
+                ) : (
+                  <div
+                    className={`flex flex-col items-center ${activeItem === item.link
+                      ? "text-[#FFC400] active"
+                      : "text-gray-400 hover-text-yellow hover:bg-[#414F54] px-0"
+                      }`}
+                    onMouseEnter={() => setHoveredItem(item.id)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                    onClick={() => {
+                      handleItemClick(item);
+                    }}
+                  >
+                    {/* {activeItem === item.id ? item.activeIcon : item.icon} */}
+                    {getFirstTwoSegmentsPathIsStoreAvtive(activeItem) ===
+                      item.link.trim() || hoveredItem === item.id
+                      ? item.activeIcon
+                      : item.icon}
+                  </div>
+                )}
+              </div>
+            ))}
         </div>
       </div>
     </>
@@ -465,44 +460,40 @@ const DropdownMenuItem = ({
         <div className="flex">
           {isMenuOpenRedux ? (
             <div
-              className={`w-full flex items-center cursor-pointer ${
-                getFirstTwoSegmentsPath(activeItem) ===
+              className={`w-full flex items-center cursor-pointer ${getFirstTwoSegmentsPath(activeItem) ===
                 getFirstTwoSegmentsPath(dropDownItem)
-                  ? "bg-[#414F54]"
-                  : ""
-              }`}
+                ? "bg-[#414F54]"
+                : ""
+                }`}
             >
               {getFirstTwoSegmentsPath(activeItem) ===
                 getFirstTwoSegmentsPath(dropDownItem) || hoveredItem === item.id
                 ? item.activeIcon
                 : item.icon}
               <p
-                className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${
-                  getFirstTwoSegmentsPath(activeItem) ===
+                className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${getFirstTwoSegmentsPath(activeItem) ===
                   getFirstTwoSegmentsPath(dropDownItem)
-                    ? "activeTab"
-                    : ""
-                }`}
+                  ? "activeTab"
+                  : ""
+                  }`}
               >
                 {item.text}
               </p>
               {currentDropDownItem === item.id ? (
                 <FaChevronUp
-                  className={`quickarrow_icon ml-4 me-5 text-${
-                    (getFirstTwoSegmentsPath(activeItem) ===
-                      getFirstTwoSegmentsPath(dropDownItem) ||
-                      hoveredItem === item.id) &&
+                  className={`quickarrow_icon ml-4 me-5 text-${(getFirstTwoSegmentsPath(activeItem) ===
+                    getFirstTwoSegmentsPath(dropDownItem) ||
+                    hoveredItem === item.id) &&
                     "[#FFC400]"
-                  }`}
+                    }`}
                 />
               ) : (
                 <FaChevronDown
-                  className={`quickarrow_icon ml-4 me-5 text-${
-                    (getFirstTwoSegmentsPath(activeItem) ===
-                      getFirstTwoSegmentsPath(dropDownItem) ||
-                      hoveredItem === item.id) &&
+                  className={`quickarrow_icon ml-4 me-5 text-${(getFirstTwoSegmentsPath(activeItem) ===
+                    getFirstTwoSegmentsPath(dropDownItem) ||
+                    hoveredItem === item.id) &&
                     "[#FFC400]"
-                  }`}
+                    }`}
                 />
               )}
             </div>
@@ -517,7 +508,7 @@ const DropdownMenuItem = ({
               >
                 {getFirstTwoSegmentsPath(activeItem) ===
                   getFirstTwoSegmentsPath(dropDownItem) ||
-                hoveredItem === item.id
+                  hoveredItem === item.id
                   ? item.activeIcon
                   : item.icon}
               </div>
@@ -560,12 +551,11 @@ const DropdownMenuItem = ({
                 <Link
                   // key={nestedDropdownItem.id}
                   to={nestedDropdownItem.link}
-                  className={`flex text-center submenu-item text-gray-400 p-4 text-[14px] ${
-                    getFirstTwoSegmentsPath(activeItem) ===
+                  className={`flex text-center submenu-item text-gray-400 p-4 text-[14px] ${getFirstTwoSegmentsPath(activeItem) ===
                     getFirstTwoSegmentsPath(nestedDropdownItem.link)
-                      ? "active"
-                      : ""
-                  }`}
+                    ? "active"
+                    : ""
+                    }`}
                   onClick={(e) => {
                     handleToggleDropdownItems(nestedDropdownItem.link);
                     e.stopPropagation();
@@ -742,47 +732,47 @@ const menuItems = [
         text: "Inventory Reports",
         link: "/store-reporting/inventory-report/recorder-inventory",
       },
-      {
-        id: 2,
-        text: "Inventory Reports",
-        dropDownItems: [
-          {
-            id: 81,
-            text: "Current Inventory Value",
-            link: "/store-reporting/current-inventory-value",
-          },
-          {
-            id: 73,
-            text: "New Item Created Between",
-            link: "/store-reporting/item-create-between",
-          },
-          {
-            id: 74,
-            text: "Reorder Inventory",
-            link: "/store-reporting/recorder-inventory",
-          },
-          {
-            id: 68,
-            text: "Instant PO Activity Report",
-            link: "/store-reporting/instant-activity",
-          },
-          {
-            id: 65,
-            text: "Check ID verification",
-            link: "/store-reporting/id-verification",
-          },
-          {
-            id: 93,
-            text: "Inventory List",
-            link: "/store-reporting/inventory-list",
-          },
-          {
-            id: 94,
-            text: "Profit Margin Per Item Listing",
-            link: "/store-reporting/profit-margin-report",
-          },
-        ],
-      },
+      // {
+      //   id: 2,
+      //   text: "Inventory Reports",
+      //   dropDownItems: [
+      //     {
+      //       id: 81,
+      //       text: "Current Inventory Value",
+      //       link: "/store-reporting/current-inventory-value",
+      //     },
+      //     {
+      //       id: 73,
+      //       text: "New Item Created Between",
+      //       link: "/store-reporting/item-create-between",
+      //     },
+      //     {
+      //       id: 74,
+      //       text: "Reorder Inventory",
+      //       link: "/store-reporting/recorder-inventory",
+      //     },
+      //     {
+      //       id: 68,
+      //       text: "Instant PO Activity Report",
+      //       link: "/store-reporting/instant-activity",
+      //     },
+      //     {
+      //       id: 65,
+      //       text: "Check ID verification",
+      //       link: "/store-reporting/id-verification",
+      //     },
+      //     {
+      //       id: 93,
+      //       text: "Inventory List",
+      //       link: "/store-reporting/inventory-list",
+      //     },
+      //     {
+      //       id: 94,
+      //       text: "Profit Margin Per Item Listing",
+      //       link: "/store-reporting/profit-margin-report",
+      //     },
+      //   ],
+      // },
       {
         id: 116,
         text: "Payment Report",

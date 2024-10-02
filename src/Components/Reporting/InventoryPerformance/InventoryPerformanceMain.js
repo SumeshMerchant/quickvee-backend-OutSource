@@ -42,6 +42,7 @@ const InventroyPerformanceMain = () => {
     "On-hand-inventory",
     "Low Inventory",
     "Out of stock",
+    "All inventory",
   ];
 
   const initialColumns = [
