@@ -63,10 +63,9 @@ const NewItemCreatedBetweenMain = ({ hide = false }) => {
       <Grid container sx={{ mt: 3 }}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-      <NewItemCreatedBetweenList allNewItemData={allNewItemData} />
-      {/* already have data   
+      {/* <NewItemCreatedBetweenList allNewItemData={allNewItemData} /> */}
+      
       <NewItemCreatedBetweenList selectedDateRange={selectedDateRange} />
-      */}
     </>
   );
 };

@@ -48,7 +48,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const NewItemCreatedBetweenList = ({allNewItemData}) => {
+const NewItemCreatedBetweenList = (props) => {
+  const [allNewItemData, setallNewItemData] = useState("");
+
   const dispatch = useDispatch();
   const {
     LoginGetDashBoardRecordJson,
@@ -90,13 +92,38 @@ const NewItemCreatedBetweenList = ({allNewItemData}) => {
   const sortByItemName = (type, name) => {
   
   };
+  useEffect(() => {
+    if (props && props.selectedDateRange) {
+      let data = {
+        merchant_id,
+        start_date: props.selectedDateRange.start_date,
+        end_date: props.selectedDateRange.end_date,
+        ...userTypeData,
+      };
+      if (data) {
+        dispatch(fetchNewItemCreatedBetweenData(data));
+      }
+    }
+  }, [props]);
+  useEffect(() => {
+    if (!AllNewItemDataState.loading && AllNewItemDataState.NewItemData) {      
+      // console.log(AllNewItemDataState.NewItemData)
+      setallNewItemData(AllNewItemDataState.NewItemData);
+    } else {
+      // setallNewItemData("");
+    }
+  }, [
+    AllNewItemDataState,
+    AllNewItemDataState.loading,
+    AllNewItemDataState.NewItemData,
+  ]);
   
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           {AllNewItemDataState.loading ||
-          (AllNewItemDataState.status && !allNewItemData.length) ? (
+          (allNewItemData.status && !allNewItemData.report_data?.length) ? (
             <SkeletonTable
               columns={["Date", "Category", "Item Name", "Price"]}
             />
@@ -142,8 +169,8 @@ const NewItemCreatedBetweenList = ({allNewItemData}) => {
                   </StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {allNewItemData && allNewItemData.length >= 1
-                    ? allNewItemData.map((ItemData, index) => (
+                  {allNewItemData && allNewItemData?.report_data?.length >= 1
+                    ? allNewItemData.report_data?.map((ItemData, index) => (
                         <StyledTableRow key={index}>
                           <StyledTableCell>
                             <p >
@@ -164,7 +191,7 @@ const NewItemCreatedBetweenList = ({allNewItemData}) => {
                     : ""}
                 </TableBody>
               </StyledTable>
-              {!allNewItemData.length && <NoDataFound />}
+              {!allNewItemData?.report_data?.length && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>
