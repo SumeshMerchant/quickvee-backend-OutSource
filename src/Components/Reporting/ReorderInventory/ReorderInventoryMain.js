@@ -6,11 +6,14 @@ import InventoryTable from "../InventoryReport/InventoryTable";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import axios from 'axios';
 import { useAuthDetails } from "../../../Common/cookiesHelper";
-
+import Skeleton from 'react-loading-skeleton'; 
 
 const ReorderInventoryMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
@@ -251,17 +254,17 @@ const showcat = 0;
     },
   ];
 
-  
 
-const fetchProductsData = async () => {
+const fetchProductsData = async (currentPage) => {
   try {
+    setLoading(true); 
     const payload = {
       merchant_id:  'JAI16179CA' , //LoginGetDashBoardRecordJson?.data?.merchant_id , // 'JAI16179CA',
       format: 'json',
       category_id: 'all',
       show_status: 'all',
       listing_type: 0,
-      offset: 0,
+      offset: currentPage * 10,
       limit: 10,
       page: 0,
       token_id: '7691', //LoginGetDashBoardRecordJson?.token_id, //'7691',
@@ -279,17 +282,70 @@ const fetchProductsData = async () => {
     );
 
     const products = response.data;
-    setProductListData(products)
+    const mapProductData = (productData) => {
+      return productData.map((product) => ({
+        sku: product.sku || product.id,  // Using id if sku is null
+        name: product.title,
+        closing_inventory: parseInt(product.quantity) || 0,
+        items_sold: product.reorder_qty || 0,
+        days_cover: 0,  // Value not directly available, default to 0 or calculated later
+        avg_cost: `$${parseFloat(product.costperItem).toFixed(2)}`,
+        brand: product.brand,
+        vendor: "Vendor A",  // Assuming vendor not available, static or mapped if possible
+        category: product.category_name.split(',')[0],  // Picking the first category
+        revenue: parseFloat(product.profit) || 0,
+        gross_profit: parseFloat(product.profit) || 0,
+        sale_margin: parseFloat(product.margin) || 0,
+        customer_count: 0,  // Assuming not available in the API response
+        sale_count: 0,  // Assuming not available in the API response
+        avg_items_per_sale: 0,  // Assuming not available in the API response
+        sale_discounted: 0,  // Assuming not available in the API response
+        avg_sale_value: 0,  // Assuming not available in the API response
+        cost_goods_sold: parseFloat(product.costperItem) || 0,
+        retail_value: 0,  // Assuming not available in the API response
+        current_inventory: parseInt(product.quantity) || 0,
+        start_date_inventory: product.created_on,
+        reorder_point: parseInt(product.reorder_level) || 0,
+        reorder_amount: parseInt(product.reorder_qty) || 0,
+        return_count: 0,  // Assuming not available in the API response
+        inventory_days_cover: 0,  // Assuming not available in the API response
+        inventory_returns: 0,  // Assuming not available in the API response
+        inbound_inventory: "",  // Assuming not available in the API response
+        items_sold_per_day: 0,  // Assuming not available in the API response
+        inventory_cost: parseFloat(product.costperItem) || 0,
+        avg_cost_measure: parseFloat(product.costperItem) || 0,
+        self_through_rate: 0,  // Assuming not available in the API response
+        created: product.created_on,
+        first_sale: "",  // Assuming not available in the API response
+        last_sale: "",  // Assuming not available in the API response
+        last_received: product.updated_on,
+      }));
+    };
+    
+    // Example usage:
+    const mappedData = mapProductData(products);
+    // console.log(mappedData);
+    
+    setProductListData(mappedData)
     return products;  // Return the products for further use
   } catch (error) {
     console.error('Error fetching products:', error);
+  } finally {
+    setLoading(false); // Set loading to false after fetching
   }
 }
 
   useEffect(()=>{
-    fetchProductsData()
-  })
-
+    fetchProductsData(page)
+  },[page])
+  const handleScroll = (event) => {
+    const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
+    console.log("=-=-=scrollTop, clientHeight, scrollHeight ",scrollTop, clientHeight, scrollHeight )
+    // Check if we've reached the bottom
+    if (scrollTop + clientHeight >= scrollHeight - 5) {
+      setPage((prevPage) => prevPage + 1); // Increment the page
+    }
+  };
 
   return (
     <>
@@ -339,7 +395,13 @@ const fetchProductsData = async () => {
       <Grid container sx={{}}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-      <InventoryTable initialColumns={initialColumns} initialData={initialData}/>
+      {/* <InventoryTable initialColumns={initialColumns} initialData={productListData}/> */}
+
+      {loading ? (
+       <Skeleton count={5} height={50} />  // Show loading indicator while fetching data
+      ) : (
+        <InventoryTable initialColumns={initialColumns} initialData={productListData}  scrollForProduct={handleScroll}/>
+      )}
     </>
   );
 };
