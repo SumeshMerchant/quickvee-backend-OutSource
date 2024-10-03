@@ -26,26 +26,26 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
 
   const tableRef = useRef(null);
 
-  useEffect(() => {
-    // setData(initialData);
-    if (tableRef.current) {
-      const tableHeaders = tableRef.current.querySelectorAll("th");
-      let offset = 0;
+  // useEffect(() => {
+  //   // setData(initialData);
+  //   if (tableRef.current) {
+  //     const tableHeaders = tableRef.current.querySelectorAll("th");
+  //     let offset = 0;
  
-      // Calculate cumulative width of all <th> before the left-sticky class
-      for (let i = 0; i < tableHeaders.length; i++) {
-        const th = tableHeaders[i];
-        if (th.classList.contains("left-sticky")) {
-          break;
-        }
-        offset += th.offsetWidth;
-      }
+  //     // Calculate cumulative width of all <th> before the left-sticky class
+  //     for (let i = 0; i < tableHeaders.length; i++) {
+  //       const th = tableHeaders[i];
+  //       if (th.classList.contains("left-sticky")) {
+  //         break;
+  //       }
+  //       offset += th.offsetWidth;
+  //     }
 
-      // Set the left offset for the sticky header
-      setLeftStickyOffset(offset);
-    }
+  //     // Set the left offset for the sticky header
+  //     setLeftStickyOffset(offset);
+  //   }
 
-  }, []);
+  // }, []);
 
   const [columns, setColumns] = useState(initialColumns);
   
