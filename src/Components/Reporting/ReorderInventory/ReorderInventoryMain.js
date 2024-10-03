@@ -74,19 +74,14 @@ const ReorderInventoryMain = () => {
     try {
       setLoading(true)
       const payload = {
-        "merchant_id": "JAI16179CA",
-        "format": "json",
-        "category_id": "all",
-        "show_status": "all",
-        "listing_type": 0,
-        "offset": currentPage * 10,
-        "limit": 10,
-        "page": 0,
-        "token_id": 7691,
-        "login_type": "superadmin"
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        token_id: LoginGetDashBoardRecordJson?.token_id,
+        login_type: LoginGetDashBoardRecordJson?.login_type,
+        limit: 10,
+        offset: (currentPage - 1) * 10 
       }
       const response = await axios.post(
-        `${Config.BASE_URL}${Config.PRODUCTS_LIST}`,
+        `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
         payload,
         {
           headers: {
