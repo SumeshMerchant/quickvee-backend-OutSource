@@ -15,6 +15,8 @@ const ReorderInventoryMain = () => {
     setSelectedDateRange(dateRange);
   };
   const [selectedOrderSource, setSelectedOrderSource] = useState("SKU Name");
+  const [productListData, setProductListData] = useState([]);
+
   const [selectedOrderType, setSelectedOrderType] =
     useState("All inventory");
 
@@ -265,21 +267,19 @@ const fetchProductsData = async () => {
       token_id: '7691', //LoginGetDashBoardRecordJson?.token_id, //'7691',
       login_type: LoginGetDashBoardRecordJson?.login_type //'superadmin'
     }
-
-    console.log("=-=-=payload",payload)
     const response = await axios.post(
       'https://production.quickvee.net/Product_api_react/Products_list',
       payload,
       {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer 08ad7136136aff9a13cf14701ade857690726d8f6719c28482ff08703d08`, // ${LoginGetDashBoardRecordJson?.token}
         },
       }
     );
 
     const products = response.data;
-    console.log('Fetched Products:', JSON.stringify(products));
+    setProductListData(products)
     return products;  // Return the products for further use
   } catch (error) {
     console.error('Error fetching products:', error);
