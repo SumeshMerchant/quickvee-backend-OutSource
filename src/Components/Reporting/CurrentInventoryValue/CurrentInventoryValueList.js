@@ -49,7 +49,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const InventoryStocktateHistoryReportList = ({productData}) => {
+const CurrentInventoryValueList = ({productData}) => {
   const dispatch = useDispatch();
   const {
     LoginGetDashBoardRecordJson,
@@ -242,4 +242,4 @@ const InventoryStocktateHistoryReportList = ({productData}) => {
   );
 };
 
-export default InventoryStocktateHistoryReportList;
+export default CurrentInventoryValueList;

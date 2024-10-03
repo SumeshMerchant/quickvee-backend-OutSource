@@ -230,7 +230,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                       : ""}
                   </TableBody>
                 </StyledTable>
-                {/* {showNoData && !instantactivity.length && <NoDataFound />} */}
+                {instantactivityDataState && !instantactivityDataState.length && <NoDataFound />}
               </TableContainer>
             </>
           </Grid>
