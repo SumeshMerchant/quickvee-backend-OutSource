@@ -11,9 +11,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
-const InventoryTable = ({initialColumns,initialData, scrollForProduct}) => {
+const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore }) => {
   const [leftStickyOffset, setLeftStickyOffset] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
+  const [data, setData] = useState(initialData);
+  // const [hasMore, setHasMore] = useState(true);
   // For opening and closing InventoryTableColumns modal
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
@@ -26,10 +27,11 @@ const InventoryTable = ({initialColumns,initialData, scrollForProduct}) => {
   const tableRef = useRef(null);
 
   useEffect(() => {
+    setData(initialData);
     if (tableRef.current) {
       const tableHeaders = tableRef.current.querySelectorAll("th");
       let offset = 0;
-
+ 
       // Calculate cumulative width of all <th> before the left-sticky class
       for (let i = 0; i < tableHeaders.length; i++) {
         const th = tableHeaders[i];
@@ -42,10 +44,11 @@ const InventoryTable = ({initialColumns,initialData, scrollForProduct}) => {
       // Set the left offset for the sticky header
       setLeftStickyOffset(offset);
     }
+
   }, []);
 
   const [columns, setColumns] = useState(initialColumns);
-  const [data, setData] = useState(initialData);
+  
   const [selectedColumns, setSelectedColumns] = useState({
     brand: false,
     vendor: false,
@@ -153,15 +156,23 @@ const InventoryTable = ({initialColumns,initialData, scrollForProduct}) => {
     setOpen(false);
   };
 
-  const fetchMoreData = () => {
-    // scrollForProduct()
-  };
+ 
 
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-     
+        <InfiniteScroll
+              dataLength={initialData.length} // This is important to track the data length
+              next={scrollForProduct} // This will trigger the parent's function to fetch more data
+              hasMore={hasMore} // Parent will control if there's more data to fetch
+              loader={<h4>Loading...</h4>}
+              endMessage={
+                <p style={{ textAlign: "center" }}>
+                  <b>Yay! You have seen it all</b>
+                </p>
+              }
+            >
           <div className="custom-table">
           <table>
             <thead>
@@ -219,17 +230,7 @@ const InventoryTable = ({initialColumns,initialData, scrollForProduct}) => {
               </tr>
             </thead>
             <tbody>
-            <InfiniteScroll
-        dataLength={data.length}
-        next={fetchMoreData}
-        hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-        endMessage={
-          <p style={{ textAlign: "center" }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
-      >
+            
   {data.map((row, index) => (
     <tr key={index}>
       {columns.map((col) => (
@@ -252,7 +253,7 @@ const InventoryTable = ({initialColumns,initialData, scrollForProduct}) => {
       ))}
     </tr>
   ))}
-  </InfiniteScroll>
+ 
 </tbody>
 
 <tfoot>
@@ -321,7 +322,8 @@ const InventoryTable = ({initialColumns,initialData, scrollForProduct}) => {
           setShowMeasurePopup={setShowMeasurePopup}
         />
       )}
-        </div>
+            </div>
+    </InfiniteScroll>
       </Grid>
       </Grid>
         

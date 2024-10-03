@@ -11,9 +11,10 @@ import Skeleton from 'react-loading-skeleton';
 const ReorderInventoryMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const [hasMore, setHasMore] = useState(true);
 
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0); // Track current page number
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
@@ -255,9 +256,10 @@ const showcat = 0;
   ];
 
 
-const fetchProductsData = async (currentPage) => {
+  const fetchProductsData = async (currentPage) => {
+   
   try {
-    setLoading(true); 
+   
     const payload = {
       merchant_id:  'JAI16179CA' , //LoginGetDashBoardRecordJson?.data?.merchant_id , // 'JAI16179CA',
       format: 'json',
@@ -282,6 +284,9 @@ const fetchProductsData = async (currentPage) => {
     );
 
     const products = response.data;
+    if (products.length < 10) {
+      setHasMore(false);
+    }
     const mapProductData = (productData) => {
       return productData.map((product) => ({
         sku: product.sku || product.id,  // Using id if sku is null
@@ -325,19 +330,25 @@ const fetchProductsData = async (currentPage) => {
     // Example usage:
     const mappedData = mapProductData(products);
     // console.log(mappedData);
-    
-    setProductListData(mappedData)
+    setProductListData(prevData => [...prevData, ...mappedData]);
+    // setProductListData(mappedData)
     return products;  // Return the products for further use
   } catch (error) {
     console.error('Error fetching products:', error);
   } finally {
-    setLoading(false); // Set loading to false after fetching
+    // setLoading(false); // Set loading to false after fetching
   }
-}
+  }
+  const fetchMoreData = () => {
+    // Increment the page number and fetch the next set of data
+    setPage(prevPage => prevPage + 1);
+    fetchProductsData(page + 1); // Fetch data for the next page
+  };
 
-  useEffect(()=>{
-    fetchProductsData(page)
-  },[page])
+  useEffect(() => {
+    // Initial fetch when component mounts
+    fetchProductsData(page);
+  }, []);
   const handleScroll = (event) => {
     const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
     console.log("=-=-=scrollTop, clientHeight, scrollHeight ",scrollTop, clientHeight, scrollHeight )
@@ -346,7 +357,10 @@ const fetchProductsData = async (currentPage) => {
       setPage((prevPage) => prevPage + 1); // Increment the page
     }
   };
-
+  // const handleScroll = () => {
+  //   // You can handle other actions related to scrolling if necessary
+  //   console.log("Scrolling for product...");
+  // };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -397,11 +411,22 @@ const fetchProductsData = async (currentPage) => {
       </Grid>
       {/* <InventoryTable initialColumns={initialColumns} initialData={productListData}/> */}
 
-      {loading ? (
-       <Skeleton count={5} height={50} />  // Show loading indicator while fetching data
+      <InventoryTable 
+          initialColumns={initialColumns} 
+          initialData={productListData} 
+          scrollForProduct={fetchMoreData} 
+          hasMore={hasMore}
+        />
+      {/* {loading ? (
+       <Skeleton count={5} height={50} />  
       ) : (
-        <InventoryTable initialColumns={initialColumns} initialData={productListData}  scrollForProduct={handleScroll}/>
-      )}
+        <InventoryTable 
+          initialColumns={initialColumns} 
+          initialData={productListData} 
+          scrollForProduct={fetchMoreData} 
+          hasMore={hasMore}
+        />
+      )} */}
     </>
   );
 };
