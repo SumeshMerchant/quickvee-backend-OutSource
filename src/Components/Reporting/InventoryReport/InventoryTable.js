@@ -8,14 +8,14 @@ import InventoryColumns from "./InventoryColumns";
 import FirstButtonSelections from "./FirstButtonSelections";
 import SecondButtonSelections from "./SecondButtonSelections";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Skeleton from 'react-loading-skeleton';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
 const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore }) => {
+
   const [leftStickyOffset, setLeftStickyOffset] = useState(0);
-  const [data, setData] = useState(initialData);
-  // const [hasMore, setHasMore] = useState(true);
-  // For opening and closing InventoryTableColumns modal
+
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -25,10 +25,6 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
   };
 
   const tableRef = useRef(null);
-
-  useEffect(() => {
-    console.log("=-==productListData00-",data)
-  }, [data]);
 
   useEffect(() => {
     // setData(initialData);
@@ -160,6 +156,25 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
     setOpen(false);
   };
 
+  const renderLoader = () => {
+    return (
+      <TableContainer>
+        <StyledTable aria-label="customized table">
+          <TableBody>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
+              <StyledTableRow key={row}>
+                {["", "", "", "", "", "", ""].map((col) => (
+                  <StyledTableCell key={col}>
+                    <Skeleton />
+                  </StyledTableCell>
+                ))}
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </StyledTable>
+      </TableContainer>
+    );
+  };
  
 
   return (
@@ -167,10 +182,12 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
         <InfiniteScroll
-              dataLength={data.length} // This is important to track the data length
+              dataLength={initialData.length} // This is important to track the data length
               next={scrollForProduct} // This will trigger the parent's function to fetch more data
               hasMore={hasMore} // Parent will control if there's more data to fetch
-              loader={<h4>Loading...</h4>}
+              loader={
+                <h4 className="all-product-list">{renderLoader()}</h4>
+              }
               // endMessage={
               //   <p style={{ textAlign: "center" }}>
               //     <b>Yay! You have seen it all</b>
@@ -235,7 +252,7 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
             </thead>
             <tbody>
             
-  {data.map((row, index) => (
+  {initialData.map((row, index) => (
     <tr key={index}>
       {columns.map((col) => (
         <td key={col.id}>

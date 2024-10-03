@@ -6,7 +6,7 @@ import InventoryTable from "../InventoryReport/InventoryTable";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import axios from 'axios';
 import { useAuthDetails } from "../../../Common/cookiesHelper";
-import Skeleton from 'react-loading-skeleton';
+
 
 const ReorderInventoryMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -66,6 +66,7 @@ const ReorderInventoryMain = () => {
     { id: "avg_cost", name: "Avg. cost" },
     { id: "plus_after_avg_cost", name: "+" },
   ];
+
 
   const fetchProductsData = async (currentPage) => {
 
@@ -168,13 +169,9 @@ const ReorderInventoryMain = () => {
     fetchProductsData(page + 1); // Fetch data for the next page
   };
 
-  useEffect(() => {
-    // fetchProductsData(page);
-  }, []);
 
   useEffect(() => {
     fetchProductsData(page);
-    console.log("=-==productListData00-",productListData)
   }, [productListData]);
 
   return (
@@ -235,7 +232,6 @@ const ReorderInventoryMain = () => {
       {/* {loading ? (
         <></>
       ) :( */}
-      {console.log("=-=-=-productListData",productListData)}
         <InventoryTable
         initialColumns={initialColumns}
         initialData={productListData}
@@ -246,5 +242,6 @@ const ReorderInventoryMain = () => {
     </>
   );
 };
+
 
 export default ReorderInventoryMain;
