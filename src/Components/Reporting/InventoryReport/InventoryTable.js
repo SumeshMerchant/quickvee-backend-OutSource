@@ -219,9 +219,8 @@ const InventoryTable = ({initialColumns,initialData}) => {
   const [columns, setColumns] = useState(initialColumns);
   const [data, setData] = useState(initialData);
   const [selectedColumns, setSelectedColumns] = useState({
-    supplierCode: false,
     brand: false,
-    supplier: false,
+    vendor: false,
     category: false,
     revenue: false,
     gross_profit: false,
@@ -260,9 +259,8 @@ const InventoryTable = ({initialColumns,initialData}) => {
   const applyColumns = () => {
     let updatedColumns = [...columns];
     const columnMappings = {
-      supplierCode: "supplier_code",
       brand: "brand",
-      supplier: "supplier",
+      vendor: "vendor",
       category: "category",
     };
 
@@ -396,10 +394,7 @@ const InventoryTable = ({initialColumns,initialData}) => {
 
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          {/* Inventory Filter */}
-          <InventoryFilter />
-          
-          {/* Table */}
+     
           <div className="custom-table">
           <table>
             <thead>

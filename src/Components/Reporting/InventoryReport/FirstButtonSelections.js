@@ -31,9 +31,8 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
     const { checked } = event.target;
     setSelectAllColumns(checked);
     const updatedColumns = {
-      supplierCode: checked,
       brand: checked,
-      supplier: checked,
+      vendor: checked,
       category: checked,
       tag: checked
     };
@@ -41,7 +40,7 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
   };
 
   useEffect(() => {
-    const allSelected = selectedColumns.supplierCode && selectedColumns.brand && selectedColumns.supplier && selectedColumns.category  && selectedColumns.tag;
+    const allSelected =  selectedColumns.brand && selectedColumns.vendor && selectedColumns.category  && selectedColumns.tag;
     setSelectAllColumns(allSelected);
   }, [selectedColumns]);
 
@@ -121,17 +120,6 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
               
                 <input
                   type="checkbox"
-                  name="supplierCode"
-                  checked={selectedColumns.supplierCode}
-                  onChange={handleCheckboxChange}
-                />
-                Supplier Code
-             
-            </Grid>
-            <Grid item xs={6} sm={12} md={6} sx={{gap: 1.5, alignItems: 'center', display: 'flex'}}>
-              
-                <input
-                  type="checkbox"
                   name="brand"
                   checked={selectedColumns.brand}
                   onChange={handleCheckboxChange}
@@ -143,11 +131,11 @@ const FirstButtonSelections = ({ selectedColumns, setSelectedColumns, applyColum
            
               <input
                 type="checkbox"
-                name="supplier"
-                checked={selectedColumns.supplier}
+                name="vendor"
+                checked={selectedColumns.vendor}
                 onChange={handleCheckboxChange}
               />
-              Supplier
+              Vendor
            
             </Grid>
             <Grid item xs={6} sm={12} md={6} sx={{gap: 1.5, alignItems: 'center', display: 'flex'}}>

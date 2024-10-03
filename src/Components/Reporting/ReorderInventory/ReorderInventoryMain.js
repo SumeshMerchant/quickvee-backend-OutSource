@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReorderInventoryList from "./ReorderInventoryList";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import InventoryTable from "../InventoryReport/InventoryTable";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
+import axios from 'axios';
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+
 
 const ReorderInventoryMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
@@ -28,7 +32,9 @@ const ReorderInventoryMain = () => {
         break;
     }
   };
-  const showcat = 0;
+
+  // console.log("=-=-LoginGetDashBoardRecordJson",JSON.stringify(LoginGetDashBoardRecordJson))
+const showcat = 0;
   const reportTypeList = [
     "Product",
     "SKU Name",
@@ -45,7 +51,7 @@ const ReorderInventoryMain = () => {
   ];
 
   const initialColumns = [
-    { id: "sku", name: "SKU name" },
+    { id: "sku", name: "Product Name" },
     { id: "plus_after_sku", name: "+" },
     { id: "closing_inventory", name: "Closing Inventory" },
     { id: "items_sold_per_day", name: "Items sold per day" },
@@ -64,9 +70,8 @@ const ReorderInventoryMain = () => {
       days_cover: 1.5,
       avg_cost: "$10.00",
       brand: "Brand A",
-      supplier: "Supplier A",
+      vendor: "Vendor A",
       category: "Category A",
-      supplier_code: "SC001",
       revenue: 200,
       gross_profit: 12,
       sale_margin: 10,
@@ -102,9 +107,8 @@ const ReorderInventoryMain = () => {
       days_cover: 1,
       avg_cost: "$10.00",
       brand: "Brand A",
-      supplier: "Supplier A",
+      vendor: "Vendor A",
       category: "Category A",
-      supplier_code: "SC001",
       revenue: 200,
       gross_profit: 12,
       sale_margin: 10,
@@ -140,9 +144,8 @@ const ReorderInventoryMain = () => {
       days_cover: "",
       avg_cost: "",
       brand: "Brand A",
-      supplier: "Supplier A",
+      vendor: "Vendor A",
       category: "Category A",
-      supplier_code: "SC001",
       revenue: 200,
       gross_profit: 12,
       sale_margin: 10,
@@ -178,9 +181,8 @@ const ReorderInventoryMain = () => {
       days_cover: "",
       avg_cost: "",
       brand: "Brand A",
-      supplier: "Supplier A",
+      vendor: "Vendor A",
       category: "Category A",
-      supplier_code: "SC001",
       revenue: 200,
       gross_profit: 12,
       sale_margin: 10,
@@ -216,9 +218,8 @@ const ReorderInventoryMain = () => {
       days_cover: "",
       avg_cost: "",
       brand: "Brand A",
-      supplier: "Supplier A",
+      vendor: "Vendor A",
       category: "Category A",
-      supplier_code: "SC001",
       revenue: 200,
       gross_profit: 12,
       sale_margin: 10,
@@ -247,6 +248,49 @@ const ReorderInventoryMain = () => {
       last_received: "2023-04-01",
     },
   ];
+
+  
+
+const fetchProductsData = async () => {
+  try {
+    const payload = {
+      merchant_id:  'JAI16179CA' , //LoginGetDashBoardRecordJson?.data?.merchant_id , // 'JAI16179CA',
+      format: 'json',
+      category_id: 'all',
+      show_status: 'all',
+      listing_type: 0,
+      offset: 0,
+      limit: 10,
+      page: 0,
+      token_id: '7691', //LoginGetDashBoardRecordJson?.token_id, //'7691',
+      login_type: LoginGetDashBoardRecordJson?.login_type //'superadmin'
+    }
+
+    console.log("=-=-=payload",payload)
+    const response = await axios.post(
+      'https://production.quickvee.net/Product_api_react/Products_list',
+      payload,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer 08ad7136136aff9a13cf14701ade857690726d8f6719c28482ff08703d08`, // ${LoginGetDashBoardRecordJson?.token}
+        },
+      }
+    );
+
+    const products = response.data;
+    console.log('Fetched Products:', JSON.stringify(products));
+    return products;  // Return the products for further use
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  }
+}
+
+  useEffect(()=>{
+    fetchProductsData()
+  })
+
+
   return (
     <>
       <Grid container className="box_shadow_div">
