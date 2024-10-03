@@ -27,7 +27,11 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
   const tableRef = useRef(null);
 
   useEffect(() => {
-    setData(initialData);
+    console.log("=-==productListData00-",data)
+  }, [data]);
+
+  useEffect(() => {
+    // setData(initialData);
     if (tableRef.current) {
       const tableHeaders = tableRef.current.querySelectorAll("th");
       let offset = 0;
@@ -163,15 +167,15 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
         <InfiniteScroll
-              dataLength={initialData.length} // This is important to track the data length
+              dataLength={data.length} // This is important to track the data length
               next={scrollForProduct} // This will trigger the parent's function to fetch more data
               hasMore={hasMore} // Parent will control if there's more data to fetch
               loader={<h4>Loading...</h4>}
-              endMessage={
-                <p style={{ textAlign: "center" }}>
-                  <b>Yay! You have seen it all</b>
-                </p>
-              }
+              // endMessage={
+              //   <p style={{ textAlign: "center" }}>
+              //     <b>Yay! You have seen it all</b>
+              //   </p>
+              // }
             >
           <div className="custom-table">
           <table>

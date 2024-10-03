@@ -6,7 +6,7 @@ import InventoryTable from "../InventoryReport/InventoryTable";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import axios from 'axios';
 import { useAuthDetails } from "../../../Common/cookiesHelper";
-import Skeleton from 'react-loading-skeleton'; 
+import Skeleton from 'react-loading-skeleton';
 
 const ReorderInventoryMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -39,7 +39,7 @@ const ReorderInventoryMain = () => {
     }
   };
 
-const showcat = 0;
+  const showcat = 0;
   const reportTypeList = [
     "Product",
     "SKU Name",
@@ -68,86 +68,99 @@ const showcat = 0;
   ];
 
   const fetchProductsData = async (currentPage) => {
-   
-  try {
-   
-    const payload = {
-      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id , // 'JAI16179CA',
-      token_id:  LoginGetDashBoardRecordJson?.token_id , //7691
-      login_type: LoginGetDashBoardRecordJson?.login_type //'superadmin'
-    }
-    const response = await axios.post(
-      'https://production.quickvee.net/ReportingReactapi/get_reorder_inventory_list',
-      payload,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `${LoginGetDashBoardRecordJson?.token}` // `Bearer 08ad7136136aff9a13cf14701ade857690726d8f6719c28482ff08703d08`, // ${LoginGetDashBoardRecordJson?.token}
-        },
-      }
-    );
 
-    const products = response.data;
-    if (products.length < 10) {
-      setHasMore(false);
-    }
-    const mapProductData = (productData) => {
-    return productData.map((product) => {
-      return {
-        sku: product.sku || product.id  ,
-        name: product.title || product.item_name,
-        closing_inventory: parseInt(product.quantity) || 0,
-        items_sold: product.reorder_qty || 0,
-        days_cover: 0,
-        avg_cost: product?.costperItem ? `$${parseFloat(product?.costperItem).toFixed(2)}` : "",
-        brand: product.brand,
-        vendor: "Vendor A" || product.cost_vendor,  
-        category: product?.category_name || product.category, 
-        revenue: parseFloat(product.profit) || 0,
-        gross_profit: parseFloat(product.profit) || 0,
-        sale_margin: parseFloat(product.margin) || 0,
-        customer_count: 0, 
-        sale_count: 0, 
-        avg_items_per_sale: 0, 
-        sale_discounted: 0, 
-        avg_sale_value: 0, 
-        cost_goods_sold: parseFloat(product.costperItem) || 0,
-        retail_value: 0, 
-        current_inventory: parseInt(product.quantity) || product?.reorder_qty || 0,
-        start_date_inventory: product.created_on,
-        reorder_point: parseInt(product.reorder_level) || 0,
-        reorder_amount: parseInt(product.reorder_qty) || 0,
-        return_count: 0, 
-        inventory_days_cover: 0, 
-        inventory_returns: 0, 
-        inbound_inventory: "", 
-        items_sold_per_day: 0, 
-        inventory_cost: parseFloat(product.costperItem) || 0,
-        avg_cost_measure: parseFloat(product.costperItem) || 0,
-        self_through_rate: 0, 
-        created: product.created_on,
-        first_sale: "", 
-        last_sale: "", 
-        last_received: product.updated_on,
-        varient: product?.variant,
-        instock:product?.instock,
-        item_price:product?.item_price,
-        reorder_level:product?.reorder_level
+    try {
+      setLoading(true)
+      // const payload = {
+      //   merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id, // 'JAI16179CA',
+      //   token_id: LoginGetDashBoardRecordJson?.token_id, //7691
+      //   login_type: LoginGetDashBoardRecordJson?.login_type //'superadmin'
+      // }
+      const payload = {
+        "merchant_id": "JAI16179CA",
+        "format": "json",
+        "category_id": "all",
+        "show_status": "all",
+        "listing_type": 0,
+        "offset": 0,
+        "limit": 10,
+        "page": 0,
+        "token_id": 7691,
+        "login_type": "superadmin"
       }
-      });
-    };
-    
-    // Example usage:
-    const mappedData = mapProductData(products);
-    // console.log(mappedData);
-    setProductListData(prevData => [...prevData, ...mappedData]);
-    // setProductListData(mappedData)
-    return products;  // Return the products for further use
-  } catch (error) {
-    console.error('Error fetching products:', error);
-  } finally {
-    // setLoading(false); // Set loading to false after fetching
-  }
+      const response = await axios.post(
+        'https://production.quickvee.net/Product_api_react/Products_list',
+        payload,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `${LoginGetDashBoardRecordJson?.token}` // `Bearer 08ad7136136aff9a13cf14701ade857690726d8f6719c28482ff08703d08`, // ${LoginGetDashBoardRecordJson?.token}
+          },
+        }
+      );
+
+      const products = response.data;
+      if (products.length < 10) {
+        setHasMore(false);
+      }
+      const mapProductData = (productData) => {
+        return productData?.map((product) => {
+          return {
+            sku: product.sku || product.id,
+            name: product.title || product.item_name,
+            closing_inventory: parseInt(product.quantity) || 0,
+            items_sold: product.reorder_qty || 0,
+            days_cover: 0,
+            avg_cost: product?.costperItem ? `$${parseFloat(product?.costperItem).toFixed(2)}` : "",
+            brand: product.brand,
+            vendor: "Vendor A" || product.cost_vendor,
+            category: product?.category_name || product.category,
+            revenue: parseFloat(product.profit) || 0,
+            gross_profit: parseFloat(product.profit) || 0,
+            sale_margin: parseFloat(product.margin) || 0,
+            customer_count: 0,
+            sale_count: 0,
+            avg_items_per_sale: 0,
+            sale_discounted: 0,
+            avg_sale_value: 0,
+            cost_goods_sold: parseFloat(product.costperItem) || 0,
+            retail_value: 0,
+            current_inventory: parseInt(product.quantity) || product?.reorder_qty || 0,
+            start_date_inventory: product.created_on,
+            reorder_point: parseInt(product.reorder_level) || 0,
+            reorder_amount: parseInt(product.reorder_qty) || 0,
+            return_count: 0,
+            inventory_days_cover: 0,
+            inventory_returns: 0,
+            inbound_inventory: "",
+            items_sold_per_day: 0,
+            inventory_cost: parseFloat(product.costperItem) || 0,
+            avg_cost_measure: parseFloat(product.costperItem) || 0,
+            self_through_rate: 0,
+            created: product.created_on,
+            first_sale: "",
+            last_sale: "",
+            last_received: product.updated_on,
+            varient: product?.variant,
+            instock: product?.instock,
+            item_price: product?.item_price,
+            reorder_level: product?.reorder_level
+          }
+        });
+      };
+      const mappedData = mapProductData(products);
+      // console.log(mappedData);
+      // if(hasMore){
+        setProductListData(prevData => [...prevData, ...mappedData]);
+      // } else {
+      //   setProductListData(mappedData)
+      // }
+      return products;  // Return the products for further use
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+       setLoading(false); 
+    }
   }
   const fetchMoreData = () => {
     // Increment the page number and fetch the next set of data
@@ -156,21 +169,14 @@ const showcat = 0;
   };
 
   useEffect(() => {
-    // Initial fetch when component mounts
-    fetchProductsData(page);
+    // fetchProductsData(page);
   }, []);
-  const handleScroll = (event) => {
-    const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-    console.log("=-=-=scrollTop, clientHeight, scrollHeight ",scrollTop, clientHeight, scrollHeight )
-    // Check if we've reached the bottom
-    if (scrollTop + clientHeight >= scrollHeight - 5) {
-      setPage((prevPage) => prevPage + 1); // Increment the page
-    }
-  };
-  // const handleScroll = () => {
-  //   // You can handle other actions related to scrolling if necessary
-  //   console.log("Scrolling for product...");
-  // };
+
+  useEffect(() => {
+    fetchProductsData(page);
+    console.log("=-==productListData00-",productListData)
+  }, [productListData]);
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -220,22 +226,23 @@ const showcat = 0;
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
 
-      <InventoryTable 
-          initialColumns={initialColumns} 
-          initialData={productListData} 
-          scrollForProduct={fetchMoreData} 
-          hasMore={hasMore}
-        />
+      {/* <InventoryTable
+        initialColumns={initialColumns}
+        initialData={productListData}
+        scrollForProduct={fetchMoreData}
+        hasMore={hasMore}
+      /> */}
       {/* {loading ? (
-       <Skeleton count={5} height={50} />  
-      ) : (
-        <InventoryTable 
-          initialColumns={initialColumns} 
-          initialData={productListData} 
-          scrollForProduct={fetchMoreData} 
-          hasMore={hasMore}
-        />
-      )} */}
+        <></>
+      ) :( */}
+      {console.log("=-=-=-productListData",productListData)}
+        <InventoryTable
+        initialColumns={initialColumns}
+        initialData={productListData}
+        scrollForProduct={fetchMoreData}
+        hasMore={hasMore}
+      />
+       {/* )}  */}
     </>
   );
 };
