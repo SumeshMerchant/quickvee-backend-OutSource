@@ -156,36 +156,24 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
     setOpen(false);
   };
 
-  const renderLoader = () => {
-    return (
-      <table>
-        <tbody>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
-              <tr key={row}>
-                {["", "", "", "", "", "", ""].map((col) => (
-                  <td key={col}>
-                    <Skeleton />
-                  </td>
-                ))}
-              </tr>
-            ))}
-        </tbody>
-      </table>
-      //    <TableBody>
-      //       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
-      //         <StyledTableRow key={row}>
-      //           {["", "", "", "", "", "", ""].map((col) => (
-      //             <StyledTableCell key={col}>
-      //               <Skeleton />
-      //             </StyledTableCell>
-      //           ))}
-      //         </StyledTableRow>
-      //       ))}
-      //     </TableBody>
-      //   </StyledTable>
-      // </TableContainer>
-    );
-  };
+  
+const renderLoader = () => {
+  return (
+    <table>
+      <tbody>
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
+            <tr key={row} style={{background: 'rgba(0, 0, 0, 0.04)'}} >
+              {["", "", "", "", "", "", "", "","",""].map((col) => (
+                <td key={col}>
+                  <Skeleton />
+                </td>
+              ))}
+            </tr>
+          ))}
+      </tbody>
+    </table>
+  );
+};
  
  
   return (
@@ -197,7 +185,7 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
               next={scrollForProduct} // This will trigger the parent's function to fetch more data
               hasMore={hasMore} // Parent will control if there's more data to fetch
               loader={
-                <h4 className="all-product-list">{renderLoader()}</h4>
+                <div className="custom-table">{renderLoader()}</div>
               }
               // endMessage={
               //   <p style={{ textAlign: "center" }}>
