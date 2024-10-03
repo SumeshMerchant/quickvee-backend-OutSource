@@ -6,6 +6,7 @@ import InventoryTable from "../InventoryReport/InventoryTable";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import axios from 'axios';
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import Config from "../../../Constants/Config";
 
 
 const ReorderInventoryMain = () => {
@@ -72,35 +73,30 @@ const ReorderInventoryMain = () => {
     console.log("======currentPage=====", currentPage)
     try {
       setLoading(true)
-      // const payload = {
-      //   merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id, // 'JAI16179CA',
-      //   token_id: LoginGetDashBoardRecordJson?.token_id, //7691
-      //   login_type: LoginGetDashBoardRecordJson?.login_type //'superadmin'
-      // }
       const payload = {
         "merchant_id": "JAI16179CA",
         "format": "json",
         "category_id": "all",
         "show_status": "all",
         "listing_type": 0,
-        "offset": currentPage * 10,
+        "offset": 0,
         "limit": 10,
         "page": 0,
         "token_id": 7691,
         "login_type": "superadmin"
       }
       const response = await axios.post(
-        'https://production.quickvee.net/Product_api_react/Products_list',
+        `${Config.BASE_URL}${Config.PRODUCTS_LIST}`,
         payload,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            'Authorization': `${LoginGetDashBoardRecordJson?.token}` // `Bearer 08ad7136136aff9a13cf14701ade857690726d8f6719c28482ff08703d08`, // ${LoginGetDashBoardRecordJson?.token}
+            'Authorization': `${LoginGetDashBoardRecordJson?.token}`
           },
         }
       );
 
-      const products = response.data;
+      const products = response?.data;
       if (products.length < 10) {
         setHasMore(false);
       }
@@ -150,13 +146,14 @@ const ReorderInventoryMain = () => {
         });
       };
       const mappedData = mapProductData(products);
-      // console.log(mappedData);
-      // if(hasMore){
-        setProductListData(prevData => [...prevData, ...mappedData]);
-      // } else {
-      //   setProductListData(mappedData)
-      // }
-      return products;  // Return the products for further use
+      if (page == 0) {
+        setProductListData(mappedData)
+        
+      }else {
+        
+        setProductListData(prev => [...prev, ...mappedData])
+      }
+      return products; 
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -164,9 +161,8 @@ const ReorderInventoryMain = () => {
     }
   }
   const fetchMoreData = () => {
-    // Increment the page number and fetch the next set of data
     setPage(prevPage => prevPage + 1);
-    fetchProductsData(page + 1); // Fetch data for the next page
+    fetchProductsData(page + 1);
   };
 
 
