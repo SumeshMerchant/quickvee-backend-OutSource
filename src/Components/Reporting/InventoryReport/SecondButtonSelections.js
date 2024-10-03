@@ -14,11 +14,11 @@ const SecondButtonSelections = ({ selectedColumns, setSelectedColumns, applyMeas
       <label>
         <input
           type="checkbox"
-          name="revenue"
-          checked={selectedColumns.revenue}
+          name="net_sale"
+          checked={selectedColumns.net_sale}
           onChange={handleCheckboxChange}
         />
-        Revenue
+        Net Sale
       </label>
       <label>
         <input

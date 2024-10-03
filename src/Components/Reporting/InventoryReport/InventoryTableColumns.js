@@ -66,13 +66,13 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
               <Grid item>
               <input
                   type="checkbox"
-                  name="revenue"
-                  checked={selectedColumns?.revenue}
+                  name="net_sale"
+                  checked={selectedColumns?.net_sale}
                   onChange={handleCheckboxChange}
                 />
               </Grid>
               <Grid item xs={10}>
-                <h6 className="form-title">Revenue</h6>
+                <h6 className="form-title">Net Sale</h6>
                 <p className="sub-title">Total value of items sold</p>
               </Grid>
             </Grid>

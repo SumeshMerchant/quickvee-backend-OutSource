@@ -110,7 +110,7 @@ const InventoryTable = ({initialColumns,initialData, scrollForProduct}) => {
   const applyMeasures = () => {
     let updatedColumns = [...columns];
     const measureMappings = {
-      revenue: "revenue",
+      net_sale: "net_sale",
       gross_profit: "gross_profit",
       sale_margin: "sale_margin",
       customer_count: "customer_count",
