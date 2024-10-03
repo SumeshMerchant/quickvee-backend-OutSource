@@ -69,7 +69,7 @@ const ReorderInventoryMain = () => {
 
 
   const fetchProductsData = async (currentPage) => {
-
+    console.log("======currentPage=====", currentPage)
     try {
       setLoading(true)
       // const payload = {
@@ -83,7 +83,7 @@ const ReorderInventoryMain = () => {
         "category_id": "all",
         "show_status": "all",
         "listing_type": 0,
-        "offset": 0,
+        "offset": currentPage * 10,
         "limit": 10,
         "page": 0,
         "token_id": 7691,
@@ -171,8 +171,9 @@ const ReorderInventoryMain = () => {
 
 
   useEffect(() => {
+    console.log("======")
     fetchProductsData(page);
-  }, [productListData]);
+  }, []);
 
   return (
     <>

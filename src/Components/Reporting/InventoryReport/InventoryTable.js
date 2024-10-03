@@ -158,25 +158,36 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
 
   const renderLoader = () => {
     return (
-      <TableContainer>
-        <StyledTable aria-label="customized table">
-          <TableBody>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
-              <StyledTableRow key={row}>
+      <table>
+        <tbody>
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
+              <tr key={row}>
                 {["", "", "", "", "", "", ""].map((col) => (
-                  <StyledTableCell key={col}>
+                  <td key={col}>
                     <Skeleton />
-                  </StyledTableCell>
+                  </td>
                 ))}
-              </StyledTableRow>
+              </tr>
             ))}
-          </TableBody>
-        </StyledTable>
-      </TableContainer>
+        </tbody>
+      </table>
+      //    <TableBody>
+      //       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
+      //         <StyledTableRow key={row}>
+      //           {["", "", "", "", "", "", ""].map((col) => (
+      //             <StyledTableCell key={col}>
+      //               <Skeleton />
+      //             </StyledTableCell>
+      //           ))}
+      //         </StyledTableRow>
+      //       ))}
+      //     </TableBody>
+      //   </StyledTable>
+      // </TableContainer>
     );
   };
  
-
+ 
   return (
     <>
       <Grid container className="box_shadow_div">
