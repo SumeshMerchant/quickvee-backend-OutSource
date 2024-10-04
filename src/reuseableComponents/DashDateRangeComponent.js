@@ -63,32 +63,31 @@ const DashDateRangeComponent = ({
 
   const setDatesBasedOnOption = (option) => {
     const today = new Date();
-    const dayBeforeDay = new Date();
     switch (option) {
       case "Today":
         setStartDate(today);
         setEndDate(today);
         break;
       case "Yesterday":
-        const yesterday = new Date();
+        const yesterday = new Date(today);
         yesterday.setDate(today.getDate() - 1);
         setStartDate(yesterday);
         setEndDate(yesterday);
         break;
       case "Last 7 Days":
-        const last7Days = new Date();
-
-        dayBeforeDay.setDate(today.getDate() - 1);
+        const last7Days = new Date(today);
+        const dayBefore = new Date(today); 
         last7Days.setDate(today.getDate() - 7);
+        dayBefore.setDate(today.getDate() - 1);
         setStartDate(last7Days);
-        setEndDate(dayBeforeDay);
+        setEndDate(dayBefore);
         break;
-      case "Last 30 Days":
-          const thirtyDaysAgo = new Date(today);
-          thirtyDaysAgo.setDate(today.getDate() - 30);
-          setStartDate(thirtyDaysAgo); 
-          setEndDate(today); 
-          break;
+      case "Last 30 days":
+        const last30Days = new Date(today);
+        last30Days.setDate(today.getDate() - 30);
+        setStartDate(last30Days);
+        setEndDate(today);
+        break;
       default:
         break;
     }

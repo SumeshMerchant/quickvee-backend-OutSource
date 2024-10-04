@@ -8,16 +8,31 @@ import axios from 'axios';
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import Config from "../../../Constants/Config";
 
+const getCurrentDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
 const ReorderInventoryMain = () => {
-  const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    start_date: getCurrentDate(),
+    end_date: getCurrentDate(), 
+  });
+
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [hasMore, setHasMore] = useState(true);
 
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(0); // Track current page number
+  const [page, setPage] = useState(0);
   const handleDateRangeChange = (dateRange) => {
-    setSelectedDateRange(dateRange);
+    const updatedData = {
+      ...dateRange
+    };
+    setSelectedDateRange(updatedData);
+    fetchProductsData(page);
   };
   const [selectedOrderSource, setSelectedOrderSource] = useState("SKU Name");
   const [productListData, setProductListData] = useState([]);
@@ -78,7 +93,8 @@ const ReorderInventoryMain = () => {
         token_id: LoginGetDashBoardRecordJson?.token_id,
         login_type: LoginGetDashBoardRecordJson?.login_type,
         limit: 10,
-        offset: (currentPage - 1) * 10 
+        offset: (currentPage - 1) * 10,
+        ...selectedDateRange 
       }
       const response = await axios.post(
         `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
@@ -164,7 +180,7 @@ const ReorderInventoryMain = () => {
   useEffect(() => {
    
     fetchProductsData(page);
-  }, []);
+  }, [selectedDateRange]);
 
   return (
     <>

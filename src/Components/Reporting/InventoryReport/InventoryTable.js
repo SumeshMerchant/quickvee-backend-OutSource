@@ -1,21 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Grid } from "@mui/material";
 import plusIcon from "../../../Assests/Products/plusIcon.svg";
-import InventoryFilter from "./InventoryFilter";
-import InventoryMeasures from "./InventoryMeasures";
 import InventoryTableColumns from "./InventoryTableColumns";
-import InventoryColumns from "./InventoryColumns";
 import FirstButtonSelections from "./FirstButtonSelections";
 import SecondButtonSelections from "./SecondButtonSelections";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Skeleton from 'react-loading-skeleton';
-
-const emails = ['username@gmail.com', 'user02@gmail.com'];
-
 const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore }) => {
-
   const [leftStickyOffset, setLeftStickyOffset] = useState(0);
-
+  const [colWidths, setColWidths] = useState([]);
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -23,30 +16,7 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
   const handleClose = () => {
     setOpen(false);
   };
-
   const tableRef = useRef(null);
-
-  // useEffect(() => {
-  //   // setData(initialData);
-  //   if (tableRef.current) {
-  //     const tableHeaders = tableRef.current.querySelectorAll("th");
-  //     let offset = 0;
- 
-  //     // Calculate cumulative width of all <th> before the left-sticky class
-  //     for (let i = 0; i < tableHeaders.length; i++) {
-  //       const th = tableHeaders[i];
-  //       if (th.classList.contains("left-sticky")) {
-  //         break;
-  //       }
-  //       offset += th.offsetWidth;
-  //     }
-
-  //     // Set the left offset for the sticky header
-  //     setLeftStickyOffset(offset);
-  //   }
-
-  // }, []);
-
   const [columns, setColumns] = useState(initialColumns);
   
   const [selectedColumns, setSelectedColumns] = useState({
@@ -193,176 +163,178 @@ const renderLoader = () => {
   );
 };
  
+  // Function to dynamically set the column widths
+useEffect(() => {
+  if (tableRef.current) {
+    const headerCells = tableRef.current.querySelectorAll('thead th');
+    const widths = Array.from(headerCells).map((th) => th.offsetWidth);
+    setColWidths(widths);
+  }
+}, [columns, initialData]);
+useEffect(() => {
+  const tableContainer = document.querySelector(".custom-table");
+  const tfootContainer = document.querySelector(".tfoot-scrollable-container");
+
+  // Sync scroll between table and tfoot (from table to tfoot)
+  const syncScrollFromTable = () => {
+    tfootContainer.scrollLeft = tableContainer.scrollLeft;
+  };
+
+  // Sync scroll from tfoot to table (from footer to table)
+  const syncScrollFromFooter = () => {
+    tableContainer.scrollLeft = tfootContainer.scrollLeft;
+  };
+
+  // Add scroll event listeners
+  tableContainer.addEventListener("scroll", syncScrollFromTable);
+  tfootContainer.addEventListener("scroll", syncScrollFromFooter);
+
+  // Cleanup event listeners on component unmount
+  return () => {
+    tableContainer.removeEventListener("scroll", syncScrollFromTable);
+    tfootContainer.removeEventListener("scroll", syncScrollFromFooter);
+  };
+}, []);
+
  
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-        <InfiniteScroll
-              dataLength={initialData.length} // This is important to track the data length
-              next={scrollForProduct} // This will trigger the parent's function to fetch more data
-              hasMore={hasMore} // Parent will control if there's more data to fetch
-              loader={
-                <div className="custom-table">{renderLoader()}</div>
-              }
-              // endMessage={
-              //   <p style={{ textAlign: "center" }}>
-              //     <b>Yay! You have seen it all</b>
-              //   </p>
-              // }
-            >
-          <div className="custom-table">
-          <table>
-            <thead>
-
-              <tr>
-              {columns.map((col) => {
-                  // Check if the column id matches to render the appropriate button
-                  if (col.id === "plus_after_sku") {
-                    return (
-                      <th key={col.id} className="left-sticky">
-                        {/* <button onClick={() => { setShowColumnPopup(true); setPopupCheckboxes("columns"); }}>
-                          
-                        </button> */}
-                        <FirstButtonSelections
-                        selectedColumns={selectedColumns}
-                        setSelectedColumns={setSelectedColumns}
-                        applyColumns={applyColumns}
-                        setShowColumnPopup={setShowColumnPopup}
-                      />
-                      </th>
-                    );
-                  } else if (col.id === "plus_after_avg_cost") {
-                    return (
-                      <th key={col.id} className="right-sticky">
-                        {/* <button onClick={() => { setShowMeasurePopup(true); setPopupCheckboxes("measures"); }}>
-                          
-                        </button> */}
-
-                      <div onClick={handleClickOpen}>
-                          <img
-                            style={{ height: "40px", width: "40px" }}
-                            src={plusIcon}
-                            alt="plusIcon"
-                          />
-                        </div>
-                        <InventoryTableColumns open={open} handleClose={handleClose} 
-                          selectedColumns={selectedColumns}
-                          setSelectedColumns={setSelectedColumns}
-                          applyMeasures={applyMeasures}
-                          setShowMeasurePopup={setShowMeasurePopup}
-                        />
-                      </th>
-                    );
-                  } else {
-                    return (
-                      <th key={col.id}>
-                        {col.name}
-                      </th>
-                    );
-                  }
-                })}
-
-
-              
-              </tr>
-            </thead>
-            <tbody>
-            
-  {initialData.map((row, index) => (
-    <tr key={index}>
-      {columns.map((col) => (
-        <td key={col.id}>
-          {col.id === "sku" ? (
-            <>
-              <div>{row.name}</div>
-              <div style={{ fontSize: "0.9em", color: "gray" }}>
-              {row.sku == "revenue" ? `$ ${row.sku}` : row.sku}
-              </div>
-            </>
-          ) : col.id === "plus_after_sku" || col.id === "plus_after_avg_cost" ? (
-            "" // Display nothing for "plus_after_sku"
-          ) : row[col.id] !== null && row[col.id] !== undefined && row[col.id] !== "" ? (
-            row[col.id]
-          ) : (
-            "-" // Display "-" for other empty fields
-          )}
-        </td>
-      ))}
-    </tr>
-  ))}
- 
-</tbody>
-
-<tfoot>
-                <tr>
-                  <td>Totals</td>  
-                  {columns.slice(1).map((col) => {
-    if (col.id === "closing_inventory") {
-      return <td key={col.id}>900</td>;
-    } else if (col.id === "sell_through_rate") {
-      return <td key={col.id}>90%</td>;
-    } else if (col.id === "inventory_cost") {
-      return <td key={col.id}>$72.00</td>;
-    } else if (col.id === "retail_value") {
-      return <td key={col.id}>600</td>;
-    } else if (col.id === "revenue") { 
-      return <td key={col.id}>$600</td>;
-    }
-    else if (col.id === "items_sold") { 
-      return <td key={col.id}>600</td>;
-    }
-    else if (col.id === "gross_profit") { 
-      return <td key={col.id}>$600</td>;
-    }
-    else if (col.id === "items_sold_per_day") {
-      return <td key={col.id}>600</td>;
-    }
-    else if (col.id === "current_inventory") {
-      return <td key={col.id}>600</td>;
-    }
-    else {
-      return <td key={col.id}></td>;
-    }
-  })}
-                </tr>
-              </tfoot>
-
-            {/* <tbody>
-              {data.map((row, index) => (
-                <tr key={index}>
-                  {columns.map((col) => (
-                    <td key={col.id}>
-                      {row[col.id] || ""}
-                    </td>
+          <InfiniteScroll
+            dataLength={initialData.length} // This is important to track the data length
+            next={scrollForProduct} // This will trigger the parent's function to fetch more data
+            hasMore={hasMore} // Parent will control if there's more data to fetch
+            loader={<div className="custom-table">{renderLoader()}</div>}
+          >
+            <div className="custom-table custom-table-hidescroll">
+              <table ref={tableRef}>
+                <thead>
+                  <tr>
+                    {columns.map((col) => {
+                      // Check if the column id matches to render the appropriate button
+                      if (col.id === "plus_after_sku") {
+                        return (
+                          <th key={col.id} className="left-sticky">
+                            <FirstButtonSelections
+                              selectedColumns={selectedColumns}
+                              setSelectedColumns={setSelectedColumns}
+                              applyColumns={applyColumns}
+                              setShowColumnPopup={setShowColumnPopup}
+                            />
+                          </th>
+                        );
+                      } else if (col.id === "plus_after_avg_cost") {
+                        return (
+                          <th key={col.id} className="right-sticky">
+                            <div onClick={handleClickOpen}>
+                              <img
+                                style={{ height: "40px", width: "40px" }}
+                                src={plusIcon}
+                                alt="plusIcon"
+                              />
+                            </div>
+                            <InventoryTableColumns
+                              open={open}
+                              handleClose={handleClose}
+                              selectedColumns={selectedColumns}
+                              setSelectedColumns={setSelectedColumns}
+                              applyMeasures={applyMeasures}
+                              setShowMeasurePopup={setShowMeasurePopup}
+                            />
+                          </th>
+                        );
+                      } else {
+                        return <th key={col.id}>{col.name}</th>;
+                      }
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {initialData.map((row, index) => (
+                    <tr key={index}>
+                      {columns.map((col) => (
+                        <td key={col.id}>
+                          {col.id === "sku" ? (
+                            <>
+                              <div>{row.name}</div>
+                              <div style={{ fontSize: "0.9em", color: "gray" }}>
+                                {row.sku == "revenue" ? `$ ${row.sku}` : row.sku}
+                              </div>
+                            </>
+                          ) : col.id === "plus_after_sku" ||
+                            col.id === "plus_after_avg_cost" ? (
+                            "" // Display nothing for "plus_after_sku"
+                          ) : row[col.id] !== null &&
+                            row[col.id] !== undefined &&
+                            row[col.id] !== "" ? (
+                            row[col.id]
+                          ) : (
+                            "-" // Display "-" for other empty fields
+                          )}
+                        </td>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </tbody> */}
-          </table>
+                </tbody>
+                <tfoot>
+                  <div className="tfoot-scrollable-container">
+                    <tr>
+                      <td>
+                        <div style={{ width: colWidths[0] - 3 }}>Totals</div>
+                      </td>
+                      {columns.slice(1).map((col, index) => (
+                        <td key={col.id}>
+                          <div style={{ width: colWidths[index + 1] }}>
+                            {col.id === "closing_inventory"
+                              ? "900"
+                              : col.id === "sell_through_rate"
+                              ? "90%"
+                              : col.id === "inventory_cost"
+                              ? "$72.00"
+                              : col.id === "retail_value"
+                              ? "600"
+                              : col.id === "revenue"
+                              ? "$600"
+                              : col.id === "items_sold"
+                              ? "600"
+                              : col.id === "gross_profit"
+                              ? "$600"
+                              : col.id === "items_sold_per_day"
+                              ? "600"
+                              : col.id === "current_inventory"
+                              ? "600"
+                              : ""}
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  </div>
+                </tfoot>
+              </table>
 
-      {/* First popup (columns) */}
-      {showColumnPopup && popupCheckboxes === "columns" && (
-        <FirstButtonSelections
-          selectedColumns={selectedColumns}
-          setSelectedColumns={setSelectedColumns}
-          applyColumns={applyColumns}
-          setShowColumnPopup={setShowColumnPopup}
-        />
-      )}
+              {/* First popup (columns) */}
+              {showColumnPopup && popupCheckboxes === "columns" && (
+                <FirstButtonSelections
+                  selectedColumns={selectedColumns}
+                  setSelectedColumns={setSelectedColumns}
+                  applyColumns={applyColumns}
+                  setShowColumnPopup={setShowColumnPopup}
+                />
+              )}
 
-      {/* Second popup (measures) */}
-      {showMeasurePopup && popupCheckboxes === "measures" && (
-        <SecondButtonSelections
-          selectedColumns={selectedColumns}
-          setSelectedColumns={setSelectedColumns}
-          applyMeasures={applyMeasures}
-          setShowMeasurePopup={setShowMeasurePopup}
-        />
-      )}
+              {/* Second popup (measures) */}
+              {showMeasurePopup && popupCheckboxes === "measures" && (
+                <SecondButtonSelections
+                  selectedColumns={selectedColumns}
+                  setSelectedColumns={setSelectedColumns}
+                  applyMeasures={applyMeasures}
+                  setShowMeasurePopup={setShowMeasurePopup}
+                />
+              )}
             </div>
-    </InfiniteScroll>
-      </Grid>
+          </InfiniteScroll>
+        </Grid>
       </Grid>
         
     </>
