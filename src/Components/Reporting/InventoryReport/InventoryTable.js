@@ -83,7 +83,10 @@ useEffect(() => {
       if (selectedColumns[key] && !updatedColumns.some((col) => col.id === value)) {
         // Insert the new columns BEFORE the "plus_after_sku" column
         const index = updatedColumns.findIndex(col => col.id === "plus_after_sku");
-        updatedColumns.splice(index, 0, { id: value, name: value.replace(/_/g, ' ').toUpperCase() });
+        updatedColumns.splice(index, 0, { 
+          id: value, 
+          name: value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase()) 
+      });
       } else if (!selectedColumns[key]) {
         updatedColumns = updatedColumns.filter((col) => col.id !== value);
       }
