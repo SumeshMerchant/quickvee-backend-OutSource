@@ -196,7 +196,7 @@ useEffect(() => {
   };
 }, []);
 
- 
+//  console.log("========",initialData.length)
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -277,8 +277,10 @@ useEffect(() => {
                     </tr>
                   ))}
                 </tbody>
-                <tfoot>
+                
+                  <tfoot>
                   <div className="tfoot-scrollable-container">
+                  {/* {initialData.length > 0 && ( */}
                     <tr>
                       <td>
                         <div style={{ width: colWidths[0] - 3 }}>Totals</div>
@@ -308,9 +310,12 @@ useEffect(() => {
                           </div>
                         </td>
                       ))}
-                    </tr>
+                      </tr>
+                    {/* )} */}
                   </div>
                 </tfoot>
+              
+                
               </table>
 
               {/* First popup (columns) */}

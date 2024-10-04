@@ -108,7 +108,7 @@ const ReorderInventoryMain = () => {
       );
 
       const products = response?.data?.reorder_array;
-      if (products.length < 10) {
+      if (products && products.length < 10) {
         setHasMore(false);
       }
       const mapProductData = (productData) => {
@@ -156,14 +156,17 @@ const ReorderInventoryMain = () => {
           }
         });
       };
-      const mappedData = mapProductData(products);
-      if (page == 0) {
-        setProductListData(mappedData)
-        
-      }else {
-        
-        setProductListData(prev => [...prev, ...mappedData])
+      if (products != undefined && products != null) {
+        const mappedData = mapProductData(products);
+        if (page == 0) {
+          setProductListData(mappedData)
+          
+        }else {
+          
+          setProductListData(prev => [...prev, ...mappedData])
+        }
       }
+      
       return products; 
     } catch (error) {
       console.error('Error fetching products:', error);
