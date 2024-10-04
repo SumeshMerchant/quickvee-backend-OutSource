@@ -105,7 +105,7 @@
     table {
         width: 100%;
         tfoot{
-            position: sticky;
+            // position: sticky;
             bottom: 0;
             background: #F8F8F8;
             color: #000;
@@ -128,8 +128,8 @@
             letter-spacing: 0.01071em;
             display: table-cell;
             padding: 8px 16px;
-            max-width: 200px;
-            min-width: 130px;
+            // max-width: 200px;
+             min-width: 130px;
             font-family: CircularSTDBook;
 
         }
@@ -142,12 +142,14 @@
             padding: 8px 16px;
             font-size: 13px;
             line-height: 19px;
+            vertical-align: top;
             span{
             display: block;
             font-size: 11px;
             line-height: 15px;
             color: #747474;
             opacity: 1;
+           
             
             }
             
@@ -308,7 +310,53 @@
   ::-webkit-scrollbar-thumb {
     background: #e2e2e2; 
     border-radius: 5px;
+    &:hover {
+      background: #e2e2e2; 
+    }
   }
   ::-webkit-scrollbar-button{
     display: none;
   }
+  // .sticky-table-header thead {
+  //   position: fixed;
+  //   top: 70px;
+  //   left: 17rem;
+  //   right: 17px;
+  //   z-index: 2;
+  //   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow effect */
+  //   transition: top 0.4s ease-in-out;
+  // }
+  .custom-table-hidescroll {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  
+
+  tfoot {
+    position: fixed;
+    bottom: 0;
+    background: #F8F8F8;
+    color: #000;
+    z-index: 4;
+    left: 17rem;
+    right: 17px;
+    display: block;
+    height: auto;
+    // padding-bottom: 10px; /* Optional space */
+  }
+  .tfoot-scrollable-container {
+    overflow-x: auto; /* Enables horizontal scroll */
+    width: 100%; /* Ensures full width */
+    tr {
+      td {
+        padding-left: 0;
+        padding-right: 0;
+        border-top: 1px solid rgb(224, 224, 224);
+        border-bottom: none;
+        div {
+          padding-inline: 8px;
+        }
+      }
+    }
+  }
+}

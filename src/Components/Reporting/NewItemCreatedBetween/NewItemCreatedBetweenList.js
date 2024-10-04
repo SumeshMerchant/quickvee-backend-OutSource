@@ -49,7 +49,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const NewItemCreatedBetweenList = (props) => {
-  const [allNewItemData, setallNewItemData] = useState("");
+  const [allNewItemData, setallNewItemData] = useState([]);
 
   const dispatch = useDispatch();
   const {
@@ -65,7 +65,6 @@ const NewItemCreatedBetweenList = (props) => {
     (state) => state.NewItemCreatedBtnList
   );
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-
   const formatDate = (dateString) => {
     const [day, month, year] = dateString.split("-");
     const monthNames = [
@@ -88,9 +87,28 @@ const NewItemCreatedBetweenList = (props) => {
     )}, ${year}`;
   };
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
-
   const sortByItemName = (type, name) => {
-  
+    const itemsWithParsedDates = allNewItemData.map((item) => {
+      const dateString = item.created_on;
+      const [day, month, year] = dateString.split("-").map(Number);
+      const date = `${year},${month},${day}`;
+      return { ...item, created_on: date };
+    });
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      itemsWithParsedDates,
+      type,
+      name,
+      sortOrder
+    );
+    setallNewItemData(
+      sortedItems.map((item) => {
+        const dateString = item.created_on;
+        const [year, month, day] = dateString.split(",").map(Number);
+        const customdate = `${day}-${month}-${year}`;
+        return { ...item, created_on: customdate };
+      })
+    );
+    setSortOrder(newOrder);
   };
   useEffect(() => {
     if (props && props.selectedDateRange) {
@@ -106,9 +124,10 @@ const NewItemCreatedBetweenList = (props) => {
     }
   }, [props]);
   useEffect(() => {
+    console.log("AllNewItemDataState",AllNewItemDataState)
     if (!AllNewItemDataState.loading && AllNewItemDataState.NewItemData) {      
       // console.log(AllNewItemDataState.NewItemData)
-      setallNewItemData(AllNewItemDataState.NewItemData);
+      setallNewItemData(AllNewItemDataState?.NewItemData?.report_data);
     } else {
       // setallNewItemData("");
     }
@@ -123,7 +142,7 @@ const NewItemCreatedBetweenList = (props) => {
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           {AllNewItemDataState.loading ||
-          (allNewItemData.status && !allNewItemData.report_data?.length) ? (
+          (AllNewItemDataState.status && !allNewItemData.length)  ? (
             <SkeletonTable
               columns={["Date", "Category", "Item Name", "Price"]}
             />
@@ -134,7 +153,7 @@ const NewItemCreatedBetweenList = (props) => {
                   <StyledTableCell>
                     <button
                       className="flex items-center"
-                      // onClick={() => sortByItemName("date", "created_on")}
+                      onClick={() => sortByItemName("date", "created_on")}
                     >
                       <p className="whitespace-nowrap">Date</p>
                       <img src={sortIcon} alt="" className="pl-1" />
@@ -143,7 +162,7 @@ const NewItemCreatedBetweenList = (props) => {
                   <StyledTableCell>
                     <button
                       className="flex items-center"
-                      // onClick={() => sortByItemName("str", "category")}
+                      onClick={() => sortByItemName("str", "category")}
                     >
                       <p className="whitespace-nowrap">Category</p>
                       <img src={sortIcon} alt="" className="pl-1" />
@@ -152,7 +171,7 @@ const NewItemCreatedBetweenList = (props) => {
                   <StyledTableCell>
                     <button
                       className="flex items-center"
-                      // onClick={() => sortByItemName("str", "item_name")}
+                      onClick={() => sortByItemName("str", "item_name")}
                     >
                       <p className="whitespace-nowrap">Item Name</p>
                       <img src={sortIcon} alt="" className="pl-1" />
@@ -161,7 +180,7 @@ const NewItemCreatedBetweenList = (props) => {
                   <StyledTableCell>
                     <button
                       className="flex items-center"
-                      // onClick={() => sortByItemName("num", "price")}
+                      onClick={() => sortByItemName("num", "price")}
                     >
                       <p className="whitespace-nowrap">Price</p>
                       <img src={sortIcon} alt="" className="pl-1" />
@@ -169,12 +188,12 @@ const NewItemCreatedBetweenList = (props) => {
                   </StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {allNewItemData && allNewItemData?.report_data?.length >= 1
-                    ? allNewItemData.report_data?.map((ItemData, index) => (
+                  {allNewItemData && allNewItemData?.length >= 1
+                    ? allNewItemData?.map((ItemData, index) => (
                         <StyledTableRow key={index}>
                           <StyledTableCell>
                             <p >
-                              {ItemData.date}
+                            {formatDate(ItemData.created_on)}
                             </p>
                           </StyledTableCell>
                           <StyledTableCell>
@@ -184,14 +203,14 @@ const NewItemCreatedBetweenList = (props) => {
                             <p>{ItemData.item_name}</p>
                           </StyledTableCell>
                           <StyledTableCell>
-                            <p>{ItemData.price}</p>
+                          <p>${priceFormate(ItemData.price ?? "0.00")}</p>
                           </StyledTableCell>
                         </StyledTableRow>
                       ))
                     : ""}
                 </TableBody>
               </StyledTable>
-              {!allNewItemData?.report_data?.length && <NoDataFound />}
+              {!allNewItemData?.length && <NoDataFound />}
             </TableContainer>
           )}
         </Grid>

@@ -78,8 +78,8 @@ const ReorderInventoryMain = () => {
     { id: "items_sold_per_day", name: "Items sold per day" },
     { id: "items_sold", name: "Items Sold" },
     { id: "inbound_inventory", name: "Inbound Inventory" },
-    { id: "days_cover", name: "Days cover" },
-    { id: "avg_cost", name: "Avg. cost" },
+    { id: "inventory_days_cover", name: "Days cover" },
+    { id: "avgCostMeasure", name: "Avg. cost" },
     { id: "plus_after_avg_cost", name: "+" },
   ];
 
@@ -118,8 +118,8 @@ const ReorderInventoryMain = () => {
             name: product.title || product.item_name,
             closing_inventory: parseInt(product.quantity) || 0,
             items_sold: product.reorder_qty || 0,
-            days_cover: 0,
-            avg_cost: product?.costperItem ? `$${parseFloat(product?.costperItem).toFixed(2)}` : "",
+            inventory_days_cover: 0,
+            avgCostMeasure: product?.costperItem ? `$${parseFloat(product?.costperItem).toFixed(2)}` : "",
             brand: product.brand,
             vendor: "Vendor A" || product.cost_vendor,
             category: product?.category_name || product.category,
