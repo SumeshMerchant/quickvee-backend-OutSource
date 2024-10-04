@@ -50,6 +50,7 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
     firstSale: false,
     lastSale: false,
     last_received: false,
+    tag:false
   });
   const updateColumns = () => {
     const updatedColumns = columns.filter((column) => !selectedColumns[column.id]);
@@ -77,6 +78,7 @@ useEffect(() => {
       brand: "brand",
       vendor: "vendor",
       category: "category",
+      tag: "tag",
     };
 
     Object.entries(columnMappings).forEach(([key, value]) => {
