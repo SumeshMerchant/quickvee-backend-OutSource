@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 import MainInstantDetails from "./MainInstantDetails";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
@@ -6,114 +6,117 @@ import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent"
 import { Grid } from "@mui/material";
 import InventoryTable from "../InventoryReport/InventoryTable";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
+import Config from "../../../Constants/Config";
+import axios from 'axios';
+
+const getCurrentDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
 const InstantActvity = ({ hide = false }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-
-  const [filteredData, setFilteredData] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(0); // Track current page number
+    const [poActivityListData, setPoActivityListData] = useState([]);
+  // const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState({
+    start_date: getCurrentDate(),
+    end_date: getCurrentDate(), 
+  });
   const handleDataFiltered = (data) => {
-    let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
     const updatedData = {
-      ...data,
-      merchant_id,
-      ...userTypeData,
+      ...data
     };
     setFilteredData(updatedData);
+    fetchProductsData(page);
   };
 
-  const instantactivityDataState = [
-    {
-      "instant_po_info": {
-        "title": "Product A 500ml",
-        "variant": "Blueberry/5mg",
-        "created_at": "Oct 1, 2024 03:21:53 AM"
-      },
-      "source": "OB",
-      "before_adjust_qty": 2,
-      "adjust_qty": -2,
-      "after_adjust_qty": 0,
-      "cost_per_item": 0,
-      "total_cost": 12.99
-    },
-    {
-      "instant_po_info": {
-        "title": "Product B 200ml",
-        "variant": "Strawberry/10mg",
-        "created_at": "Sep 30, 2024 02:45:10 PM"
-      },
-      "source": "OB",
-      "before_adjust_qty": 2,
-      "adjust_qty": -2,
-      "after_adjust_qty": 0,
-      "cost_per_item": 0,
-      "total_cost": 12.99
-    },
-    {
-      "instant_po_info": {
-        "title": "Product C 100ml",
-        "variant": "Vanilla/3mg",
-        "created_at": "Sep 30, 2024 11:10:23 AM"
-      },
-      "source": "Online",
-      "before_adjust_qty": 2,
-      "adjust_qty": -2,
-      "after_adjust_qty": 0,
-      "cost_per_item": 0,
-      "total_cost": 12.99
-    },
-    {
-      "instant_po_info": {
-        "title": "Product D 250ml",
-        "variant": "Mango/0mg",
-        "created_at": "Sep 29, 2024 08:33:05 AM"
-      },
-      "source": "OB",
-      "before_adjust_qty": 2,
-      "adjust_qty": -2,
-      "after_adjust_qty": 0,
-      "cost_per_item": 0,
-      "total_cost": 12.99
-    },
-    {
-      "instant_po_info": {
-        "title": "Product E 150ml",
-        "variant": "Apple/5mg",
-        "created_at": "Sep 28, 2024 06:22:45 PM"
-      },
-      "source": "Online",
-      "before_adjust_qty": 2,
-      "adjust_qty": -2,
-      "after_adjust_qty": 0,
-      "cost_per_item": 0,
-      "total_cost": 12.99
+  const fetchProductsData = async (currentPage) => {
+
+    try {
+      setLoading(true)
+      const payload = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        token_id: LoginGetDashBoardRecordJson?.token_id,
+        login_type: LoginGetDashBoardRecordJson?.login_type,
+        limit: 10,
+        offset: (currentPage - 1) * 10, 
+        ...filteredData,  
+      }
+      console.log("=-=-=payload",payload)
+      const response = await axios.post(
+        `${Config.BASE_URL}${Config.INSTANT_ACTIVITY_REPORT}`,
+        payload,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `${LoginGetDashBoardRecordJson?.token}`
+          },
+        }
+      );
+
+      const products = response?.data?.result;
+      console.log("=-=-=-products",products)
+
+      if (products && products.length < 10) {
+        setHasMore(false);
+      }
+      const transformData = (resultData) => {
+        return resultData.map(item => ({
+          instant_po_info: {
+            title: item.title || `Product ${item.product_id}`, 
+            variant: item.variant || `Variant ${item.variant_id}`,
+            created_at: new Date(item.created_at).toLocaleString('en-US', {
+              month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric',
+              hour12: true
+            })
+          },
+          source: "OB" , 
+          before_adjust_qty: parseInt(item.current_qty) || 0,
+          adjust_qty: parseInt(item.qty) || 0,
+          after_adjust_qty: parseInt(item.after_qty) || 0,
+          cost_per_item: parseFloat(item.price) || 0,
+          total_cost: parseFloat(item.price) * parseInt(item.qty) || 0
+        }));
+      };
+      if(products != undefined && products != ""){
+        const instantactivityDataState = transformData(products);
+          setPoActivityListData(instantactivityDataState)
+      } else {
+        setPoActivityListData([])
+      }
+      return products; 
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+       setLoading(false); 
     }
-  ]
+  }
+  const fetchMoreData = () => {
+    setPage(prevPage => prevPage + 1);
+    fetchProductsData(page + 1);
+  };
+
+
+  useEffect(() => {
+    fetchProductsData(page);
+  }, []);
 
   return (
     <>
-      {/* <Grid
-        container
-        sx={{ padding: 2.5, mt: 3.6 }}
-        className="box_shadow_div "
-      >
-        <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={12}>
-              <h1 style={{ marginBottom: 0 }} className="heading ">
-                Instant PO Activity Report
-              </h1>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid> */}
       <Grid container sx={{ mt: 3 }}>
         <Grid item xs={12}>
           <DashDateRangeComponent onDateRangeChange={handleDataFiltered} />
         </Grid>
       </Grid>
-      <MainInstantDetails instantactivityDataState={instantactivityDataState} />
-      {/* <MainInstantDetails data={filteredData} /> */}
+      <MainInstantDetails instantactivityDataState={poActivityListData}  scrollForProduct={fetchMoreData}
+        hasMore={hasMore}/>
     </>
   );
 };

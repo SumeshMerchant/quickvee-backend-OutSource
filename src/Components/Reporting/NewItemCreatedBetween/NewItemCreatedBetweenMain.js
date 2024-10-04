@@ -9,38 +9,6 @@ const NewItemCreatedBetweenMain = ({ hide = false }) => {
     setSelectedDateRange(dateRange);
   };
 
-  const allNewItemData = [
-    {
-      "date": "October 1, 2024",
-      "category": "Electronics",
-      "item_name": "Wireless Headphones",
-      "price": "$59.99"
-    },
-    {
-      "date": "October 1, 2024",
-      "category": "Books",
-      "item_name": "JavaScript Guide",
-      "price": "$25.99"
-    },
-    {
-      "date": "September 30, 2024",
-      "category": "Groceries",
-      "item_name": "Organic Apples",
-      "price": "$4.99"
-    },
-    {
-      "date": "September 30, 2024",
-      "category": "Home",
-      "item_name": "LED Light Bulbs",
-      "price": "$15.00"
-    },
-    {
-      "date": "September 29, 2024",
-      "category": "Fitness",
-      "item_name": "Yoga Mat",
-      "price": "$30.00"
-    }
-  ];
 
 
   return (
@@ -63,10 +31,9 @@ const NewItemCreatedBetweenMain = ({ hide = false }) => {
       <Grid container sx={{ mt: 3 }}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-      <NewItemCreatedBetweenList allNewItemData={allNewItemData} />
-      {/* already have data   
+      {/* <NewItemCreatedBetweenList allNewItemData={allNewItemData} /> */}
+      
       <NewItemCreatedBetweenList selectedDateRange={selectedDateRange} />
-      */}
     </>
   );
 };

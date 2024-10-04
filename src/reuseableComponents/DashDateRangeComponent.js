@@ -15,7 +15,7 @@ const DashDateRangeComponent = ({
   future_date,
 }) => {
   const isDesktopWtdth = useMediaQuery("(max-width:710px)");
-  // console.log("isDesktopWtdth : ", isDesktopWtdth);
+  
   const today = dayjs();
   const [isTablet, setIsTablet] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
@@ -23,7 +23,7 @@ const DashDateRangeComponent = ({
   const [futureDateState, setFutureDate] = useState(new Date());
   const startDateRef = React.useRef(null);
   const endDateRef = React.useRef(null);
-  // console.log("futureDateState", new Date(futureDateState));
+ 
   const handleStartDateIconClick = () => {
     startDateRef.current.setOpen(true);
   };
@@ -83,29 +83,16 @@ const DashDateRangeComponent = ({
         setStartDate(last7Days);
         setEndDate(dayBeforeDay);
         break;
-      case "Last 30 days":
-        const thirtyDaysAgo = new Date(today);
-        thirtyDaysAgo.setDate(today.getDate() - 30);
-        dayBeforeDay.setDate(today.getDate() - 1);
-        setStartDate(thirtyDaysAgo);
-        setEndDate(dayBeforeDay);
-        break;
+      case "Last 30 Days":
+          const thirtyDaysAgo = new Date(today);
+          thirtyDaysAgo.setDate(today.getDate() - 30);
+          setStartDate(thirtyDaysAgo); 
+          setEndDate(today); 
+          break;
       default:
         break;
     }
   };
-  // useEffect(() => {
-  //   // console.log("inside date range selectedDateRange", selectedDateRange);
-  //   let count = 0;
-  //   if (selectedDateRange && selectedDateRange && count <= 0) {
-  //     // console.log("inside date range selectedDateRange", selectedDateRange);
-  //     setStartDate(new Date(selectedDateRange.start_date));
-  //     setEndDate(new Date(selectedDateRange.end_date));
-  //     // onDateRangeChange({start_date:selectedDateRange.start_date,end_date:selectedDateRange.end_date});
-  //     count++;
-  //   }
-  // }, [selectedDateRange]);
-  // console.log("inside date range selectedDateRange", selectedDateRange);
   useEffect(() => {
     const today = new Date();
     let gotFurureDate = new Date();
@@ -120,10 +107,6 @@ const DashDateRangeComponent = ({
 
     setDatesBasedOnOption(activeOption);
   }, [activeOption]);
-
-
-
-
 
   const [selectedReportList, setSelectedReportList] = useState("Main Outlet");
 
@@ -281,7 +264,6 @@ const DashDateRangeComponent = ({
             <label className="q-details-page-label" htmlFor="storetoFilter">
                 Outlet
                 </label>
-                {/* <div className="q_date_range_start ">Outlet</div> */}
                 <SelectDropDown
                   
                     listItem={selectReportList}

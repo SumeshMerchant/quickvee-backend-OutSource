@@ -30,6 +30,7 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
     sale_count: false,
     inventory_cost:false,
     avg_items_per_sale: false,
+    items_sold:false,
     sale_discounted:false,
     avg_sale_value: false,
     cost_goods_sold:false,
@@ -48,9 +49,22 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
     created: false,
     firstSale: false,
     lastSale: false,
-    lastReceived: false,
+    last_received: false,
   });
-
+  const updateColumns = () => {
+    const updatedColumns = columns.filter((column) => !selectedColumns[column.id]);
+    const updatedSelectedColumns = { ...selectedColumns };
+    columns.forEach((column) => {
+        if (selectedColumns.hasOwnProperty(column.id)) {
+            updatedSelectedColumns[column.id] = true;
+        }
+    });
+    setColumns(updatedColumns);
+    setSelectedColumns(updatedSelectedColumns);
+};
+useEffect(() => {
+  updateColumns();
+}, []);
   const [popupCheckboxes, setPopupCheckboxes] = useState(""); // To track the active popup
   const [showColumnPopup, setShowColumnPopup] = useState(false);
   const [showMeasurePopup, setShowMeasurePopup] = useState(false);
@@ -90,6 +104,7 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
       sale_count: "sale_count",
       items_sold_per_day: "items_sold_per_day",
       avg_items_per_sale: "avg_items_per_sale",
+      items_sold:"items_sold",
       sale_discounted:"sale_discounted",
       avg_sale_value:"avg_sale_value",
       cost_goods_sold:"cost_goods_sold",
@@ -108,15 +123,18 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
       created: "created",
       firstSale: "first_sale",
       lastSale: "last_sale",
-      lastReceived: "last_received",
+      last_received: "last_received",
     };
 
     Object.entries(measureMappings).forEach(([key, value]) => {
       if (selectedColumns[key] && !updatedColumns.some((col) => col.id === value)) {
         // Insert the new columns BEFORE the "plus_after_avg_cost" column
         const index = updatedColumns.findIndex(col => col.id === "plus_after_avg_cost");
-        updatedColumns.splice(index, 0, { id: value, name: value.replace(/_/g, ' ').toUpperCase() });
-      } else if (!selectedColumns[key]) {
+        updatedColumns.splice(index, 0, { 
+          id: value, 
+          name: value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase()) 
+      });
+            } else if (!selectedColumns[key]) {
         updatedColumns = updatedColumns.filter((col) => col.id !== value);
       }
     });
