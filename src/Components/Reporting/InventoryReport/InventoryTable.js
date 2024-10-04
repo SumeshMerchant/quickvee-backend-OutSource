@@ -280,7 +280,7 @@ useEffect(() => {
                 
                   <tfoot>
                   <div className="tfoot-scrollable-container">
-                  {/* {initialData.length > 0 && ( */}
+                  {initialData.length > 0 && (
                     <tr>
                       <td>
                         <div style={{ width: colWidths[0] - 3 }}>Totals</div>
@@ -311,7 +311,7 @@ useEffect(() => {
                         </td>
                       ))}
                       </tr>
-                    {/* )} */}
+                    )}
                   </div>
                 </tfoot>
               
