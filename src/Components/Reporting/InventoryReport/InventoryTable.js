@@ -160,8 +160,11 @@ useEffect(() => {
       if (selectedColumns[key] && !updatedColumns.some((col) => col.id === value)) {
         // Insert the new columns BEFORE the "plus_after_avg_cost" column
         const index = updatedColumns.findIndex(col => col.id === "plus_after_avg_cost");
-        updatedColumns.splice(index, 0, { id: value, name: value.replace(/_/g, ' ').toUpperCase() });
-      } else if (!selectedColumns[key]) {
+        updatedColumns.splice(index, 0, { 
+          id: value, 
+          name: value.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase()) 
+      });
+            } else if (!selectedColumns[key]) {
         updatedColumns = updatedColumns.filter((col) => col.id !== value);
       }
     });
