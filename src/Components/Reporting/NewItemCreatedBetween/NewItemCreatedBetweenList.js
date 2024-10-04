@@ -142,7 +142,7 @@ const NewItemCreatedBetweenList = (props) => {
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           {AllNewItemDataState.loading ||
-          (AllNewItemDataState.status && !allNewItemData.length)  ? (
+          (AllNewItemDataState.status && !allNewItemData?.length)  ? (
             <SkeletonTable
               columns={["Date", "Category", "Item Name", "Price"]}
             />
