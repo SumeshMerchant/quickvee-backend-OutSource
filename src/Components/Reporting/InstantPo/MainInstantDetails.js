@@ -13,7 +13,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
-import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+// import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import PasswordShow from "../../../Common/passwordShow";
@@ -52,28 +52,53 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const MainInstantDetails = ({ instantactivityDataState }) => {
   const dispatch = useDispatch();
-
+  const [instantactivity, setinstantactivity] = useState(instantactivityDataState);
   // const showNoData = useDelayedNodata(instantactivityDataState)
   // const instantactivityDataState = useSelector(
   //   (state) => state.instantactivity
   // );
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
-
-
-
-
-  const formatDateTime = (dateTimeString) => {
-    const date = new Date(dateTimeString);
-    const dateOptions = { year: "numeric", month: "short", day: "numeric" };
-    const timeOptions = { hour: "numeric", minute: "numeric", hour12: true };
-    const formattedDate = date.toLocaleDateString("en-US", dateOptions);
-    return `${formattedDate}`;
-  };
+    const SortTableItemsHelperFun = (items, type, name, sortOrder) => {
+      const sortedItems = [...items].sort((a, b) => {
+        if (type === "num") {
+          const aValue = parseFloat(a[name]);
+          const bValue = parseFloat(b[name]);
+    
+          return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+        } else if (type === "string") {
+          const aValue = a[name].toLowerCase();
+          const bValue = b[name].toLowerCase();
+          if (sortOrder === "asc") {
+            return aValue > bValue ? 1 : -1;
+          } else {
+            return aValue < bValue ? 1 : -1;
+          }
+        }
+        return 0;
+      });
+          const newOrder = sortOrder === "asc" ? "desc" : "asc";
+      return { sortedItems, newOrder };
+    };
   const [sortOrder, setSortOrder] = useState("asc");
   const sortByItemName = (type, name) => {
-   
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      instantactivity,
+      type,
+      name,
+      sortOrder
+    );
+    setinstantactivity(sortedItems);
+    setSortOrder(newOrder);
   };
+  useEffect(() => {
+  }, [instantactivity]);
+  
+  useEffect(() => {
+    setinstantactivity(instantactivityDataState);
+  }, [instantactivityDataState]);
+  
+  
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -90,7 +115,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        // onClick={() => sortByItemName("date", "created_at")}
+                        onClick={() => sortByItemName("str", "title")}
                       >
                         <p>Instant PO Info</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -100,7 +125,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        // onClick={() => sortByItemName("str", "emp_name")}
+                        onClick={() => sortByItemName("str", "source")}
                       >
                         <p>Source</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -110,7 +135,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        // onClick={() => sortByItemName("num", "current_qty")}
+                        onClick={() => sortByItemName("num", "before_adjust_qty")}
                       >
                         <p>Before Adjust Qty</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -119,7 +144,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        // onClick={() => sortByItemName("num", "qty")}
+                        onClick={() => sortByItemName("num", "adjust_qty")}
                       >
                         <p>Adjust Qty</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -128,7 +153,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        onClick={() => sortByItemName("num", "qty")}
+                        onClick={() => sortByItemName("num", "after_adjust_qty")}
                       >
                         <p>After Adjust Qty</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -137,7 +162,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        // onClick={() => sortByItemName("num", "price")}
+                        onClick={() => sortByItemName("num", "cost_per_item")}
                       >
                         <p>Per Item Cost</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -146,7 +171,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     <StyledTableCell>
                       <button
                         className="flex items-center"
-                        // onClick={() => sortByItemName("num", "calculatedTotal")}
+                        onClick={() => sortByItemName("num", "total_cost")}
                       >
                         <p>Total Cost</p>
                         <img src={sortIcon} alt="" className="pl-1" />
@@ -154,8 +179,8 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                     </StyledTableCell>
                   </TableHead>
                   <TableBody>
-                    {instantactivityDataState && instantactivityDataState.length >= 1
-                      ? instantactivityDataState.map((instantactivity, index) => {
+                    {instantactivity && instantactivity.length >= 1
+                      ? instantactivity.map((instantactivity, index) => {
       
                           return (
                             <StyledTableRow key={index}>
@@ -221,7 +246,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p>
-                                  ${instantactivity.total_cost}
+                                {instantactivity.total_cost ? `$${instantactivity.total_cost.toFixed(2)}` : ''}
                                 </p>
                               </StyledTableCell>
                             </StyledTableRow>
@@ -230,7 +255,7 @@ const MainInstantDetails = ({ instantactivityDataState }) => {
                       : ""}
                   </TableBody>
                 </StyledTable>
-                {instantactivityDataState && !instantactivityDataState.length && <NoDataFound />}
+                {instantactivity && !instantactivity.length && <NoDataFound />}
               </TableContainer>
             </>
           </Grid>
