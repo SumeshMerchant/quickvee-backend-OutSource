@@ -124,6 +124,7 @@ const NewItemCreatedBetweenList = (props) => {
     }
   }, [props]);
   useEffect(() => {
+    console.log("AllNewItemDataState",AllNewItemDataState)
     if (!AllNewItemDataState.loading && AllNewItemDataState.NewItemData) {      
       // console.log(AllNewItemDataState.NewItemData)
       setallNewItemData(AllNewItemDataState?.NewItemData?.report_data);
@@ -141,7 +142,7 @@ const NewItemCreatedBetweenList = (props) => {
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           {AllNewItemDataState.loading ||
-          (AllNewItemDataState && !allNewItemData?.length) ? (
+          (AllNewItemDataState.status && !allNewItemData.length)  ? (
             <SkeletonTable
               columns={["Date", "Category", "Item Name", "Price"]}
             />
