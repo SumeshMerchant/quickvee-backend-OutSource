@@ -91,7 +91,7 @@ const ReorderInventoryMain = () => {
         }
       );
 
-      const products = response?.data;
+      const products = response?.data?.reorder_array;
       if (products.length < 10) {
         setHasMore(false);
       }
