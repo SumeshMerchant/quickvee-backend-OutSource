@@ -78,7 +78,6 @@ const ReorderInventoryMain = () => {
     { id: "items_sold_per_day", name: "Items sold per day" },
     { id: "inventory_days_cover", name: "Days Cover" },
     { id: "sell_through_rate", name: "Sell-through rate" },
-    { id: "revenue", name: "Revenue" },
     { id: "gross_profit", name: "Gross Pro" },
     { id: "avg_cost", name: "Avg. cost" },
     { id: "avg_sale_value", name: "Avg. sale value" },
@@ -95,6 +94,12 @@ const ReorderInventoryMain = () => {
     { id: "item_price", name: "Items price" },
     { id: "instock", name: "Instock" },
     { id: "variant", name: "Variant" },
+    { id: "avg_discount_percentage", name: "Discounted (%)" },
+    { id: "created", name: "Created" },
+    { id: "first_sale", name: "First sale" },
+    { id: "last_sale", name: "Last sale" },
+    { id: "inventory_cost", name: "Inventory cost" },
+    { id: "cost_goods_sold", name: "Cost of goods sold" },
     { id: "plus_after_avg_cost", name: "+" },
   ];
 
