@@ -12,38 +12,38 @@ const InventoryStocktateHistoryReportMain = () => {
 
   const employeeData = [
     {
-      stocktake: "ST00001",
+      stocktake: "AT00001",
+      status: "coid",
+      tqty: 100,
+      tDiscrepancyCost: 26.99,
+      Date: "Sep 22, 2024"
+    },
+    {
+      stocktake: "CT00001",
+      status: "toid",
+      tqty: 100,
+      tDiscrepancyCost: 20.99,
+      Date: "Sep 22, 2024"
+    },
+    {
+      stocktake: "BT00001",
       status: "Void",
       tqty: 100,
-      tDiscrepancyCost: "-$24.99",
+      tDiscrepancyCost: 24.99,
       Date: "Sep 22, 2024"
     },
     {
       stocktake: "ST00001",
       status: "Void",
       tqty: 100,
-      tDiscrepancyCost: "-$24.99",
+      tDiscrepancyCost: 24.99,
       Date: "Sep 22, 2024"
     },
     {
-      stocktake: "ST00001",
+      stocktake: "KT00001",
       status: "Void",
       tqty: 100,
-      tDiscrepancyCost: "-$24.99",
-      Date: "Sep 22, 2024"
-    },
-    {
-      stocktake: "ST00001",
-      status: "Void",
-      tqty: 100,
-      tDiscrepancyCost: "-$24.99",
-      Date: "Sep 22, 2024"
-    },
-    {
-      stocktake: "ST00001",
-      status: "Void",
-      tqty: 100,
-      tDiscrepancyCost: "-$24.99",
+      tDiscrepancyCost: 24.99,
       Date: "Sep 22, 2024"
     }
   ];

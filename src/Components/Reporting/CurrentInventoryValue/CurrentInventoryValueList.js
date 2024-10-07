@@ -12,7 +12,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
-import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
@@ -40,7 +39,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    // backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {},
   "& td, & th": {
@@ -50,86 +48,46 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const CurrentInventoryValueList = ({productData}) => {
-  const dispatch = useDispatch();
-  const {
-    LoginGetDashBoardRecordJson,
-    LoginAllStore,
-    userTypeData,
-    GetSessionLogin,
-  } = useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
-    PasswordShow();
-  const [allNewItemData, setallNewItemData] = useState([]);
-  const AllNewItemDataState = useSelector(
-    (state) => state.NewItemCreatedBtnList
-  );
-  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+  const [allNewItemData, setallNewItemData] = useState(productData);
 
-  // useEffect(() => {
-  //   getNewItemCreatedBetweenData();
-  // }, [props]);
-  // const getNewItemCreatedBetweenData = async () => {
-  //   try {
-  //     if (props && props.selectedDateRange) {
-  //       let data = {
-  //         merchant_id,
-  //         start_date: props.selectedDateRange.start_date,
-  //         end_date: props.selectedDateRange.end_date,
-  //         ...userTypeData,
-  //       };
-  //       if (data) {
-  //         await dispatch(fetchNewItemCreatedBetweenData(data)).unwrap();
-  //       }
-  //     }
-  //   } catch (error) {
-  //     if (error?.status == 401 || error?.response?.status === 401) {
-  //       getUnAutherisedTokenMessage();
-  //       handleCoockieExpire();
-  //     } else if (error.status == "Network Error") {
-  //       getNetworkError();
-  //     }
-  //   }
-  // };
-
-  useEffect(() => {
-    if (
-      !AllNewItemDataState.loading &&
-      AllNewItemDataState?.NewItemData &&
-      AllNewItemDataState?.NewItemData?.report_data
-    ) {
-      setallNewItemData(AllNewItemDataState?.NewItemData?.report_data);
-
-    } else {
-      setallNewItemData([]);
-    }
-  }, [AllNewItemDataState, AllNewItemDataState.NewItemData]);
-
-
-  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
-
-  const sortByItemName = (type, name) => {
-    const itemsWithParsedDates = allNewItemData.map((item) => {
-      const dateString = item.created_on;
-      const [day, month, year] = dateString.split("-").map(Number);
-      const date = `${year},${month},${day}`;
-      return { ...item, created_on: date };
+  const [sortOrder, setSortOrder] = useState("asc");
+  const SortTableItemsHelperFun = (items, type, name, sortOrder) => {
+    const sortedItems = [...items].sort((a, b) => {
+      if (type === "num") {
+        const aValue = parseFloat(a[name]);
+        const bValue = parseFloat(b[name]);
+  
+        return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+      } else if (type === "string") {
+        const aValue = a[name].toLowerCase();
+        const bValue = b[name].toLowerCase();
+        if (sortOrder === "asc") {
+          return aValue > bValue ? 1 : -1;
+        } else {
+          return aValue < bValue ? 1 : -1;
+        }
+      }
+      return 0;
     });
+        const newOrder = sortOrder === "asc" ? "desc" : "asc";
+    return { sortedItems, newOrder };
+  };
+  const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
-      itemsWithParsedDates,
+      allNewItemData,
       type,
       name,
       sortOrder
     );
-    setallNewItemData(
-      sortedItems.map((item) => {
-        const dateString = item.created_on;
-        const [year, month, day] = dateString.split(",").map(Number);
-        const customdate = `${day}-${month}-${year}`;
-        return { ...item, created_on: customdate };
-      })
-    );
+    setallNewItemData(sortedItems);
     setSortOrder(newOrder);
   };
+  useEffect(() => {
+  }, [allNewItemData]);
+  
+  useEffect(() => {
+    setallNewItemData(productData);
+  }, [productData]);
 
  
   
@@ -159,7 +117,7 @@ const CurrentInventoryValueList = ({productData}) => {
                       <StyledTableCell>
                         <button
                           className="flex items-center"
-                          // onClick={() => sortByItemName("str", "fullName")}
+                          onClick={() => sortByItemName("string", "product")}
                         >
                           <p>Product</p>
                           <img src={sortIcon} alt="" className="pl-1" />
@@ -168,7 +126,7 @@ const CurrentInventoryValueList = ({productData}) => {
                       <StyledTableCell>
                         <button
                           className="flex items-center"
-                          // onClick={() => sortByItemName("num", "pin")}
+                          onClick={() => sortByItemName("num", "qoh")}
                         >
                           <p>GoH</p>
                           <img src={sortIcon} alt="" className="pl-1" />
@@ -177,7 +135,7 @@ const CurrentInventoryValueList = ({productData}) => {
                       <StyledTableCell>
                         <button
                             className="flex items-center"
-                            // onClick={() => sortByItemName("num", "pin")}
+                            onClick={() => sortByItemName("num", "cost")}
                           >
                             <p>Cost</p>
                             <img src={sortIcon} alt="" className="pl-1" />
@@ -186,7 +144,7 @@ const CurrentInventoryValueList = ({productData}) => {
                       <StyledTableCell>
                         <button
                           className="flex items-center"
-                          // onClick={() => sortByItemName("str", "email")}
+                          onClick={() => sortByItemName("num", "totalValue")}
                         >
                           <p>Total Value</p>
                           <img src={sortIcon} alt="" className="pl-1" />
@@ -195,20 +153,20 @@ const CurrentInventoryValueList = ({productData}) => {
                       
                     </TableHead>
                     <TableBody>
-                      {productData && productData?.length >= 1 ? (
-                        productData?.map((employee, index) => (
+                      {allNewItemData && allNewItemData?.length >= 1 ? (
+                        allNewItemData?.map((employee, index) => (
                           <StyledTableRow key={index}>
                             <StyledTableCell>
                               <p>{employee?.product}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{employee?.qoh}</p>
+                              <p>${employee?.qoh}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{employee?.cost}</p>
+                              <p>${employee?.cost}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{employee?.totalValue}</p>
+                              <p>${employee?.totalValue}</p>
                             </StyledTableCell>
                           </StyledTableRow>
                         ))
@@ -222,7 +180,7 @@ const CurrentInventoryValueList = ({productData}) => {
                           <p >Totals</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>{14}</p>
+                          <p>$90</p>
                         </StyledTableCell>
                         <StyledTableCell />
                         <StyledTableCell>

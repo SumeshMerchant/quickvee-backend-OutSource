@@ -76,40 +76,40 @@ const CurrentInventoryValue = ({ hide = false }) => {
 
   const productData = [
     {
-      product: "Product Name 1",
+      product: "kroduct Name 1",
       qoh: 4,
-      cost: "$5.00",
-      totalValue: "$20.00"
+      cost: 5.00,
+      totalValue: 20.00
+    },
+    {
+      product: "lroduct Name 1",
+      qoh: 2,
+      cost: 10.00,
+      totalValue: 6.00
+    },
+    {
+      product: "croduct Name 1",
+      qoh: 2,
+      cost: 5.00,
+      totalValue: 10.00
     },
     {
       product: "Product Name 1",
-      qoh: 2,
-      cost: "$5.00",
-      totalValue: "$10.00"
+      qoh: 60,
+      cost: 5.00,
+      totalValue: 10.00
     },
     {
-      product: "Product Name 1",
-      qoh: 2,
-      cost: "$5.00",
-      totalValue: "$10.00"
+      product: "zroduct Name 1",
+      qoh: 8,
+      cost: 5.00,
+      totalValue: 10.00
     },
     {
-      product: "Product Name 1",
-      qoh: 2,
-      cost: "$5.00",
-      totalValue: "$10.00"
-    },
-    {
-      product: "Product Name 1",
-      qoh: 2,
-      cost: "$5.00",
-      totalValue: "$10.00"
-    },
-    {
-      product: "Product Name 1",
-      qoh: 2,
-      cost: "$5.00",
-      totalValue: "$10.00"
+      product: "aroduct Name 1",
+      qoh: 20,
+      cost: 16.00,
+      totalValue: 90.00
     }
   ];
 
