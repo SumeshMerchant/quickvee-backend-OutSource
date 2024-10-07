@@ -49,86 +49,45 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const InventoryStocktateHistoryReportList = ({employeeData}) => {
-  const dispatch = useDispatch();
-  const {
-    LoginGetDashBoardRecordJson,
-    LoginAllStore,
-    userTypeData,
-    GetSessionLogin,
-  } = useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
-    PasswordShow();
-  const [allNewItemData, setallNewItemData] = useState([]);
-  const AllNewItemDataState = useSelector(
-    (state) => state.NewItemCreatedBtnList
-  );
-  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-
-  // useEffect(() => {
-  //   getNewItemCreatedBetweenData();
-  // }, [props]);
-  // const getNewItemCreatedBetweenData = async () => {
-  //   try {
-  //     if (props && props.selectedDateRange) {
-  //       let data = {
-  //         merchant_id,
-  //         start_date: props.selectedDateRange.start_date,
-  //         end_date: props.selectedDateRange.end_date,
-  //         ...userTypeData,
-  //       };
-  //       if (data) {
-  //         await dispatch(fetchNewItemCreatedBetweenData(data)).unwrap();
-  //       }
-  //     }
-  //   } catch (error) {
-  //     if (error?.status == 401 || error?.response?.status === 401) {
-  //       getUnAutherisedTokenMessage();
-  //       handleCoockieExpire();
-  //     } else if (error.status == "Network Error") {
-  //       getNetworkError();
-  //     }
-  //   }
-  // };
-
-  useEffect(() => {
-    if (
-      !AllNewItemDataState.loading &&
-      AllNewItemDataState?.NewItemData &&
-      AllNewItemDataState?.NewItemData?.report_data
-    ) {
-      setallNewItemData(AllNewItemDataState?.NewItemData?.report_data);
-
-    } else {
-      setallNewItemData([]);
-    }
-  }, [AllNewItemDataState, AllNewItemDataState.NewItemData]);
-
-
-  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
-
-  const sortByItemName = (type, name) => {
-    const itemsWithParsedDates = allNewItemData.map((item) => {
-      const dateString = item.created_on;
-      const [day, month, year] = dateString.split("-").map(Number);
-      const date = `${year},${month},${day}`;
-      return { ...item, created_on: date };
+  const [allNewItemData, setallNewItemData] = useState(employeeData);
+  const SortTableItemsHelperFun = (items, type, name, sortOrder) => {
+    const sortedItems = [...items].sort((a, b) => {
+      if (type === "num") {
+        const aValue = parseFloat(a[name]);
+        const bValue = parseFloat(b[name]);
+  
+        return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+      } else if (type === "string") {
+        const aValue = a[name].toLowerCase();
+        const bValue = b[name].toLowerCase();
+        if (sortOrder === "asc") {
+          return aValue > bValue ? 1 : -1;
+        } else {
+          return aValue < bValue ? 1 : -1;
+        }
+      }
+      return 0;
     });
-    const { sortedItems, newOrder } = SortTableItemsHelperFun(
-      itemsWithParsedDates,
-      type,
-      name,
-      sortOrder
-    );
-    setallNewItemData(
-      sortedItems.map((item) => {
-        const dateString = item.created_on;
-        const [year, month, day] = dateString.split(",").map(Number);
-        const customdate = `${day}-${month}-${year}`;
-        return { ...item, created_on: customdate };
-      })
-    );
-    setSortOrder(newOrder);
+        const newOrder = sortOrder === "asc" ? "desc" : "asc";
+    return { sortedItems, newOrder };
   };
+const [sortOrder, setSortOrder] = useState("asc");
+const sortByItemName = (type, name) => {
+  const { sortedItems, newOrder } = SortTableItemsHelperFun(
+    allNewItemData,
+    type,
+    name,
+    sortOrder
+  );
+  setallNewItemData(sortedItems);
+  setSortOrder(newOrder);
+};
+useEffect(() => {
+}, [allNewItemData]);
+
+useEffect(() => {
+  setallNewItemData(employeeData);
+}, [employeeData]);
   return (
     <>
         <Grid container className="box_shadow_div">
@@ -155,7 +114,7 @@ const InventoryStocktateHistoryReportList = ({employeeData}) => {
                       <StyledTableCell>
                         <button
                           className="flex items-center"
-                          // onClick={() => sortByItemName("str", "fullName")}
+                          onClick={() => sortByItemName("string", "stocktake")}
                         >
                           <p>Stocktake</p>
                           <img src={sortIcon} alt="" className="pl-1" />
@@ -164,7 +123,7 @@ const InventoryStocktateHistoryReportList = ({employeeData}) => {
                       <StyledTableCell>
                         <button
                           className="flex items-center"
-                          // onClick={() => sortByItemName("num", "pin")}
+                          onClick={() => sortByItemName("string", "status")}
                         >
                           <p>Status</p>
                           <img src={sortIcon} alt="" className="pl-1" />
@@ -173,7 +132,7 @@ const InventoryStocktateHistoryReportList = ({employeeData}) => {
                       <StyledTableCell>
                         <button
                             className="flex items-center"
-                            // onClick={() => sortByItemName("num", "pin")}
+                            onClick={() => sortByItemName("num", "tqty")}
                           >
                             <p>Total Qty</p>
                             <img src={sortIcon} alt="" className="pl-1" />
@@ -182,7 +141,7 @@ const InventoryStocktateHistoryReportList = ({employeeData}) => {
                       <StyledTableCell>
                         <button
                           className="flex items-center"
-                          // onClick={() => sortByItemName("str", "email")}
+                          onClick={() => sortByItemName("num", "tDiscrepancyCost")}
                         >
                           <p>Total Discrepancy Cost</p>
                           <img src={sortIcon} alt="" className="pl-1" />
@@ -199,8 +158,8 @@ const InventoryStocktateHistoryReportList = ({employeeData}) => {
                       </StyledTableCell>
                     </TableHead>
                     <TableBody>
-                      {employeeData && employeeData?.length >= 1 ? (
-                        employeeData?.map((employee, index) => (
+                      {allNewItemData && allNewItemData?.length >= 1 ? (
+                        allNewItemData?.map((employee, index) => (
                           <StyledTableRow key={index}>
                             <StyledTableCell>
                               <p className="text-[#0A64F9]">{employee?.stocktake}</p>
