@@ -31,6 +31,7 @@ const ReorderInventoryMain = () => {
     const updatedData = {
       ...dateRange,
     };
+    setPage(1)
     setSelectedDateRange(updatedData);
     fetchProductsData(page);
   };
@@ -79,6 +80,39 @@ const ReorderInventoryMain = () => {
     { id: "inbound_inventory", name: "Inbound Inventory" },
     { id: "inventory_days_cover", name: "Days Cover" },
     { id: "avg_cost", name: "Avg. cost" },
+    { id: "plus_after_avg_cost", name: "+" },
+  ];
+
+  const initialColumns1 = [
+    { id: "name", name: "Product" },
+    { id: "plus_after_sku", name: "+" },
+    { id: "net_sale", name: "Net Sale" },
+    { id: "closing_inventory", name: "Closing Inventory" },
+    { id: "items_sold_per_day", name: "Items sold per day" },
+    { id: "inventory_days_cover", name: "Days Cover" },
+    { id: "sell_through_rate", name: "Sell-through rate" },
+    { id: "gross_profit", name: "Gross Pro" },
+    { id: "avg_cost", name: "Avg. cost" },
+    { id: "avg_sale_value", name: "Avg. sale value" },
+    { id: "avg_items_per_sale", name: "Avg. items per sale" },
+    { id: "items_sold", name: "Avg. items per sale" },
+    { id: "sale_count", name: "Sale count" },
+    { id: "customer_count", name: "Customer count" },
+    { id: "sale_margin", name: "Margin (%)" },
+    { id: "gross_profit", name: "Gross profit" },
+    { id: "times_sold", name: "Items sold" },
+    { id: "quantity", name: "Quantity" },
+    { id: "reorder_qty", name: "Reorder Qty" },
+    { id: "reorder_level", name: "Reorder Level" },
+    { id: "item_price", name: "Items price" },
+    { id: "instock", name: "Instock" },
+    { id: "variant", name: "Variant" },
+    { id: "avg_discount_percentage", name: "Discounted (%)" },
+    { id: "created", name: "Created" },
+    { id: "first_sale", name: "First sale" },
+    { id: "last_sale", name: "Last sale" },
+    { id: "inventory_cost", name: "Inventory cost" },
+    { id: "cost_goods_sold", name: "Cost of goods sold" },
     { id: "plus_after_avg_cost", name: "+" },
   ];
 
