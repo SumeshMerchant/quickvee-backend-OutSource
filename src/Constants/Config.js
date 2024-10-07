@@ -3,7 +3,8 @@
 //remove unwanted and credentials of other app
 module.exports = Object.freeze({
   // BASE_URL: "https://sandbox.quickvee.net/",
-  BASE_URL: "https://production.quickvee.net/",
+  // BASE_URL: "https://production.quickvee.net/",
+  BASE_URL:"http://192.168.20.231/",
   // BASE_URL: "https://www.quickvee.net/",
   // BASE_URL: "https://www.quickvee.net/",
   // Categories API calls
@@ -17,7 +18,7 @@ module.exports = Object.freeze({
   EDIT_CATOGRY_DATA: "CategoryReactapi/category_data",
   SORT_CATOGRY_DATA: "CategoryReactapi/SaveSizeSorting",
 
-  // DASHBOARD CHARTS
+  // DASHBOARD CHARTS Invenrory_report/Reorder_list
   REVENUE_CHART: "ReportingReactapi/revenue_data_api",
   SALES_COUNT_CHART: "NewDashboardReact/sales_count_api",
   CUSTOMER_COUNT_CHART: "ReportingReactapi/customer_count_api",
@@ -284,7 +285,8 @@ module.exports = Object.freeze({
   // NewsLetter List API
   NEWS_LETTER_LIIST: "vendor_report_api/newsletter",
 
-  GET_REORDER_INVENTORY_LIST: "ReportingReactapi/get_reorder_inventory_list",
+  // GET_REORDER_INVENTORY_LIST: "ReportingReactapi/get_reorder_inventory_list",
+  GET_REORDER_INVENTORY_LIST: "Invenrory_report/Reorder_list",
 
   // PRODUCTS
   PRODUCTS_LIST: "Product_api_react/Products_list",
