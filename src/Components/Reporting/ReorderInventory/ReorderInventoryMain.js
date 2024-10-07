@@ -111,7 +111,7 @@ const ReorderInventoryMain = () => {
       };
       const response = await axios.post(
         // `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,Invenrory_report/Reorder_list
-        `${Config.BASE_URL}$Invenrory_report/Reorder_list`,
+        `${Config.BASE_URL}Invenrory_report/Reorder_list`,
         payload,
         {
           headers: {
