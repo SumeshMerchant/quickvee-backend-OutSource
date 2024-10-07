@@ -4,9 +4,9 @@
 module.exports = Object.freeze({
   // BASE_URL: "https://sandbox.quickvee.net/",
   // BASE_URL: "https://production.quickvee.net/",
-  BASE_URL:"http://192.168.20.231/",
-  // BASE_URL: "https://www.quickvee.net/",
-  // BASE_URL: "https://www.quickvee.net/",
+  BASE_URL: "http://192.168.20.231/",
+  // BASE_URL: "https://www.quickvee.net/",,
+  // BASE_URL: "http://localhost:8888/QuickveeReport/"
   // Categories API calls
   ADD_CATOGRY: "CategoryReactapi/addnewcolln",
   UPDATE_CATOGRY: "CategoryReactapi/updateCategory",
