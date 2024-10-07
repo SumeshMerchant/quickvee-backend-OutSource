@@ -78,7 +78,6 @@ const ReorderInventoryMain = () => {
     { id: "items_sold_per_day", name: "Items sold per day" },
     { id: "inventory_days_cover", name: "Days Cover" },
     { id: "sell_through_rate", name: "Sell-through rate" },
-    { id: "revenue", name: "Revenue" },
     { id: "gross_profit", name: "Gross Pro" },
     { id: "avg_cost", name: "Avg. cost" },
     { id: "avg_sale_value", name: "Avg. sale value" },
