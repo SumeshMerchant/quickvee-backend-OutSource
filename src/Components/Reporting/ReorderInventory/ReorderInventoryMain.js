@@ -33,7 +33,7 @@ const ReorderInventoryMain = () => {
     };
     setPage(1)
     setSelectedDateRange(updatedData);
-    fetchProductsData(page);
+    fetchProductsData();
   };
   const [selectedOrderSource, setSelectedOrderSource] = useState("SKU Name");
   const [productListData, setProductListData] = useState([]);
@@ -116,7 +116,7 @@ const ReorderInventoryMain = () => {
     { id: "plus_after_avg_cost", name: "+" },
   ];
 
-  const fetchProductsData = async (currentPage) => {
+  const fetchProductsData = async () => {
     try {
       setLoading(true);
       const payload = {
@@ -156,14 +156,16 @@ const ReorderInventoryMain = () => {
     }
   };
   const fetchMoreData = () => {
-    setPage(prevPage => prevPage + 1);
-    fetchProductsData(page + 1);
+    if (hasMore ) {
+      setPage((prevPage) => prevPage + 1);
+      fetchProductsData();
+    }
   };
 
 
   useEffect(() => {
    
-    fetchProductsData(page);
+    fetchProductsData();
   }, [selectedDateRange]);
 
   return (
