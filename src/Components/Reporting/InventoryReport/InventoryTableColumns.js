@@ -249,8 +249,8 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
               <Grid item>
               <input
                   type="checkbox"
-                  name="avgCostMeasure"
-                  checked={selectedColumns?.avgCostMeasure}
+                  name="avg_cost"
+                  checked={selectedColumns?.avg_cost}
                   onChange={handleCheckboxChange}
                 />
               </Grid>

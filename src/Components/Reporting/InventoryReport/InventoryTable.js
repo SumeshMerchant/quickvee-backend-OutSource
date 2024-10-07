@@ -5,11 +5,51 @@ import InventoryTableColumns from "./InventoryTableColumns";
 import FirstButtonSelections from "./FirstButtonSelections";
 import SecondButtonSelections from "./SecondButtonSelections";
 import InfiniteScroll from "react-infinite-scroll-component";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import Skeleton from 'react-loading-skeleton';
-const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore }) => {
+const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore,loading }) => {
   const [leftStickyOffset, setLeftStickyOffset] = useState(0);
   const [colWidths, setColWidths] = useState([]);
   const [open, setOpen] = useState(false);
+
+  const totalAvgCost = initialData.reduce((acc, item) => {
+    if (item?.avg_cost !== undefined && item?.avg_cost !== null) {
+      const cost = parseFloat(item.avg_cost);
+      return acc + (isNaN(cost) ? 0 : cost);
+    }
+    return acc;
+  }, 0);  
+
+  const totalgross_profit = initialData.reduce((acc, item) => {
+    if (item?.gross_profit !== undefined && item?.gross_profit !== null) {
+      const cost = parseFloat(item.gross_profit);
+      return acc + (isNaN(cost) ? 0 : cost);
+    }
+    return acc;
+  }, 0);  //gross_profit
+  const TotalItemsSoldPerDay = initialData.reduce((acc, item) => {
+    if (item?.items_sold_per_day !== undefined && item?.items_sold_per_day !== null) {
+      const cost = parseFloat(item?.items_sold_per_day);
+      return acc + (isNaN(cost) ? 0 : cost);
+    }
+    return acc;
+  }, 0);
+  const Totalitems_sold = initialData.reduce((acc, item) => {
+    if (item?.times_sold !== undefined && item?.times_sold !== null) {
+      const cost = parseFloat(item?.times_sold);
+      return acc + (isNaN(cost) ? 0 : cost);
+    }
+    return acc;
+  }, 0);
+
+  const Totalrevenue = initialData.reduce((acc, item) => {
+    if (item?.revenue !== undefined && item?.revenue !== null) {
+      const cost = parseFloat(item?.revenue);
+      return acc + (isNaN(cost) ? 0 : cost);
+    }
+    return acc;
+  }, 0);
+  
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -44,7 +84,7 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
     inventory_returns:false,
     inbound_inventory:false,
     items_sold_per_day: false,
-    avgCostMeasure: false,
+    avg_cost: false,
     selfThroughRate: false,
     created: false,
     firstSale: false,
@@ -122,7 +162,7 @@ useEffect(() => {
       inventory_days_cover:"inventory_days_cover",
       inventory_returns:"inventory_returns",
       inbound_inventory:"inbound_inventory",
-      avgCostMeasure: "avg_cost_measure",
+      avg_cost: "avg_cost",
       inventory_cost:"inventory_cost",
       selfThroughRate: "self_through_rate",
       created: "created",
@@ -270,7 +310,9 @@ useEffect(() => {
                           ) : col.id === "plus_after_sku" ||
                             col.id === "plus_after_avg_cost" ? (
                             "" // Display nothing for "plus_after_sku"
-                          ) : row[col.id] !== null &&
+                          ): col.id === "avg_cost" && row[col.id] !== null && row[col.id] !== undefined && row[col.id] !== "" ? (
+                            `$ ${parseFloat(row[col.id]).toFixed(2)}`
+                        ): row[col.id] !== null &&
                             row[col.id] !== undefined &&
                             row[col.id] !== "" ? (
                             row[col.id]
@@ -285,7 +327,7 @@ useEffect(() => {
                 
                   <tfoot>
                   <div className="tfoot-scrollable-container">
-                  {initialData.length > 0 && (
+                  {initialData && initialData.length > 0 && (
                     <tr>
                       <td>
                         <div style={{ width: colWidths[0] - 3 }}>Totals</div>
@@ -293,8 +335,8 @@ useEffect(() => {
                       {columns.slice(1).map((col, index) => (
                         <td key={col.id}>
                           <div style={{ width: colWidths[index + 1] }}>
-                            {col.id === "closing_inventory"
-                              ? "900"
+                            {col.id === "avg_cost"
+                              ?  `$ ${parseFloat(totalAvgCost).toFixed(2)}`
                               : col.id === "sell_through_rate"
                               ? "90%"
                               : col.id === "inventory_cost"
@@ -302,13 +344,13 @@ useEffect(() => {
                               : col.id === "retail_value"
                               ? "600"
                               : col.id === "revenue"
-                              ? "$600"
-                              : col.id === "items_sold"
-                              ? "600"
+                              ? `$ ${parseFloat(Totalrevenue).toFixed(2)}`
+                              : col.id === "times_sold"
+                              ? Totalitems_sold
                               : col.id === "gross_profit"
-                              ? "$600"
+                              ?  `$ ${parseFloat(totalgross_profit).toFixed(2)}`
                               : col.id === "items_sold_per_day"
-                              ? "600"
+                              ? TotalItemsSoldPerDay
                               : col.id === "current_inventory"
                               ? "600"
                               : ""}
