@@ -95,6 +95,12 @@ const ReorderInventoryMain = () => {
     { id: "item_price", name: "Items price" },
     { id: "instock", name: "Instock" },
     { id: "variant", name: "Variant" },
+    { id: "avg_discount_percentage", name: "Discounted (%)" },
+    { id: "created", name: "Created" },
+    { id: "first_sale", name: "First sale" },
+    { id: "last_sale", name: "Last sale" },
+    { id: "inventory_cost", name: "Inventory cost" },
+    { id: "cost_goods_sold", name: "Cost of goods sold" },
     { id: "plus_after_avg_cost", name: "+" },
   ];
 
