@@ -26,10 +26,10 @@ const ReorderInventoryMain = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const handleDateRangeChange = (dateRange) => {
     const updatedData = {
-      ...dateRange
+      ...dateRange,
     };
     setSelectedDateRange(updatedData);
     fetchProductsData(page);
@@ -37,8 +37,7 @@ const ReorderInventoryMain = () => {
   const [selectedOrderSource, setSelectedOrderSource] = useState("SKU Name");
   const [productListData, setProductListData] = useState([]);
 
-  const [selectedOrderType, setSelectedOrderType] =
-    useState("All inventory");
+  const [selectedOrderType, setSelectedOrderType] = useState("All inventory");
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
@@ -68,112 +67,74 @@ const ReorderInventoryMain = () => {
     "On-hand-inventory",
     "Low inventory",
     "All inventory",
-    "Out of stock"
+    "Out of stock",
   ];
 
   const initialColumns = [
-    { id: "sku", name: "Product Name" },
+    { id: "name", name: "Product" },
     { id: "plus_after_sku", name: "+" },
+    { id: "net_sale", name: "Net Sale" },
     { id: "closing_inventory", name: "Closing Inventory" },
     { id: "items_sold_per_day", name: "Items sold per day" },
-    { id: "items_sold", name: "Items Sold" },
-    { id: "inbound_inventory", name: "Inbound Inventory" },
-    { id: "inventory_days_cover", name: "Days cover" },
-    { id: "avgCostMeasure", name: "Avg. cost" },
+    { id: "inventory_days_cover", name: "Days Cover" },
+    { id: "sell_through_rate", name: "Sell-through rate" },
+    { id: "revenue", name: "Revenue" },
+    { id: "gross_profit", name: "Gross Pro" },
+    { id: "avg_cost", name: "Avg. cost" },
+    { id: "avg_sale_value", name: "Avg. sale value" },
+    { id: "avg_items_per_sale", name: "Avg. items per sale" },
+    { id: "items_sold", name: "Avg. items per sale" },
+    { id: "sale_count", name: "Sale count" },
+    { id: "customer_count", name: "Customer count" },
+    { id: "sale_margin", name: "Margin (%)" },
+    { id: "gross_profit", name: "Gross profit" },
+    { id: "times_sold", name: "Items sold" },
+    { id: "quantity", name: "Quantity" },
+    { id: "reorder_qty", name: "Reorder Qty" },
+    { id: "reorder_level", name: "Reorder Level" },
+    { id: "item_price", name: "Items price" },
+    { id: "instock", name: "Instock" },
+    { id: "variant", name: "Variant" },
     { id: "plus_after_avg_cost", name: "+" },
   ];
 
-
   const fetchProductsData = async (currentPage) => {
-    
     try {
-      setLoading(true)
+      setLoading(true);
       const payload = {
         merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
         token_id: LoginGetDashBoardRecordJson?.token_id,
         login_type: LoginGetDashBoardRecordJson?.login_type,
         limit: 10,
-        offset: (currentPage - 1) * 10,
-        ...selectedDateRange 
-      }
+        page: page,
+      };
       const response = await axios.post(
         `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
         payload,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `${LoginGetDashBoardRecordJson?.token}`
+            "Content-Type": "multipart/form-data",
+            Authorization: `${LoginGetDashBoardRecordJson?.token}`,
           },
         }
       );
 
       const products = response?.data?.reorder_array;
-      if (products && products.length < 10) {
+      if (products.length < 10) {
         setHasMore(false);
       }
-      const mapProductData = (productData) => {
-        return productData?.map((product) => {
-          return {
-            sku: product.sku || product.id,
-            name: product.title || product.item_name,
-            closing_inventory: parseInt(product.quantity) || 0,
-            items_sold: product.reorder_qty || 0,
-            inventory_days_cover: 0,
-            avgCostMeasure: product?.costperItem ? `$${parseFloat(product?.costperItem).toFixed(2)}` : "",
-            brand: product.brand,
-            vendor: "Vendor A" || product.cost_vendor,
-            category: product?.category_name || product.category,
-            revenue: parseFloat(product.profit) || 0,
-            gross_profit: parseFloat(product.profit) || 0,
-            sale_margin: parseFloat(product.margin) || 0,
-            customer_count: 0,
-            sale_count: 0,
-            avg_items_per_sale: 0,
-            sale_discounted: 0,
-            avg_sale_value: 0,
-            cost_goods_sold: parseFloat(product.costperItem) || 0,
-            retail_value: 0,
-            current_inventory: parseInt(product.quantity) || product?.reorder_qty || 0,
-            start_date_inventory: product.created_on,
-            reorder_point: parseInt(product.reorder_level) || 0,
-            reorder_amount: parseInt(product.reorder_qty) || 0,
-            return_count: 0,
-            inventory_days_cover: 0,
-            inventory_returns: 0,
-            inbound_inventory: "",
-            items_sold_per_day: 0,
-            inventory_cost: parseFloat(product.costperItem) || 0,
-            avg_cost_measure: parseFloat(product.costperItem) || 0,
-            self_through_rate: 0,
-            created: product.created_on,
-            first_sale: "",
-            last_sale: "",
-            last_received: product.updated_on,
-            varient: product?.variant,
-            instock: product?.instock,
-            item_price: product?.item_price,
-            reorder_level: product?.reorder_level
-          }
-        });
-      };
-      if (products != undefined && products != null) {
-        const mappedData = mapProductData(products);
-        if (page == 0) {
-          setProductListData(mappedData)
-          
-        }else {
-          
-          setProductListData(prev => [...prev, ...mappedData])
-        }
+      if (products && products.length > 0 && page == 0) {
+        setProductListData(products);
+      } else if (products && products.length > 0 && page != 0) {
+        setProductListData([...productListData, ...products]);
       }
-      
-      return products; 
+      return products;
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error("Error fetching products:", error);
     } finally {
-       setLoading(false); 
+      setLoading(false);
     }
-  }
+  };
   const fetchMoreData = () => {
     setPage(prevPage => prevPage + 1);
     fetchProductsData(page + 1);
