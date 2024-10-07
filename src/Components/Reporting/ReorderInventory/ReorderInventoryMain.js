@@ -107,6 +107,7 @@ const ReorderInventoryMain = () => {
         login_type: LoginGetDashBoardRecordJson?.login_type,
         limit: 10,
         offset: (currentPage - 1) * 10,
+        ...selectedDateRange
       };
       const response = await axios.post(
         `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
