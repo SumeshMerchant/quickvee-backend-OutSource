@@ -140,6 +140,9 @@ const ReorderInventoryMain = () => {
       );
 
       const products = response?.data?.reorder_array;
+      if(response?.data && !response?.data?.status){
+        setProductListData([])
+      }
       if (products.length < 10) {
         setHasMore(false); 
       }
@@ -231,6 +234,7 @@ const ReorderInventoryMain = () => {
         initialData={productListData}
         scrollForProduct={fetchMoreData}
         hasMore={hasMore}
+        loading={loading}
               />
        {/* )}  */}
     </>

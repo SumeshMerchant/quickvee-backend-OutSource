@@ -26,10 +26,17 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
       return acc + (isNaN(cost) ? 0 : cost);
     }
     return acc;
-  }, 0);  //gross_profit
+  }, 0); 
   const TotalItemsSoldPerDay = initialData.reduce((acc, item) => {
     if (item?.items_sold_per_day !== undefined && item?.items_sold_per_day !== null) {
       const cost = parseFloat(item?.items_sold_per_day);
+      return acc + (isNaN(cost) ? 0 : cost);
+    }
+    return acc;
+  }, 0);
+  const Totalinventory_cost = initialData.reduce((acc, item) => {
+    if (item?.inventory_cost !== undefined && item?.inventory_cost !== null) {
+      const cost = parseFloat(item?.inventory_cost);
       return acc + (isNaN(cost) ? 0 : cost);
     }
     return acc;
@@ -222,30 +229,45 @@ useEffect(() => {
 
   // Sync scroll between table and tfoot (from table to tfoot)
   const syncScrollFromTable = () => {
-    tfootContainer.scrollLeft = tableContainer.scrollLeft;
+    if(tableContainer){
+      tfootContainer.scrollLeft = tableContainer.scrollLeft;
+    }
   };
 
   // Sync scroll from tfoot to table (from footer to table)
   const syncScrollFromFooter = () => {
-    tableContainer.scrollLeft = tfootContainer.scrollLeft;
+    if(tableContainer){
+      tableContainer.scrollLeft = tfootContainer.scrollLeft;
+    }
   };
 
   // Add scroll event listeners
-  tableContainer.addEventListener("scroll", syncScrollFromTable);
-  tfootContainer.addEventListener("scroll", syncScrollFromFooter);
+  if(tableContainer && tfootContainer){
+    tableContainer.addEventListener("scroll", syncScrollFromTable);
+    tfootContainer.addEventListener("scroll", syncScrollFromFooter);
+  }
 
   // Cleanup event listeners on component unmount
   return () => {
+    if(tableContainer){
     tableContainer.removeEventListener("scroll", syncScrollFromTable);
-    tfootContainer.removeEventListener("scroll", syncScrollFromFooter);
+    }
+    if(tfootContainer){
+      tfootContainer.removeEventListener("scroll", syncScrollFromFooter);
+    }
   };
+
 }, []);
 
-//  console.log("========",initialData.length)
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
+        {loading ? (
+            <div className="custom-table">{renderLoader()}</div>
+          ) : initialData?.length === 0 ? (
+            <NoDataFound message="No Data Found" />
+          ) : (
           <InfiniteScroll
             dataLength={initialData.length} // This is important to track the data length
             next={scrollForProduct} // This will trigger the parent's function to fetch more data
@@ -309,10 +331,14 @@ useEffect(() => {
                             </>
                           ) : col.id === "plus_after_sku" ||
                             col.id === "plus_after_avg_cost" ? (
-                            "" // Display nothing for "plus_after_sku"
-                          ): col.id === "avg_cost" && row[col.id] !== null && row[col.id] !== undefined && row[col.id] !== "" ? (
-                            `$ ${parseFloat(row[col.id]).toFixed(2)}`
-                        ): row[col.id] !== null &&
+                            "" // Display nothing for "plus_after_sku" sell_through_rate
+                          ): row[col.id] !== null &&  (col.id === "avg_cost" || col.id === "gross_profit" ||col.id === "revenue" ||col.id === "inventory_cost") && row[col.id] !== undefined && row[col.id] !== "" ? (
+                            isNaN(parseFloat(row[col.id])) ? '-' : `$ ${parseFloat(row[col.id]).toFixed(2)}`
+                        ): row[col.id] !== null && ( col.id === "sell_through_rate" || col.id === "avg_discount_percentage") && row[col.id] !== undefined && row[col.id] !== "" ? (
+                          isNaN(parseFloat(row[col.id])) ? '-' : `${parseFloat(row[col.id]).toFixed(2)} % `
+                      ): row[col.id] !== null &&  (col.id === "net_sale" || col.id === "sale_margin" || col.id ==="avg_items_per_sale" || col.id ==="avg_sale_value" || col.id ==="cost_goods_sold") && row[col.id] !== undefined && row[col.id] !== "" ? (
+                        isNaN(parseFloat(row[col.id])) ? '-' :  ` ${parseFloat(row[col.id]).toFixed(2)}`
+                    ): row[col.id] !== null &&
                             row[col.id] !== undefined &&
                             row[col.id] !== "" ? (
                             row[col.id]
@@ -340,17 +366,17 @@ useEffect(() => {
                               : col.id === "sell_through_rate"
                               ? "90%"
                               : col.id === "inventory_cost"
-                              ? "$72.00"
+                              ?  `$ ${parseFloat(Totalinventory_cost).toFixed(2)}`  
                               : col.id === "retail_value"
                               ? "600"
                               : col.id === "revenue"
                               ? `$ ${parseFloat(Totalrevenue).toFixed(2)}`
                               : col.id === "times_sold"
-                              ? Totalitems_sold
+                              ? ` ${parseFloat(Totalitems_sold).toFixed(2)}` 
                               : col.id === "gross_profit"
                               ?  `$ ${parseFloat(totalgross_profit).toFixed(2)}`
                               : col.id === "items_sold_per_day"
-                              ? TotalItemsSoldPerDay
+                              ? `${parseFloat(TotalItemsSoldPerDay).toFixed(2)}`
                               : col.id === "current_inventory"
                               ? "600"
                               : ""}
@@ -386,6 +412,7 @@ useEffect(() => {
               )}
             </div>
           </InfiniteScroll>
+           )}
         </Grid>
       </Grid>
         

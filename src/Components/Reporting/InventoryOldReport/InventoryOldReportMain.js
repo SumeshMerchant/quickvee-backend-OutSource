@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InventoryOldReportList from "./InventoryOldReportList";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import { Grid } from "@mui/material";
 import InventoryTable from "../InventoryReport/InventoryTable";
-
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+import axios from 'axios';
+import Config from "../../../Constants/Config";
 const InventoryOldReportMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
@@ -13,6 +15,10 @@ const InventoryOldReportMain = () => {
   const [selectedOrderSource, setSelectedOrderSource] = useState("SKU Name");
   const [selectedOrderType, setSelectedOrderType] =
     useState("On-hand-inventory");
+    const [hasMore, setHasMore] = useState(true);
+    const [productListData, setProductListData] = useState([]);
+    const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(false);
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
@@ -75,7 +81,7 @@ const InventoryOldReportMain = () => {
       sale_discounted: 10,
       avg_sale_value: 70,
       cost_goods_sold: 90,
-      retail_value:"$200",
+      retail_value:200,
       current_inventory: 30,
       start_date_inventory: "2023-02-01",
       reorder_point: 10,
@@ -99,7 +105,7 @@ const InventoryOldReportMain = () => {
       closing_inventory: 200,
       items_sold: 30,
       days_cover: 10,
-      sell_through_rate: "30%",
+      sell_through_rate: 30,
       avg_cost: 15,
       brand: "Brand B",
       vendor: "Vendor A",
@@ -113,7 +119,7 @@ const InventoryOldReportMain = () => {
       avg_items_per_sale: 70,
       avg_sale_value: 70,
       cost_goods_sold: 90,
-      retail_value: "$200",
+      retail_value: 200,
       current_inventory: 30,
       start_date_inventory: "2023-02-01",
       reorder_point: 10,
@@ -137,7 +143,7 @@ const InventoryOldReportMain = () => {
       closing_inventory: 200,
       items_sold: 30,
       days_cover: 10,
-      sell_through_rate: "30%",
+      sell_through_rate: 30,
       avg_cost: 15,
       brand: "Brand B",
       vendor: "Vendor A",
@@ -151,7 +157,7 @@ const InventoryOldReportMain = () => {
       avg_items_per_sale: 70,
       avg_sale_value: 70,
       cost_goods_sold: 90,
-      retail_value:"$200",
+      retail_value:200,
       current_inventory: 30,
       start_date_inventory: "2023-02-01",
       reorder_point: 10,
@@ -175,7 +181,7 @@ const InventoryOldReportMain = () => {
       closing_inventory: 200,
       items_sold: 30,
       days_cover: 10,
-      sell_through_rate: "40%",
+      sell_through_rate: 40,
       avg_cost: 15,
       brand: "Brand B",
       vendor: "Vendor A",
@@ -190,7 +196,7 @@ const InventoryOldReportMain = () => {
       sale_discounted: 10,
       avg_sale_value: 70,
       cost_goods_sold: 90,
-      retail_value: "$200",
+      retail_value: 200,
       current_inventory: 30,
       start_date_inventory: "2023-02-01",
       reorder_point: 10,
@@ -208,6 +214,63 @@ const InventoryOldReportMain = () => {
       last_received: "2023-04-02",
     },
   ];
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+
+  const fetchProductsData = async () => {
+    try {
+      setLoading(true);
+      const payload = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        token_id: LoginGetDashBoardRecordJson?.token_id,
+        login_type: LoginGetDashBoardRecordJson?.login_type,
+        limit: 10,
+        page: page,
+        ...selectedDateRange
+      };
+      // const response = await axios.post(
+      //   `${Config.BASE_URL}Invenrory_report/Reorder_list`,
+      //   payload,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //       Authorization: `${LoginGetDashBoardRecordJson?.token}`,
+      //     },
+      //   }
+      // );
+
+      // const products = response?.data?.reorder_array;
+      const products = initialData;
+      // if(!response?.data?.status){
+      //   setProductListData([])
+      // }
+      if (products.length < 10) {
+        setHasMore(false); 
+      }
+      if (products && products.length > 0 && page == 0) {
+        setProductListData(products);
+      } else if (products && products.length > 0 && page != 0) {
+        setProductListData([...productListData, ...products]);
+      }
+      return products;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchMoreData = () => {
+    if (hasMore ) {
+      setPage((prevPage) => prevPage + 1);
+      fetchProductsData();
+    }
+  };
+
+
+  useEffect(() => {
+   
+    fetchProductsData();
+  }, [selectedDateRange]);
 
   return (
     <>
@@ -257,7 +320,10 @@ const InventoryOldReportMain = () => {
       <Grid container sx={{mt: 3}}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-      <InventoryTable initialColumns={initialColumns} initialData={initialData} />
+      <InventoryTable  initialColumns={initialColumns} initialData={productListData } 
+              scrollForProduct={fetchMoreData}
+              hasMore={hasMore}
+              loading={loading}/>
     </>
   );
 };
