@@ -35,7 +35,7 @@ const ReorderInventoryMain = () => {
     setSelectedDateRange(updatedData);
     fetchProductsData();
   };
-  const [selectedOrderSource, setSelectedOrderSource] = useState("SKU Name");
+  const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
   const [productListData, setProductListData] = useState([]);
 
   const [selectedOrderType, setSelectedOrderType] = useState("All inventory");

@@ -338,7 +338,9 @@ useEffect(() => {
                           isNaN(parseFloat(row[col.id])) ? '-' : `${parseFloat(row[col.id]).toFixed(2)} % `
                       ): row[col.id] !== null &&  (col.id === "net_sale" || col.id === "sale_margin" || col.id ==="avg_items_per_sale" || col.id ==="avg_sale_value" || col.id ==="cost_goods_sold") && row[col.id] !== undefined && row[col.id] !== "" ? (
                         isNaN(parseFloat(row[col.id])) ? '-' :  ` ${parseFloat(row[col.id]).toFixed(2)}`
-                    ): row[col.id] !== null &&
+                    ): row[col.id] !== null &&  col.id === "name" && row[col.id] !== undefined && row[col.id] !== "" ? (
+                      row[col.id] ? row[col.id].charAt(0).toUpperCase() + row[col.id].slice(1).toLowerCase() : '-'
+                  ): row[col.id] !== null &&
                             row[col.id] !== undefined &&
                             row[col.id] !== "" ? (
                             row[col.id]
