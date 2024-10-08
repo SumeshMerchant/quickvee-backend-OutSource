@@ -4,9 +4,9 @@
 module.exports = Object.freeze({
   // BASE_URL: "https://sandbox.quickvee.net/",
   // BASE_URL: "https://production.quickvee.net/",
-  BASE_URL: "http://192.168.20.231/",
+     BASE_URL: "http://192.168.20.231/",
   // BASE_URL: "https://www.quickvee.net/",,
-  // BASE_URL: "http://localhost:8888/QuickveeReport/"
+  // BASE_URL: "http://127.0.0.1:8888/",
   // Categories API calls
   ADD_CATOGRY: "CategoryReactapi/addnewcolln",
   UPDATE_CATOGRY: "CategoryReactapi/updateCategory",
@@ -286,7 +286,7 @@ module.exports = Object.freeze({
   NEWS_LETTER_LIIST: "vendor_report_api/newsletter",
 
   // GET_REORDER_INVENTORY_LIST: "ReportingReactapi/get_reorder_inventory_list",
-  GET_REORDER_INVENTORY_LIST: "Invenrory_report/Reorder_list",
+  GET_REORDER_INVENTORY_LIST: "InventoryReportPk/Reorder_list",
 
   // PRODUCTS
   PRODUCTS_LIST: "Product_api_react/Products_list",
