@@ -13,28 +13,14 @@ const getCurrentDate = () => {
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
-  const endDate = `${year}-${month}-${day}`;
-  const pastDate = new Date();
-  pastDate.setDate(today.getDate() - 6);
-  const pastYear = pastDate.getFullYear();
-  const pastMonth = String(pastDate.getMonth() + 1).padStart(2, '0');
-  const pastDay = String(pastDate.getDate()).padStart(2, '0');
-  const startDate = `${pastYear}-${pastMonth}-${pastDay}`;
-
-  return {
-    start_date: startDate,
-    end_date: endDate
-  };
+  return `${year}-${month}-${day}`;
 };
 
-console.log(getCurrentDate());
-
-
 const ReorderInventoryMain = () => {
-
-  const defaultDateRange = getCurrentDate();
-
-  const [selectedDateRange, setSelectedDateRange] = useState(defaultDateRange);
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    start_date: getCurrentDate(),
+    end_date: getCurrentDate(), 
+  });
 
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [hasMore, setHasMore] = useState(true);
@@ -58,10 +44,12 @@ const ReorderInventoryMain = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const handleDateRangeChange = (dateRange) => {
-      setPage(1);
-      setSelectedDateRange(dateRange); 
-      fetchProductsData(selectedOrderType,dateRange)
-      fetchRecordTotal(selectedOrderType,dateRange)
+    const updatedData = {
+      ...dateRange,
+    };
+    setPage(1)
+    setSelectedDateRange(updatedData);
+    fetchProductsData();
   };
   const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
   const [productListData, setProductListData] = useState([]);
@@ -85,48 +73,17 @@ const ReorderInventoryMain = () => {
     "Out of stock",
   ];
 
-
-  const createPayload = (measureType, dateRange) => ({
-    merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-    token_id: LoginGetDashBoardRecordJson?.token_id,
-    login_type: LoginGetDashBoardRecordJson?.login_type,
-    limit: 10,
-    page: page,
-    start_date: dateRange.start_date,
-    end_date: dateRange.end_date,
-    measureType: measureType,
-  });
-
-  const fetchRecordTotal = async (measureType="All inventory",dateRange) => {
-    const payload = createPayload(measureType, dateRange);
-    // Reorder_total_list
-    const response = await axios.post(
-      `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
-      payload,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `${LoginGetDashBoardRecordJson?.token}`,
-        },
-      }
-    );
-    // console.log("=-=-=-response",response)
-  }
-
-  const fetchProductsData = async (measureType="All inventory",dateRange) => {
+  const fetchProductsData = async () => {
     try {
       setLoading(true);
-      const payload = createPayload(measureType, dateRange);
-      // const payload = {
-      //   merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      //   token_id: LoginGetDashBoardRecordJson?.token_id,
-      //   login_type: LoginGetDashBoardRecordJson?.login_type,
-      //   limit: 10,
-      //   page: page,
-      //   start_date: dateRange.start_date,
-      //   end_date: dateRange.end_date,
-      //   measureType: measureType
-      // };
+      const payload = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        token_id: LoginGetDashBoardRecordJson?.token_id,
+        login_type: LoginGetDashBoardRecordJson?.login_type,
+        limit: 10,
+        page: page,
+        ...selectedDateRange
+      };
       const response = await axios.post(
         // `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,Invenrory_report/Reorder_list
         `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
@@ -138,10 +95,11 @@ const ReorderInventoryMain = () => {
           },
         }
       );
+
+      const products = response?.data?.reorder_array;
       if(response?.data && !response?.data?.status){
         setProductListData([])
       }
-      const products = response?.data?.reorder_array;
       if (products.length < 10) {
         setHasMore(false); 
       }
@@ -175,8 +133,14 @@ const ReorderInventoryMain = () => {
             updatedColumns[0] = { id: "outlet", name: "Outlet" };
           }else{
             updatedColumns[0] = { id: option.title.toLowerCase(), name: option.title };
-           setreportType((prevReportType) =>
-            prevReportType.filter((item) => item.id !== option.title.toLowerCase())
+            const dataArray = [
+              { id: "brand", name: "Brand" },
+              { id: "vendor", name: "Vendor" },
+              { id: "category", name: "Category" },
+              { id: "tag", name: "Tag" }
+            ]
+            setreportType((prevReportType) =>
+            dataArray.filter((item) => item.id !== option.title.toLowerCase())
           );
           }
           
