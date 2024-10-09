@@ -55,7 +55,7 @@ const ReorderInventoryMain = () => {
   const handleDateRangeChange = (dateRange) => {
     setPage(1);
     setSelectedDateRange(dateRange); 
-    fetchProductsData(selectedOrderType,dateRange)
+    fetchProductsData(1,selectedOrderType,dateRange)
     fetchRecordTotal(selectedOrderType,dateRange)
   };
   const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
@@ -80,12 +80,12 @@ const ReorderInventoryMain = () => {
     "Out of stock",
   ];
 
-  const createPayload = (measureType, dateRange) => ({
+  const createPayload = (pageNum,measureType, dateRange) => ({
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
     token_id: LoginGetDashBoardRecordJson?.token_id,
     login_type: LoginGetDashBoardRecordJson?.login_type,
     limit: 10,
-    page: page,
+    page: pageNum,
     start_date: dateRange.start_date,
     end_date: dateRange.end_date,
     measureType: measureType,
@@ -107,10 +107,10 @@ const ReorderInventoryMain = () => {
     // console.log("=-=-=-response",response)
   }
 
-  const fetchProductsData = async (measureType="All inventory",dateRange) => {
+  const fetchProductsData = async (page=0,measureType="All inventory",dateRange) => {
     try {
       setLoading(true);
-      const payload = createPayload(measureType, dateRange);
+      const payload = createPayload(page,measureType, dateRange);
       const response = await axios.post(
         // `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,Invenrory_report/Reorder_list
         `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
@@ -145,8 +145,9 @@ const ReorderInventoryMain = () => {
   const fetchMoreData = () => {
     if (hasMore ) {
       setPage((prevPage) => prevPage + 1);
+      const prevPage = page +1
       // fetchProductsData();
-      fetchProductsData(selectedOrderType,selectedDateRange);
+      fetchProductsData(prevPage,selectedOrderType,selectedDateRange);
     }
   };
   const handleOptionClick = (option, dropdown) => {
@@ -180,7 +181,7 @@ const ReorderInventoryMain = () => {
       case "orderType":
         setSelectedOrderType(option.title);
         setPage(1);
-        fetchProductsData(option.title,selectedDateRange);
+        fetchProductsData(1,option.title,selectedDateRange);
         fetchRecordTotal(option.title,selectedDateRange)
 
         break;
@@ -192,7 +193,7 @@ const ReorderInventoryMain = () => {
   useEffect(() => {
     setSelectedOrderType("All inventory")
     fetchRecordTotal("All inventory",selectedDateRange)
-    fetchProductsData("All inventory",selectedDateRange);
+    fetchProductsData(1,"All inventory",selectedDateRange);
   }, []);
 
   return (
