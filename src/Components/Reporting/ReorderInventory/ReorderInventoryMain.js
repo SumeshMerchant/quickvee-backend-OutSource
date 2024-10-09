@@ -13,80 +13,18 @@ const getCurrentDate = () => {
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
-  const endDate = `${year}-${month}-${day}`;
-  const pastDate = new Date();
-  pastDate.setDate(today.getDate() - 6);
-  const pastYear = pastDate.getFullYear();
-  const pastMonth = String(pastDate.getMonth() + 1).padStart(2, '0');
-  const pastDay = String(pastDate.getDate()).padStart(2, '0');
-  const startDate = `${pastYear}-${pastMonth}-${pastDay}`;
-
-  return {
-    start_date: startDate,
-    end_date: endDate
-  };
+  return `${year}-${month}-${day}`;
 };
 
-console.log(getCurrentDate());
-
-
 const ReorderInventoryMain = () => {
-
-  const defaultDateRange = getCurrentDate();
-
-  const [selectedDateRange, setSelectedDateRange] = useState(defaultDateRange);
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    start_date: getCurrentDate(),
+    end_date: getCurrentDate(), 
+  });
 
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [hasMore, setHasMore] = useState(true);
-
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const handleDateRangeChange = (dateRange) => {
-      setPage(1);
-      setSelectedDateRange(dateRange); 
-      fetchProductsData(selectedOrderType,dateRange)
-      fetchRecordTotal(selectedOrderType,dateRange)
-  };
-  const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
-  const [productListData, setProductListData] = useState([]);
-
-  const [selectedOrderType, setSelectedOrderType] = useState("All inventory");
-
-  const handleOptionClick = (option, dropdown) => {
-    switch (dropdown) {
-      case "orderSource":
-        setSelectedOrderSource(option.title);
-
-        break;
-      case "orderType":
-        setSelectedOrderType(option.title);
-        fetchProductsData(option.title,selectedDateRange);
-        fetchRecordTotal(option.title,selectedDateRange)
-
-        break;
-      default:
-        break;
-    }
-  };
-
-  const showcat = 0;
-  const reportTypeList = [
-    "Product",
-    "SKU Name",
-    "Brand",
-    "Outlet",
-    "Supplier",
-    "Product category",
-  ];
-  const measureTypeList = [
-    "On-hand-inventory",
-    "Low inventory",
-    "All inventory",
-    "Out of stock",
-  ];
-  // avg_discount_percentage
-
-  const initialColumns = [ 
+  const [initialColumns, setInitialColumns] = useState([
     { id: "name", name: "Product Name" },
     { id: "plus_after_sku", name: "+" },
     { id: "closing_inventory", name: "Closing Inventory" },
@@ -96,6 +34,41 @@ const ReorderInventoryMain = () => {
     { id: "inventory_days_cover", name: "Days Cover" },
     { id: "avg_cost", name: "Avg. cost" },
     { id: "plus_after_avg_cost", name: "+" },
+  ]);
+  const [reportType, setreportType] = useState([
+    { id: "brand", name: "Brand" },
+    { id: "vendor", name: "Vendor" },
+    { id: "category", name: "Category" },
+    { id: "tag", name: "Tag" }
+  ]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const handleDateRangeChange = (dateRange) => {
+    setPage(1);
+    setSelectedDateRange(dateRange); 
+    fetchProductsData(selectedOrderType,dateRange)
+    fetchRecordTotal(selectedOrderType,dateRange)
+  };
+  const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
+  const [productListData, setProductListData] = useState([]);
+
+  const [selectedOrderType, setSelectedOrderType] = useState("All inventory");
+
+ 
+
+  const showcat = 0;
+  const reportTypeList = [
+    "Product",
+    "Brand",
+    "Outlet",
+    "Vendor",
+    "Category",
+  ];
+  const measureTypeList = [
+    "On-hand-inventory",
+    "Low inventory",
+    "All inventory",
+    "Out of stock",
   ];
 
   const createPayload = (measureType, dateRange) => ({
@@ -112,16 +85,16 @@ const ReorderInventoryMain = () => {
   const fetchRecordTotal = async (measureType="All inventory",dateRange) => {
     const payload = createPayload(measureType, dateRange);
     // Reorder_total_list
-    const response = await axios.post(
-      `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
-      payload,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `${LoginGetDashBoardRecordJson?.token}`,
-        },
-      }
-    );
+    // const response = await axios.post(
+    //   `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
+    //   payload,
+    //   {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //       Authorization: `${LoginGetDashBoardRecordJson?.token}`,
+    //     },
+    //   }
+    // );
     // console.log("=-=-=-response",response)
   }
 
@@ -129,16 +102,6 @@ const ReorderInventoryMain = () => {
     try {
       setLoading(true);
       const payload = createPayload(measureType, dateRange);
-      // const payload = {
-      //   merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      //   token_id: LoginGetDashBoardRecordJson?.token_id,
-      //   login_type: LoginGetDashBoardRecordJson?.login_type,
-      //   limit: 10,
-      //   page: page,
-      //   start_date: dateRange.start_date,
-      //   end_date: dateRange.end_date,
-      //   measureType: measureType
-      // };
       const response = await axios.post(
         // `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,Invenrory_report/Reorder_list
         `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
@@ -150,6 +113,7 @@ const ReorderInventoryMain = () => {
           },
         }
       );
+
       if(response?.data && !response?.data?.status){
         setProductListData([])
       }
@@ -174,6 +138,44 @@ const ReorderInventoryMain = () => {
       setPage((prevPage) => prevPage + 1);
       // fetchProductsData();
       fetchProductsData(selectedOrderType,selectedDateRange);
+    }
+  };
+  const handleOptionClick = (option, dropdown) => {
+
+    switch (dropdown) {
+      case "orderSource":
+        setInitialColumns((prevColumns) => {
+          const updatedColumns = [...prevColumns];
+          if(option.title==="Product"){
+            updatedColumns[0] = { id: "name", name: "Product Name" };
+          }else if(option.title==="Outlet"){
+            updatedColumns[0] = { id: "outlet", name: "Outlet" };
+          }else{
+            updatedColumns[0] = { id: option.title.toLowerCase(), name: option.title };
+            const dataArray = [
+              { id: "brand", name: "Brand" },
+              { id: "vendor", name: "Vendor" },
+              { id: "category", name: "Category" },
+              { id: "tag", name: "Tag" }
+            ]
+            setreportType((prevReportType) =>
+            dataArray.filter((item) => item.id !== option.title.toLowerCase())
+          );
+          }
+          
+          return updatedColumns;
+        });
+
+        setSelectedOrderSource(option.title);
+        break;
+      case "orderType":
+        setSelectedOrderType(option.title);
+        fetchProductsData(option.title,selectedDateRange);
+        fetchRecordTotal(option.title,selectedDateRange)
+
+        break;
+      default:
+        break;
     }
   };
 
@@ -247,6 +249,7 @@ const ReorderInventoryMain = () => {
         scrollForProduct={fetchMoreData}
         hasMore={hasMore}
         loading={loading}
+        reportType={reportType}
               />
        {/* )}  */}
     </>
