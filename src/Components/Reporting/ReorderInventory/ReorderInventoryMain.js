@@ -178,6 +178,7 @@ const ReorderInventoryMain = () => {
         setSelectedOrderSource(option.title);
         break;
       case "orderType":
+        setProductListData([])
         setSelectedOrderType(option.title);
         setPage(1);
         fetchProductsData(1,option.title,selectedDateRange);
