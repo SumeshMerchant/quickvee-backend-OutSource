@@ -179,6 +179,7 @@ const ReorderInventoryMain = () => {
         break;
       case "orderType":
         setSelectedOrderType(option.title);
+        setPage(1);
         fetchProductsData(option.title,selectedDateRange);
         fetchRecordTotal(option.title,selectedDateRange)
 
