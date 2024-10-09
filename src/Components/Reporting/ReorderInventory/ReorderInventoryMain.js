@@ -94,16 +94,16 @@ const ReorderInventoryMain = () => {
   const fetchRecordTotal = async (measureType="All inventory",dateRange) => {
     const payload = createPayload(measureType, dateRange);
     // Reorder_total_list
-    // const response = await axios.post(
-    //   `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
-    //   payload,
-    //   {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //       Authorization: `${LoginGetDashBoardRecordJson?.token}`,
-    //     },
-    //   }
-    // );
+    const response = await axios.post(
+      `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `${LoginGetDashBoardRecordJson?.token}`,
+        },
+      }
+    );
     // console.log("=-=-=-response",response)
   }
 
