@@ -7,9 +7,10 @@ import SecondButtonSelections from "./SecondButtonSelections";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import Skeleton from 'react-loading-skeleton';
-const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore,loading }) => {
+const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore,loading,reportType }) => {
   const [leftStickyOffset, setLeftStickyOffset] = useState(0);
   const [colWidths, setColWidths] = useState([]);
+  const [columns, setColumns] = useState(initialColumns);
   const [open, setOpen] = useState(false);
 
   const totalAvgCost = initialData.reduce((acc, item) => {
@@ -64,8 +65,9 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
     setOpen(false);
   };
   const tableRef = useRef(null);
-  const [columns, setColumns] = useState(initialColumns);
   
+  const [columnsOptions, setcolumnsOptions] = useState(reportType||[]);
+
   const [selectedColumns, setSelectedColumns] = useState({
     brand: false,
     vendor: false,
@@ -99,6 +101,12 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
     last_received: false,
     tag:false
   });
+  useEffect(() => {
+    const updatedColumns = { ...selectedColumns };
+     const firstColumnId = initialColumns[0].id;
+      updatedColumns[firstColumnId] = true;
+      setSelectedColumns(updatedColumns);
+  }, [selectedColumns]);
   const updateColumns = () => {
     const updatedColumns = columns.filter((column) => !selectedColumns[column.id]);
     const updatedSelectedColumns = { ...selectedColumns };
@@ -113,6 +121,9 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
 useEffect(() => {
   updateColumns();
 }, []);
+useEffect(() => {
+  setColumns(initialColumns);
+}, [initialColumns]);
   const [popupCheckboxes, setPopupCheckboxes] = useState(""); // To track the active popup
   const [showColumnPopup, setShowColumnPopup] = useState(false);
   const [showMeasurePopup, setShowMeasurePopup] = useState(false);
@@ -178,6 +189,8 @@ useEffect(() => {
       last_received: "last_received",
     };
 
+    
+
     Object.entries(measureMappings).forEach(([key, value]) => {
       if (selectedColumns[key] && !updatedColumns.some((col) => col.id === value)) {
         // Insert the new columns BEFORE the "plus_after_avg_cost" column
@@ -223,6 +236,11 @@ useEffect(() => {
     setColWidths(widths);
   }
 }, [columns, initialData]);
+
+
+useEffect(()=>{
+setcolumnsOptions(reportType)
+},[columnsOptions,reportType])
 useEffect(() => {
   const tableContainer = document.querySelector(".custom-table");
   const tfootContainer = document.querySelector(".tfoot-scrollable-container");
@@ -284,10 +302,10 @@ useEffect(() => {
                         return (
                           <th key={col.id} className="left-sticky">
                             <FirstButtonSelections
+                              columnsOptions={columnsOptions}
                               selectedColumns={selectedColumns}
                               setSelectedColumns={setSelectedColumns}
                               applyColumns={applyColumns}
-                              setShowColumnPopup={setShowColumnPopup}
                             />
                           </th>
                         );
@@ -396,7 +414,7 @@ useEffect(() => {
               {/* First popup (columns) */}
               {showColumnPopup && popupCheckboxes === "columns" && (
                 <FirstButtonSelections
-                  selectedColumns={selectedColumns}
+                columnsOptions={columnsOptions}
                   setSelectedColumns={setSelectedColumns}
                   applyColumns={applyColumns}
                   setShowColumnPopup={setShowColumnPopup}

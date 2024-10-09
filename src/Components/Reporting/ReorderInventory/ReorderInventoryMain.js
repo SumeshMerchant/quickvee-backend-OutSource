@@ -24,7 +24,23 @@ const ReorderInventoryMain = () => {
 
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [hasMore, setHasMore] = useState(true);
-
+  const [initialColumns, setInitialColumns] = useState([
+    { id: "name", name: "Product Name" },
+    { id: "plus_after_sku", name: "+" },
+    { id: "closing_inventory", name: "Closing Inventory" },
+    { id: "items_sold_per_day", name: "Items sold per day" },
+    { id: "times_sold", name: "Items sold" },
+    { id: "inbound_inventory", name: "Inbound Inventory" },
+    { id: "inventory_days_cover", name: "Days Cover" },
+    { id: "avg_cost", name: "Avg. cost" },
+    { id: "plus_after_avg_cost", name: "+" },
+  ]);
+  const [reportType, setreportType] = useState([
+    { id: "brand", name: "Brand" },
+    { id: "vendor", name: "Vendor" },
+    { id: "category", name: "Category" },
+    { id: "tag", name: "Tag" }
+  ]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const handleDateRangeChange = (dateRange) => {
@@ -40,29 +56,15 @@ const ReorderInventoryMain = () => {
 
   const [selectedOrderType, setSelectedOrderType] = useState("All inventory");
 
-  const handleOptionClick = (option, dropdown) => {
-    switch (dropdown) {
-      case "orderSource":
-        setSelectedOrderSource(option.title);
-
-        break;
-      case "orderType":
-        setSelectedOrderType(option.title);
-
-        break;
-      default:
-        break;
-    }
-  };
+ 
 
   const showcat = 0;
   const reportTypeList = [
     "Product",
-    "SKU Name",
     "Brand",
     "Outlet",
-    "Supplier",
-    "Product category",
+    "Vendor",
+    "Category",
   ];
   const measureTypeList = [
     "On-hand-inventory",
@@ -71,17 +73,6 @@ const ReorderInventoryMain = () => {
     "Out of stock",
   ];
 
-  const initialColumns = [
-    { id: "name", name: "Product Name" },
-    { id: "plus_after_sku", name: "+" },
-    { id: "closing_inventory", name: "Closing Inventory" },
-    { id: "items_sold_per_day", name: "Items sold per day" },
-    { id: "times_sold", name: "Items sold" },
-    { id: "inbound_inventory", name: "Inbound Inventory" },
-    { id: "inventory_days_cover", name: "Days Cover" },
-    { id: "avg_cost", name: "Avg. cost" },
-    { id: "plus_after_avg_cost", name: "+" },
-  ];
 
   const initialColumns1 = [
     { id: "name", name: "Product" },
@@ -164,12 +155,41 @@ const ReorderInventoryMain = () => {
       fetchProductsData();
     }
   };
+  const handleOptionClick = (option, dropdown) => {
 
+    switch (dropdown) {
+      case "orderSource":
+        setInitialColumns((prevColumns) => {
+          const updatedColumns = [...prevColumns];
+          if(option.title==="Product"){
+            updatedColumns[0] = { id: "name", name: "Product Name" };
+          }else if(option.title==="Outlet"){
+            updatedColumns[0] = { id: "outlet", name: "Outlet" };
+          }else{
+            updatedColumns[0] = { id: option.title.toLowerCase(), name: option.title };
+           setreportType((prevReportType) =>
+            prevReportType.filter((item) => item.id !== option.title.toLowerCase())
+          );
+          }
+          
+          return updatedColumns;
+        });
+
+        setSelectedOrderSource(option.title);
+        break;
+      case "orderType":
+        setSelectedOrderType(option.title);
+
+        break;
+      default:
+        break;
+    }
+  };
 
   useEffect(() => {
    
     fetchProductsData();
-  }, [selectedDateRange]);
+  }, [selectedDateRange,selectedOrderSource]);
 
   return (
     <>
@@ -235,6 +255,7 @@ const ReorderInventoryMain = () => {
         scrollForProduct={fetchMoreData}
         hasMore={hasMore}
         loading={loading}
+        reportType={reportType}
               />
        {/* )}  */}
     </>
