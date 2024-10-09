@@ -84,8 +84,9 @@ const ReorderInventoryMain = () => {
     "All inventory",
     "Out of stock",
   ];
+  // avg_discount_percentage
 
-  const initialColumns = [
+  const initialColumns = [ 
     { id: "name", name: "Product Name" },
     { id: "plus_after_sku", name: "+" },
     { id: "closing_inventory", name: "Closing Inventory" },
@@ -153,7 +154,7 @@ const ReorderInventoryMain = () => {
         setProductListData([])
       }
       const products = response?.data?.reorder_array;
-      if (products.length < 10) {
+      if (products && products.length < 10) {
         setHasMore(false); 
       }
       if (products && products.length > 0 && page == 0) {
@@ -171,7 +172,8 @@ const ReorderInventoryMain = () => {
   const fetchMoreData = () => {
     if (hasMore ) {
       setPage((prevPage) => prevPage + 1);
-      fetchProductsData();
+      // fetchProductsData();
+      fetchProductsData(selectedOrderType,selectedDateRange);
     }
   };
 
