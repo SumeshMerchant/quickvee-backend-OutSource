@@ -129,9 +129,9 @@ const ReorderInventoryMain = () => {
       if (products && products.length < 10) {
         setHasMore(false); 
       }
-      if (products && products.length > 0 && page == 0) {
+      if (products && products.length > 0 && page == 1) {
         setProductListData(products);
-      } else if (products && products.length > 0 && page != 0) {
+      } else if (products && products.length > 0 && page != 1) {
         setProductListData([...productListData, ...products]);
       }
       return products;
