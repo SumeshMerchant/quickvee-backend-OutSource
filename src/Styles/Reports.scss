@@ -327,6 +327,7 @@
   //   transition: top 0.4s ease-in-out;
   // }
   .custom-table-hidescroll {
+    margin-bottom: 30px;
     &::-webkit-scrollbar {
       display: none;
     }

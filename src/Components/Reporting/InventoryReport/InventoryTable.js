@@ -263,16 +263,18 @@ useEffect(() => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-        {loading ? (
-            <div className="custom-table">{renderLoader()}</div>
-          ) : initialData?.length === 0 ? (
+        {/* {initialData?.length === 0 ? (
             <NoDataFound message="No Data Found" />
-          ) : (
-          <InfiniteScroll
-            dataLength={initialData.length} // This is important to track the data length
-            next={scrollForProduct} // This will trigger the parent's function to fetch more data
-            hasMore={hasMore} // Parent will control if there's more data to fetch
-            loader={<div className="custom-table">{renderLoader()}</div>}
+          ) : ( */}
+        <InfiniteScroll
+            dataLength={initialData.length} // This tracks the current data length
+            next={scrollForProduct} // This triggers the function to fetch more data
+            hasMore={hasMore} // Determines if more data needs to be fetched
+            loader={
+              initialData.length > 0 ? ( // Show loader only if data exists
+                <div className="custom-table">{renderLoader()}</div>
+              ) : null
+            }
           >
             <div className="custom-table custom-table-hidescroll">
               <table ref={tableRef}>
@@ -318,40 +320,79 @@ useEffect(() => {
                   </tr>
                 </thead>
                 <tbody>
-                  {initialData.map((row, index) => (
-                    <tr key={index}>
-                      {columns.map((col) => (
-                        <td key={col.id}>
-                          {col.id === "sku" ? (
-                            <>
-                              <div>{row.name}</div>
-                              <div style={{ fontSize: "0.9em", color: "gray" }}>
-                                {row.sku == "revenue" ? `$ ${row.sku}` : row.sku}
-                              </div>
-                            </>
-                          ) : col.id === "plus_after_sku" ||
-                            col.id === "plus_after_avg_cost" ? (
-                            "" // Display nothing for "plus_after_sku" sell_through_rate
-                          ): row[col.id] !== null &&  (col.id === "avg_cost" || col.id === "gross_profit" ||col.id === "revenue" ||col.id === "inventory_cost") && row[col.id] !== undefined && row[col.id] !== "" ? (
-                            isNaN(parseFloat(row[col.id])) ? '-' : `$ ${parseFloat(row[col.id]).toFixed(2)}`
-                        ): row[col.id] !== null && ( col.id === "sell_through_rate" || col.id === "avg_discount_percentage") && row[col.id] !== undefined && row[col.id] !== "" ? (
-                          isNaN(parseFloat(row[col.id])) ? '-' : `${parseFloat(row[col.id]).toFixed(2)} % `
-                      ): row[col.id] !== null &&  (col.id === "net_sale" || col.id === "sale_margin" || col.id ==="avg_items_per_sale" || col.id ==="avg_sale_value" || col.id ==="cost_goods_sold") && row[col.id] !== undefined && row[col.id] !== "" ? (
-                        isNaN(parseFloat(row[col.id])) ? '-' :  ` ${parseFloat(row[col.id]).toFixed(2)}`
-                    ): row[col.id] !== null &&  col.id === "name" && row[col.id] !== undefined && row[col.id] !== "" ? (
-                      row[col.id] ? row[col.id].charAt(0).toUpperCase() + row[col.id].slice(1).toLowerCase() : '-'
-                  ): row[col.id] !== null &&
-                            row[col.id] !== undefined &&
-                            row[col.id] !== "" ? (
-                            row[col.id]
-                          ) : (
-                            "-" // Display "-" for other empty fields
-                          )}
-                        </td>
-                      ))}
+                  {loading ? (
+                    <tr>
+                      <td colSpan={columns.length}>
+                        <div className="custom-table">{renderLoader()} </div>
+                      </td>
                     </tr>
-                  ))}
-                </tbody>
+                  
+                ) : initialData?.length === 0 ? (
+                  <tr>
+                    <td colSpan={columns.length} style={{ border: "none" }}>
+                      
+                      <NoDataFound message="No Data Found" />
+                    </td>
+                  </tr>
+                ) : (
+                initialData.map((row, index) => (
+                  <tr key={index}>
+                    {columns.map((col) => (
+                      <td key={col.id}>
+                        {col.id === "sku" ? (
+                          <>
+                            <div>{row.name}</div>
+                            <div style={{ fontSize: "0.9em", color: "gray" }}>
+                              {row.sku === "revenue" ? `$ ${row.sku}` : row.sku}
+                            </div>
+                          </>
+                        ) : col.id === "plus_after_sku" ||
+                          col.id === "plus_after_avg_cost" ? (
+                          "" // Skip rendering for these columns
+                        ) : row[col.id] !== null &&
+                          ["avg_cost", "gross_profit", "revenue", "inventory_cost"].includes(col.id) &&
+                          row[col.id] !== undefined &&
+                          row[col.id] !== "" ? (
+                          isNaN(parseFloat(row[col.id]))
+                            ? "-"
+                            : `$ ${parseFloat(row[col.id]).toFixed(2)}`
+                        ) : row[col.id] !== null &&
+                          ["sell_through_rate", "avg_discount_percentage"].includes(col.id) &&
+                          row[col.id] !== undefined &&
+                          row[col.id] !== "" ? (
+                          isNaN(parseFloat(row[col.id]))
+                            ? "-"
+                            : `${parseFloat(row[col.id]).toFixed(2)} %`
+                        ) : row[col.id] !== null &&
+                          ["net_sale", "sale_margin", "avg_items_per_sale", "avg_sale_value", "cost_goods_sold"].includes(
+                            col.id
+                          ) &&
+                          row[col.id] !== undefined &&
+                          row[col.id] !== "" ? (
+                          isNaN(parseFloat(row[col.id]))
+                            ? "-"
+                            : `${parseFloat(row[col.id]).toFixed(2)}`
+                        ) : row[col.id] !== null &&
+                          col.id === "name" &&
+                          row[col.id] !== undefined &&
+                          row[col.id] !== "" ? (
+                          row[col.id]
+                            ? row[col.id].charAt(0).toUpperCase() +
+                              row[col.id].slice(1).toLowerCase()
+                            : "-"
+                        ) : row[col.id] !== null &&
+                          row[col.id] !== undefined &&
+                          row[col.id] !== "" ? (
+                          row[col.id]
+                        ) : (
+                          "-" // Display "-" for other empty fields
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+            )}
+          </tbody>
                 
                   <tfoot>
                   <div className="tfoot-scrollable-container">
@@ -414,7 +455,7 @@ useEffect(() => {
               )}
             </div>
           </InfiniteScroll>
-           )}
+           {/* )} */}
         </Grid>
       </Grid>
         
