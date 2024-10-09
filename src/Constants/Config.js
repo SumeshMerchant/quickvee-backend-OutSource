@@ -286,7 +286,8 @@ module.exports = Object.freeze({
   NEWS_LETTER_LIIST: "vendor_report_api/newsletter",
 
   // GET_REORDER_INVENTORY_LIST: "ReportingReactapi/get_reorder_inventory_list",
-  GET_REORDER_INVENTORY_LIST: "InventoryReportPk/Reorder_list",
+  GET_REORDER_INVENTORY_LIST: "Invenrory_report/Reorder_list",
+  REORDER_TOTAL_LIST: "Reorder_total_list",
 
   // PRODUCTS
   PRODUCTS_LIST: "Product_api_react/Products_list",
