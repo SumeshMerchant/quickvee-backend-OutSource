@@ -16,10 +16,15 @@ const DashDateRangeComponent = ({
 }) => {
   const isDesktopWtdth = useMediaQuery("(max-width:710px)");
   
-  const today = dayjs();
   const [isTablet, setIsTablet] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  // const today = dayjs();
+  // const [startDate, setStartDate] = useState(new Date());
+  // const [endDate, setEndDate] = useState(new Date());
+  const today = new Date();
+  const last7DaysStart = new Date(today);
+  last7DaysStart.setDate(today.getDate() - 6); // 7 days ago
+  const [startDate, setStartDate] = useState(last7DaysStart);
+  const [endDate, setEndDate] = useState(today); // Today's date
   const [futureDateState, setFutureDate] = useState(new Date());
   const startDateRef = React.useRef(null);
   const endDateRef = React.useRef(null);
@@ -77,8 +82,8 @@ const DashDateRangeComponent = ({
       case "Last 7 Days":
         const last7Days = new Date(today);
         const dayBefore = new Date(today); 
-        last7Days.setDate(today.getDate() - 7);
-        dayBefore.setDate(today.getDate() - 1);
+        last7Days.setDate(today.getDate() - 6);
+        dayBefore.setDate(today.getDate() );
         setStartDate(last7Days);
         setEndDate(dayBefore);
         break;
