@@ -28,9 +28,8 @@ const getCurrentDate = () => {
 };
 
 const ReorderInventoryMain = () => {
-  const defaultDateRange = getCurrentDate();
 
-  const [selectedDateRange, setSelectedDateRange] = useState(defaultDateRange);
+  const [selectedDateRange, setSelectedDateRange] = useState(getCurrentDate());
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [hasMore, setHasMore] = useState(true);
   const [initialColumns, setInitialColumns] = useState([
@@ -56,7 +55,7 @@ const ReorderInventoryMain = () => {
     setPage(1);
     setSelectedDateRange(dateRange); 
     fetchProductsData(1,selectedOrderType,dateRange)
-    fetchRecordTotal(selectedOrderType,dateRange)
+    fetchRecordTotal(1,selectedOrderType,dateRange)
   };
   const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
   const [productListData, setProductListData] = useState([]);
@@ -91,8 +90,8 @@ const ReorderInventoryMain = () => {
     measureType: measureType,
   });
 
-  const fetchRecordTotal = async (measureType="All inventory",dateRange) => {
-    const payload = createPayload(measureType, dateRange);
+  const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange) => {
+    const payload = createPayload(page,measureType, dateRange);
     // Reorder_total_list
     const response = await axios.post(
       `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
@@ -107,7 +106,7 @@ const ReorderInventoryMain = () => {
     // console.log("=-=-=-response",response)
   }
 
-  const fetchProductsData = async (page=0,measureType="All inventory",dateRange) => {
+  const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
     try {
       setLoading(true);
       const payload = createPayload(page,measureType, dateRange);
@@ -182,7 +181,7 @@ const ReorderInventoryMain = () => {
         setSelectedOrderType(option.title);
         setPage(1);
         fetchProductsData(1,option.title,selectedDateRange);
-        fetchRecordTotal(option.title,selectedDateRange)
+        fetchRecordTotal(1,option.title,selectedDateRange)
 
         break;
       default:
@@ -192,7 +191,7 @@ const ReorderInventoryMain = () => {
 
   useEffect(() => {
     setSelectedOrderType("All inventory")
-    fetchRecordTotal("All inventory",selectedDateRange)
+    fetchRecordTotal(1,"All inventory",selectedDateRange)
     fetchProductsData(1,"All inventory",selectedDateRange);
   }, []);
 
