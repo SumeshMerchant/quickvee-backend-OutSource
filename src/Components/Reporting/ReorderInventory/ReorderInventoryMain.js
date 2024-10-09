@@ -13,15 +13,24 @@ const getCurrentDate = () => {
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  const endDate = `${year}-${month}-${day}`;
+  const pastDate = new Date();
+  pastDate.setDate(today.getDate() - 6);
+  const pastYear = pastDate.getFullYear();
+  const pastMonth = String(pastDate.getMonth() + 1).padStart(2, '0');
+  const pastDay = String(pastDate.getDate()).padStart(2, '0');
+  const startDate = `${pastYear}-${pastMonth}-${pastDay}`;
+
+  return {
+    start_date: startDate,
+    end_date: endDate
+  };
 };
 
 const ReorderInventoryMain = () => {
-  const [selectedDateRange, setSelectedDateRange] = useState({
-    start_date: getCurrentDate(),
-    end_date: getCurrentDate(), 
-  });
+  const defaultDateRange = getCurrentDate();
 
+  const [selectedDateRange, setSelectedDateRange] = useState(defaultDateRange);
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [hasMore, setHasMore] = useState(true);
   const [initialColumns, setInitialColumns] = useState([
