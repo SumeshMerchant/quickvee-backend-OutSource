@@ -59,11 +59,7 @@ const ReorderInventoryMain = () => {
   };
   const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
   const [productListData, setProductListData] = useState([]);
-
   const [selectedOrderType, setSelectedOrderType] = useState("All inventory");
-
- 
-
   const showcat = 0;
   const reportTypeList = [
     "Product",
@@ -108,8 +104,10 @@ const ReorderInventoryMain = () => {
 
   const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
     try {
-      setLoading(true);
       const payload = createPayload(page,measureType, dateRange);
+      if(payload && payload.page ==1){
+        setLoading(true);
+      }
       const response = await axios.post(
         // `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,Invenrory_report/Reorder_list
         `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
@@ -122,7 +120,7 @@ const ReorderInventoryMain = () => {
         }
       );
 
-      if(response?.data && !response?.data?.status){
+      if(response?.data && !response?.data?.status && response?.data?.page==1){
         setProductListData([])
       }
       const products = response?.data?.reorder_array;
