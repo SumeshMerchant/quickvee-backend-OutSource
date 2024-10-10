@@ -12,51 +12,6 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
   const [colWidths, setColWidths] = useState([]);
   const [columns, setColumns] = useState(initialColumns);
   const [open, setOpen] = useState(false);
-
-  const totalAvgCost = initialData.reduce((acc, item) => {
-    if (item?.avg_cost !== undefined && item?.avg_cost !== null) {
-      const cost = parseFloat(item.avg_cost);
-      return acc + (isNaN(cost) ? 0 : cost);
-    }
-    return acc;
-  }, 0);  
-
-  const totalgross_profit = initialData.reduce((acc, item) => {
-    if (item?.gross_profit !== undefined && item?.gross_profit !== null) {
-      const cost = parseFloat(item.gross_profit);
-      return acc + (isNaN(cost) ? 0 : cost);
-    }
-    return acc;
-  }, 0); 
-  const TotalItemsSoldPerDay = initialData.reduce((acc, item) => {
-    if (item?.items_sold_per_day !== undefined && item?.items_sold_per_day !== null) {
-      const cost = parseFloat(item?.items_sold_per_day);
-      return acc + (isNaN(cost) ? 0 : cost);
-    }
-    return acc;
-  }, 0);
-  const Totalinventory_cost = initialData.reduce((acc, item) => {
-    if (item?.inventory_cost !== undefined && item?.inventory_cost !== null) {
-      const cost = parseFloat(item?.inventory_cost);
-      return acc + (isNaN(cost) ? 0 : cost);
-    }
-    return acc;
-  }, 0);
-  const Totalitems_sold = initialData.reduce((acc, item) => {
-    if (item?.times_sold !== undefined && item?.times_sold !== null) {
-      const cost = parseFloat(item?.times_sold);
-      return acc + (isNaN(cost) ? 0 : cost);
-    }
-    return acc;
-  }, 0);
-
-  const Totalrevenue = initialData.reduce((acc, item) => {
-    if (item?.revenue !== undefined && item?.revenue !== null) {
-      const cost = parseFloat(item?.revenue);
-      return acc + (isNaN(cost) ? 0 : cost);
-    }
-    return acc;
-  }, 0);
   
   const handleClickOpen = () => {
     setOpen(true);
@@ -430,25 +385,6 @@ useEffect(() => {
                       {columns.slice(1).map((col, index) => (
                         <td key={col.id}>
                           <div style={{ width: colWidths[index + 1] }}>
-                            {/* {col.id === "avg_cost"
-                              ?  `$ ${parseFloat(totalRecords?.avg_cost).toFixed(2)}`
-                              : col.id === "sell_through_rate"
-                              ? "90%"
-                              : col.id === "inventory_cost"
-                              ?  `$ ${parseFloat(Totalinventory_cost).toFixed(2)}`  
-                              : col.id === "retail_value"
-                              ? "600"
-                              : col.id === "revenue"
-                              ? `$ ${parseFloat(Totalrevenue).toFixed(2)}`
-                              : col.id === "times_sold"
-                              ? ` ${parseFloat(Totalitems_sold).toFixed(2)}` 
-                              : col.id === "gross_profit"
-                              ?  `$ ${parseFloat(totalgross_profit).toFixed(2)}`
-                              : col.id === "items_sold_per_day"
-                              ? `${parseFloat(TotalItemsSoldPerDay).toFixed(2)}`
-                              : col.id === "current_inventory"
-                              ? "600"
-                              : ""} */}
                               {
                                   col.id === "avg_cost" && totalRecords?.avg_cost !== undefined
                                       ? `$ ${parseFloat(totalRecords.avg_cost).toFixed(2)}`
