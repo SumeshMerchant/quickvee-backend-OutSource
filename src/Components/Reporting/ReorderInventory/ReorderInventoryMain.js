@@ -173,17 +173,16 @@ const ReorderInventoryMain = () => {
             updatedColumns[0] = { id: "outlet", name: "Outlet" };
           }else{
             updatedColumns[0] = { id: option.title.toLowerCase(), name: option.title };
-            const dataArray = [
-              { id: "brand", name: "Brand" },
-              { id: "vendor", name: "Vendor" },
-              { id: "category", name: "Category" },
-              { id: "tag", name: "Tag" }
-            ]
-            setreportType((prevReportType) =>
-            dataArray.filter((item) => item.id !== option.title.toLowerCase())
-          );
-          }
-          
+          } 
+          const dataArray = [
+            { id: "brand", name: "Brand" },
+            { id: "vendor", name: "Vendor" },
+            { id: "category", name: "Category" },
+            { id: "tag", name: "Tag" } 
+          ]
+          setreportType((prevReportType) =>
+          dataArray.filter((item) => item.id !== option.title.toLowerCase())
+        );
           return updatedColumns;
         });
 
