@@ -425,8 +425,8 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
               <Grid item>
               <input
                   type="checkbox"
-                  name="selfThroughRate"
-                  checked={selectedColumns?.selfThroughRate}
+                  name="sell_through_rate"
+                  checked={selectedColumns?.sell_through_rate}
                   onChange={handleCheckboxChange}
                 />
               </Grid>
