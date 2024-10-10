@@ -60,6 +60,9 @@ const ReorderInventoryMain = () => {
   const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
   const [productListData, setProductListData] = useState([]);
   const [selectedOrderType, setSelectedOrderType] = useState("All inventory");
+  const [totalRecords, setTotalRecords] = useState(null);
+ 
+
   const showcat = 0;
   const reportTypeList = [
     "Product",
@@ -75,21 +78,23 @@ const ReorderInventoryMain = () => {
     "Out of stock",
   ];
 
-  const createPayload = (pageNum,measureType, dateRange) => ({
+  const createPayload = (pageNum = null, limit = null, measureType, dateRange) => ({
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
     token_id: LoginGetDashBoardRecordJson?.token_id,
     login_type: LoginGetDashBoardRecordJson?.login_type,
-    limit: 10,
-    page: pageNum,
+    ...(pageNum !== null && { page: pageNum }), 
+    ...(limit !== null && { limit: limit }),  
     start_date: dateRange.start_date,
     end_date: dateRange.end_date,
     measureType: measureType,
   });
 
   const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange) => {
-    const payload = createPayload(page,measureType, dateRange);
+    const payload = createPayload(0,0,measureType, dateRange);
     // Reorder_total_list
-    const response = await axios.post(
+    try {
+      setLoading(true);
+    const totalApiResponse = await axios.post(
       `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
       payload,
       {
@@ -99,13 +104,23 @@ const ReorderInventoryMain = () => {
         },
       }
     );
+    if(totalApiResponse?.status){
+      const totalResponseData = totalApiResponse?.data?.totals
+      setTotalRecords(totalResponseData);
+    }
+    } catch (error) {
+      console.error("Error fetching totals:", error); // Handle any errors
+       
+    } finally {
+      setLoading(false);
+    }
     // console.log("=-=-=-response",response)
   }
 
   const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
     try {
-      const payload = createPayload(page,measureType, dateRange);
-      if(payload && payload.page ==1){
+      const payload = createPayload(page, 50,measureType, dateRange);
+      if(page ==1){
         setLoading(true);
       }
       const response = await axios.post(
@@ -258,6 +273,7 @@ const ReorderInventoryMain = () => {
         hasMore={hasMore}
         loading={loading}
         reportType={reportType}
+        totalRecords={totalRecords}
               />
        {/* )}  */}
     </>

@@ -7,7 +7,7 @@ import SecondButtonSelections from "./SecondButtonSelections";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NoDataFound from "../../../reuseableComponents/NoDataFound";
 import Skeleton from 'react-loading-skeleton';
-const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore,loading,reportType }) => {
+const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore,loading,reportType, totalRecords }) => {
   const [leftStickyOffset, setLeftStickyOffset] = useState(0);
   const [colWidths, setColWidths] = useState([]);
   const [columns, setColumns] = useState(initialColumns);
@@ -224,8 +224,8 @@ const renderLoader = () => {
       <tbody>
       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
             <tr key={row} style={{background: 'rgba(0, 0, 0, 0.04)'}} >
-              {["", "", "", "", "", "", "", "","",""].map((col) => (
-                <td key={col}>
+              {["", "", "", "", "", "", "", "","",""].map((col,index) => (
+                <td key={index}>
                   <Skeleton />
                 </td>
               ))}
@@ -362,7 +362,7 @@ useEffect(() => {
                   </tr>
                 ) : (
                 initialData.map((row, index) => (
-                  <tr key={index}>
+                  <tr key={row.id}>
                     {columns.map((col) => (
                       <td key={col.id}>
                         {col.id === "sku" ? (
@@ -422,7 +422,7 @@ useEffect(() => {
                 
                   <tfoot>
                   <div className="tfoot-scrollable-container">
-                  {initialData && initialData.length > 0 && (
+                  {initialData && initialData.length > 0 && totalRecords && (
                     <tr>
                       <td>
                         <div style={{ width: colWidths[0] - 3 }}>Totals</div>
@@ -430,8 +430,8 @@ useEffect(() => {
                       {columns.slice(1).map((col, index) => (
                         <td key={col.id}>
                           <div style={{ width: colWidths[index + 1] }}>
-                            {col.id === "avg_cost"
-                              ?  `$ ${parseFloat(totalAvgCost).toFixed(2)}`
+                            {/* {col.id === "avg_cost"
+                              ?  `$ ${parseFloat(totalRecords?.avg_cost).toFixed(2)}`
                               : col.id === "sell_through_rate"
                               ? "90%"
                               : col.id === "inventory_cost"
@@ -448,7 +448,25 @@ useEffect(() => {
                               ? `${parseFloat(TotalItemsSoldPerDay).toFixed(2)}`
                               : col.id === "current_inventory"
                               ? "600"
-                              : ""}
+                              : ""} */}
+                              {
+                                  col.id === "avg_cost" && totalRecords?.avg_cost !== undefined
+                                      ? `$ ${parseFloat(totalRecords.avg_cost).toFixed(2)}`
+                                      : col.id === "inventory_cost" && totalRecords?.inventory_cost !== undefined
+                                      ? `$ ${parseFloat(totalRecords.inventory_cost).toFixed(2)}`
+                                      : col.id === "retail_value" && totalRecords?.retail_value !== undefined
+                                      ? `$ ${parseFloat(totalRecords.retail_value).toFixed(2)}`
+                                      : col.id === "times_sold" && totalRecords?.item_sold !== undefined
+                                      ? `${parseFloat(totalRecords.item_sold).toFixed(2)}`
+                                      : col.id === "gross_profit" && totalRecords?.gross_profit !== undefined
+                                      ? `$ ${parseFloat(totalRecords.gross_profit).toFixed(2)}`
+                                      : col.id === "items_sold_per_day" && totalRecords?.items_sold_per_day !== undefined
+                                      ? `${parseFloat(totalRecords.items_sold_per_day).toFixed(2)}`
+                                      : col.id === "current_inventory" && totalRecords?.current_inventory !== undefined
+                                      ? `${parseFloat(totalRecords.current_inventory).toFixed(2)}`
+                                      : ""
+                              }
+
                           </div>
                         </td>
                       ))}
