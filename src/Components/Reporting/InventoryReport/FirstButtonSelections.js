@@ -87,8 +87,8 @@ const FirstButtonSelections = ({ columnsOptions, selectedColumns, setSelectedCol
           </p>
 
           <Grid container className="mb-3" sx={{ pl: 1 }} spacing={3}>
-            {columnsOptions.map((col) => (
-              <Grid key={col.id} item xs={6} sm={12} md={6} sx={{ gap: 1.5, alignItems: "center", display: "flex" }}>
+            {columnsOptions.map((col,index) => (
+              <Grid key={index} item xs={6} sm={12} md={6} sx={{ gap: 1.5, alignItems: "center", display: "flex" }}>
                 <input
                   type="checkbox"
                   name={col.id}
