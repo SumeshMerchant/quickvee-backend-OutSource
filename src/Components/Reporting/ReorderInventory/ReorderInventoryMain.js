@@ -121,7 +121,7 @@ const ReorderInventoryMain = () => {
   const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
     try {
       setLoading(true);
-      const payload = createPayload(page, 10,measureType, dateRange);
+      const payload = createPayload(page, 50,measureType, dateRange);
       const response = await axios.post(
         // `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,Invenrory_report/Reorder_list
         `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
