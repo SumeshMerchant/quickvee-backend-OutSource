@@ -51,18 +51,10 @@ const ReorderInventoryMain = () => {
   ]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const handleDateRangeChange = (dateRange) => {
-    setPage(1);
-    setSelectedDateRange(dateRange); 
-    fetchProductsData(1,selectedOrderType,dateRange)
-    fetchRecordTotal(1,selectedOrderType,dateRange)
-  };
   const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
   const [productListData, setProductListData] = useState([]);
   const [selectedOrderType, setSelectedOrderType] = useState("All inventory");
   const [totalRecords, setTotalRecords] = useState(null);
- 
-
   const showcat = 0;
   const reportTypeList = [
     "Product",
@@ -77,7 +69,12 @@ const ReorderInventoryMain = () => {
     "All inventory",
     "Out of stock",
   ];
-
+  const handleDateRangeChange = (dateRange) => {
+    setPage(1);
+    setSelectedDateRange(dateRange); 
+    fetchProductsData(1,selectedOrderType,dateRange)
+    fetchRecordTotal(1,selectedOrderType,dateRange)
+  };
   const createPayload = (pageNum = null, limit = null, measureType, dateRange) => ({
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
     token_id: LoginGetDashBoardRecordJson?.token_id,
@@ -109,12 +106,11 @@ const ReorderInventoryMain = () => {
       setTotalRecords(totalResponseData);
     }
     } catch (error) {
-      console.error("Error fetching totals:", error); // Handle any errors
+      console.error("Error fetching totals:", error); 
        
     } finally {
       setLoading(false);
     }
-    // console.log("=-=-=-response",response)
   }
 
   const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
