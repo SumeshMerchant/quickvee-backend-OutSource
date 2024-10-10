@@ -147,6 +147,9 @@ const ReorderInventoryMain = () => {
       } else if (products && products.length > 0 && page != 1) {
         setProductListData([...productListData, ...products]);
       }
+      if(page >1 && !products){
+        setHasMore(false); 
+      }
       return products;
     } catch (error) {
       console.error("Error fetching products:", error);
