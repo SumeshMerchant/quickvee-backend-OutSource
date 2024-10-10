@@ -1,33 +1,57 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import InventorySellThroughList from "./InventorySellThroughList";
 import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeComponent";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import InventoryTable from "../InventoryReport/InventoryTable";
+import axios from 'axios';
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+import Config from "../../../Constants/Config";
+const getCurrentDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const endDate = `${year}-${month}-${day}`;
+  const pastDate = new Date();
+  pastDate.setDate(today.getDate() - 6);
+  const pastYear = pastDate.getFullYear();
+  const pastMonth = String(pastDate.getMonth() + 1).padStart(2, '0');
+  const pastDay = String(pastDate.getDate()).padStart(2, '0');
+  const startDate = `${pastYear}-${pastMonth}-${pastDay}`;
 
+  return {
+    start_date: startDate,
+    end_date: endDate
+  };
+};
 const InventorySellThroughMain = () => {
-  const [selectedDateRange, setSelectedDateRange] = useState(null);
-  const handleDateRangeChange = (dateRange) => {
-    setSelectedDateRange(dateRange);
-  };
-  const [selectedOrderSource, setSelectedOrderSource] = useState("Product Category");
-  const [selectedOrderType, setSelectedOrderType] =
-    useState("All inventory");
 
-  const handleOptionClick = (option, dropdown) => {
-    switch (dropdown) {
-      case "orderSource":
-        setSelectedOrderSource(option.title);
+  const [selectedDateRange, setSelectedDateRange] = useState(getCurrentDate());
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const [hasMore, setHasMore] = useState(true);
+  const [initialColumns, setInitialColumns] = useState([
+    { id: "sku", name: "Prodcut Category" },
+    { id: "plus_after_sku", name: "+" },
+    { id: "closing_inventory", name: "Closing Inventory" },
+    { id: "items_sold_per_day", name: "Items sold per day" },
+    { id: "inventory_days_cover", name: "Days cover" },
+    { id: "sell_through_rate", name: "Sell-through rate" },
+    { id: "plus_after_avg_cost", name: "+" },
+  ]);
+  const [reportType, setreportType] = useState([
+    { id: "brand", name: "Brand" },
+    { id: "vendor", name: "Vendor" },
+    { id: "category", name: "Category" },
+    { id: "tag", name: "Tag" }
+  ]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [productListData, setProductListData] = useState([]);
+  const [selectedOrderType, setSelectedOrderType] = useState("All inventory");
+  const [totalRecords, setTotalRecords] = useState(null);
+  const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
 
-        break;
-      case "orderType":
-        setSelectedOrderType(option.title);
-
-        break;
-      default:
-        break;
-    }
-  };
   const showcat = 0;
   const reportTypeList = [
     "Product",
@@ -35,7 +59,7 @@ const InventorySellThroughMain = () => {
     "Brand",
     "Outlet",
     "Supplier",
-    "Product Category",
+    "Category",
   ];
   const measureTypeList = [
     "On-hand-inventory",
@@ -43,210 +67,143 @@ const InventorySellThroughMain = () => {
     "All inventory",
     "Out of stock"
   ];
+  const handleDateRangeChange = (dateRange) => {
+    setPage(1);
+    setSelectedDateRange(dateRange); 
+    fetchProductsData(1,selectedOrderType,dateRange)
+    fetchRecordTotal(1,selectedOrderType,dateRange)
+  };
+  const createPayload = (pageNum = null, limit = null, measureType, dateRange) => ({
+    merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+    token_id: LoginGetDashBoardRecordJson?.token_id,
+    login_type: LoginGetDashBoardRecordJson?.login_type,
+    ...(pageNum !== null && { page: pageNum }), 
+    ...(limit !== null && { limit: limit }),  
+    start_date: dateRange.start_date,
+    end_date: dateRange.end_date,
+    measureType: measureType,
+  });
 
-  const initialColumns = [
-    { id: "sku", name: "Prodcut Category" },
-    { id: "plus_after_sku", name: "+" },
-    { id: "closing_inventory", name: "Closing Inventory" },
-    { id: "items_sold_per_day", name: "Items sold per day" },
-    // { id: "items_sold", name: "Items Sold" },
-    // { id: "inbound_inventory", name: "Inbound Inventory" },
-    { id: "inventory_days_cover", name: "Days cover" },
-    { id: "sell_through_rate", name: "Sell-through rate" },
-    { id: "plus_after_avg_cost", name: "+" },
-  ];
-  const initialData = [
-    {
-      sku: "10012",
-      name: "Product Name 1",
-      closing_inventory: 2,
-      items_sold: 39,
-      inventory_days_cover: "",
-      avg_cost: "$10.00",
-      brand: "Brand A",
-      supplier: "Supplier A",
-      category: "Category A",
-      supplier_code: "SC001",
-      revenue: 200,
-      gross_profit: 12,
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      avg_items_per_sale: 70,
-      sale_discounted:10,
-      avg_sale_value: 70,
-      cost_goods_sold:90,
-      retail_value:40,
-      current_inventory:30,
-      start_date_inventory:"2023-02-01",
-      reorder_point:10,
-      reorder_amount:90,
-      return_count:700,
-      inventory_days_cover:1.5,
-      inventory_returns:20,
-      inbound_inventory:"",
-      items_sold_per_day: 0.5,
-      inventory_cost:70,
-      avg_cost_measure: 12,
-      sell_through_rate: "90%",
-      created: "2023-01-01",
-      first_sale: "2023-02-01",
-      last_sale: "2023-03-01",
-      last_received: "2023-04-01",
-    },
-    {
-      sku: "10012",
-      name: "Product Name 1",
-      closing_inventory: 2,
-      items_sold: 12,
-      inventory_days_cover: "",
-      avg_cost: "$10.00",
-      brand: "Brand A",
-      supplier: "Supplier A",
-      category: "Category A",
-      supplier_code: "SC001",
-      revenue: 200,
-      gross_profit: 12,
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      avg_items_per_sale: 70,
-      sale_discounted:10,
-      avg_sale_value: 70,
-      cost_goods_sold:90,
-      retail_value:40,
-      current_inventory:30,
-      start_date_inventory:"2023-02-01",
-      reorder_point:10,
-      reorder_amount:90,
-      return_count:700,
-      inventory_days_cover:1.5,
-      inventory_returns:20,
-      inbound_inventory:"",
-      items_sold_per_day: 0.5,
-      inventory_cost:70,
-      avg_cost_measure: 12,
-      sell_through_rate: "90%",
-      created: "2023-01-01",
-      first_sale: "2023-02-01",
-      last_sale: "2023-03-01",
-      last_received: "2023-04-01",
-    },
-    {
-      sku: "10012",
-      name: "Product Name 1",
-      closing_inventory: 4,
-      items_sold: 11,
-      inventory_days_cover: "",
-      avg_cost: "",
-      brand: "Brand A",
-      supplier: "Supplier A",
-      category: "Category A",
-      supplier_code: "SC001",
-      revenue: 200,
-      gross_profit: 12,
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      avg_items_per_sale: 70,
-      sale_discounted:10,
-      avg_sale_value: 70,
-      cost_goods_sold:90,
-      retail_value:40,
-      current_inventory:30,
-      start_date_inventory:"2023-02-01",
-      reorder_point:10,
-      reorder_amount:90,
-      return_count:700,
-      inventory_days_cover:1.5,
-      inventory_returns:20,
-      inbound_inventory:"",
-      items_sold_per_day: 0.5,
-      inventory_cost:70,
-      avg_cost_measure: 12,
-      sell_through_rate: "90%",
-      created: "2023-01-01",
-      first_sale: "2023-02-01",
-      last_sale: "2023-03-01",
-      last_received: "2023-04-01",
-    },
-    {
-      sku: "10012",
-      name: "Product Name 1",
-      closing_inventory: -2,
-      items_sold: 7,
-      inventory_days_cover: "",
-      avg_cost: "",
-      brand: "Brand A",
-      supplier: "Supplier A",
-      category: "Category A",
-      supplier_code: "SC001",
-      revenue: 200,
-      gross_profit: 12,
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      avg_items_per_sale: 70,
-      sale_discounted:10,
-      avg_sale_value: 70,
-      cost_goods_sold:90,
-      retail_value:40,
-      current_inventory:30,
-      start_date_inventory:"2023-02-01",
-      reorder_point:10,
-      reorder_amount:90,
-      return_count:700,
-      inventory_days_cover:1.5,
-      inventory_returns:20,
-      inbound_inventory:"",
-      items_sold_per_day: 0,
-      inventory_cost:70,
-      avg_cost_measure: 12,
-      sell_through_rate: "",
-      created: "2023-01-01",
-      first_sale: "2023-02-01",
-      last_sale: "2023-03-01",
-      last_received: "2023-04-01",
-    },
-    {
-      sku: "10012",
-      name: "Product Name 1",
-      closing_inventory: -2,
-      items_sold: 9,
-      inventory_days_cover: "",
-      avg_cost: "",
-      brand: "Brand A",
-      supplier: "Supplier A",
-      category: "Category A",
-      supplier_code: "SC001",
-      revenue: 200,
-      gross_profit: 12,
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      avg_items_per_sale: 70,
-      sale_discounted:10,
-      avg_sale_value: 70,
-      cost_goods_sold:90,
-      retail_value:40,
-      current_inventory:30,
-      start_date_inventory:"2023-02-01",
-      reorder_point:10,
-      reorder_amount:90,
-      return_count:700,
-      inventory_days_cover:1.5,
-      inventory_returns:20,
-      inbound_inventory:"",
-      items_sold_per_day: 0,
-      inventory_cost:70,
-      avg_cost_measure: 12,
-      sell_through_rate: "",
-      created: "2023-01-01",
-      first_sale: "2023-02-01",
-      last_sale: "2023-03-01",
-      last_received: "2023-04-01",
-    },
-  ];
+  const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange) => {
+    const payload = createPayload(0,0,measureType, dateRange);
+    // Reorder_total_list
+    try {
+      setLoading(true);
+    const totalApiResponse = await axios.post(
+      `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `${LoginGetDashBoardRecordJson?.token}`,
+        },
+      }
+    );
+    if(totalApiResponse?.status){
+      const totalResponseData = totalApiResponse?.data?.totals
+      setTotalRecords(totalResponseData);
+    }
+    } catch (error) {
+      console.error("Error fetching totals:", error); 
+       
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
+    try {
+      const payload = createPayload(page, 50,measureType, dateRange);
+      if(page ==1){
+        setLoading(true);
+      }
+      const response = await axios.post(
+        // `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,Invenrory_report/Reorder_list
+        `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `${LoginGetDashBoardRecordJson?.token}`,
+          },
+        }
+      );
+
+      if(response?.data && !response?.data?.status && response?.data?.page==1){
+        setProductListData([])
+      }
+      const products = response?.data?.reorder_array;
+      if (products && products.length < 10) {
+        setHasMore(false); 
+      }
+      if (products && products.length > 0 && page == 1) {
+        setProductListData(products);
+      } else if (products && products.length > 0 && page != 1) {
+        setProductListData([...productListData, ...products]);
+      }
+      if(page >1 && !products){
+        setHasMore(false); 
+      }
+      return products;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchMoreData = () => {
+    if (hasMore ) {
+      setPage((prevPage) => prevPage + 1);
+      const prevPage = page +1
+      // fetchProductsData();
+      fetchProductsData(prevPage,selectedOrderType,selectedDateRange);
+    }
+  };
+  const handleOptionClick = (option, dropdown) => {
+
+    switch (dropdown) {
+      case "orderSource":
+        setInitialColumns((prevColumns) => {
+          const updatedColumns = [...prevColumns];
+          if(option.title==="Product"){
+            updatedColumns[0] = { id: "name", name: "Product Name" };
+          }else if(option.title==="Outlet"){
+            updatedColumns[0] = { id: "outlet", name: "Outlet" };
+          }else{
+            updatedColumns[0] = { id: option.title.toLowerCase(), name: option.title };
+          } 
+          const dataArray = [
+            { id: "brand", name: "Brand" },
+            { id: "vendor", name: "Vendor" },
+            { id: "category", name: "Category" },
+            { id: "tag", name: "Tag" } 
+          ]
+          setreportType((prevReportType) =>
+          dataArray.filter((item) => item.id !== option.title.toLowerCase())
+        );
+          return updatedColumns;
+        });
+
+        setSelectedOrderSource(option.title);
+        break;
+      case "orderType":
+        setProductListData([])
+        setSelectedOrderType(option.title);
+        setPage(1);
+        fetchProductsData(1,option.title,selectedDateRange);
+        fetchRecordTotal(1,option.title,selectedDateRange)
+
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    setSelectedOrderType("All inventory")
+    fetchRecordTotal(1,"All inventory",selectedDateRange)
+    fetchProductsData(1,"All inventory",selectedDateRange);
+  }, []);
 
   return (
     <>
@@ -296,7 +253,15 @@ const InventorySellThroughMain = () => {
       <Grid container sx={{}}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-      <InventoryTable initialColumns={initialColumns} initialData={initialData}/>
+      <InventoryTable
+        initialColumns={initialColumns}
+        initialData={productListData}
+        scrollForProduct={fetchMoreData}
+        hasMore={hasMore}
+        loading={loading}
+        reportType={reportType}
+        totalRecords={totalRecords}
+              />
     </>
   );
 };
