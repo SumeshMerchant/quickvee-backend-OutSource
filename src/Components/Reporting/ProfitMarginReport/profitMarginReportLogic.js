@@ -160,10 +160,10 @@ export default function ProfitMarginReportLogic() {
         setsearchProduct([]);
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 || error.response?.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
-      } else if (error.status == "Network Error") {
+      } else if (error?.status == "Network Error") {
         getNetworkError();
       }
     }
@@ -209,7 +209,7 @@ export default function ProfitMarginReportLogic() {
         // setsearchProduct([]);
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 || error.response?.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
