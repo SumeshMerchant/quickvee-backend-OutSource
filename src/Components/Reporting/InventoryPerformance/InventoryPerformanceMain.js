@@ -29,6 +29,7 @@ const getCurrentDate = () => {
 const InventroyPerformanceMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(getCurrentDate());
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const [totalRecords, setTotalRecords] = useState(null);
   const [loading, setLoading] = useState(false);
   const [productListData, setProductListData] = useState([]);
   const [page, setPage] = useState(1);
@@ -72,22 +73,25 @@ const InventroyPerformanceMain = () => {
     "Out of stock",
     "All inventory",
   ];
+ 
 
-  const createPayload = (pageNum,measureType, dateRange) => ({
+  const createPayload = (pageNum = null, limit = null, measureType, dateRange) => ({
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
     token_id: LoginGetDashBoardRecordJson?.token_id,
     login_type: LoginGetDashBoardRecordJson?.login_type,
-    limit: 10,
-    page: pageNum,
+    ...(pageNum !== null && { page: pageNum }), 
+    ...(limit !== null && { limit: limit }),  
     start_date: dateRange.start_date,
     end_date: dateRange.end_date,
     measureType: measureType,
   });
 
   const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange) => {
-    const payload = createPayload(page,measureType, dateRange);
+    const payload = createPayload(0,0,measureType, dateRange);
     // Reorder_total_list
-    const response = await axios.post(
+    try {
+      setLoading(true);
+    const totalApiResponse = await axios.post(
       `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
       payload,
       {
@@ -97,13 +101,24 @@ const InventroyPerformanceMain = () => {
         },
       }
     );
-    // console.log("=-=-=-response",response)
+    if(totalApiResponse?.status){
+      const totalResponseData = totalApiResponse?.data?.totals
+      setTotalRecords(totalResponseData);
+    }
+    } catch (error) {
+      console.error("Error fetching totals:", error); 
+       
+    } finally {
+      setLoading(false);
+    }
   }
 
   const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
     try {
-      setLoading(true);
-      const payload = createPayload(page,measureType, dateRange);
+      const payload = createPayload(page, 50,measureType, dateRange);
+      if(page ==1){
+        setLoading(true);
+      }
       const response = await axios.post(
         // `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,Invenrory_report/Reorder_list
         `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
@@ -116,7 +131,7 @@ const InventroyPerformanceMain = () => {
         }
       );
 
-      if(response?.data && !response?.data?.status){
+      if(response?.data && !response?.data?.status && response?.data?.page==1){
         setProductListData([])
       }
       const products = response?.data?.reorder_array;
@@ -127,6 +142,9 @@ const InventroyPerformanceMain = () => {
         setProductListData(products);
       } else if (products && products.length > 0 && page != 1) {
         setProductListData([...productListData, ...products]);
+      }
+      if(page >1 && !products){
+        setHasMore(false); 
       }
       return products;
     } catch (error) {
@@ -143,7 +161,6 @@ const InventroyPerformanceMain = () => {
       fetchProductsData(prevPage,selectedOrderType,selectedDateRange);
     }
   };
-
   const handleOptionClick = (option, dropdown) => {
 
     switch (dropdown) {
@@ -183,6 +200,12 @@ const InventroyPerformanceMain = () => {
         break;
     }
   };
+
+  useEffect(() => {
+    setSelectedOrderType("All inventory")
+    fetchRecordTotal(1,"All inventory",selectedDateRange)
+    fetchProductsData(1,"All inventory",selectedDateRange);
+  }, []);
 
   const handleDateRangeChange = (dateRange) => {
     setPage(1);
@@ -246,6 +269,7 @@ const InventroyPerformanceMain = () => {
         hasMore={hasMore}
         loading={loading}
         reportType={reportType}
+        totalRecords={totalRecords}
               />
     </>
   );
