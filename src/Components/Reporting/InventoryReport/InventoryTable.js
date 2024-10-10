@@ -107,6 +107,14 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
       updatedColumns[firstColumnId] = true;
       setSelectedColumns(updatedColumns);
   }, [selectedColumns]);
+
+  useEffect(() => {
+    const updatedColumns = { ...selectedColumns };
+     columnsOptions.forEach((column) => {
+      updatedColumns[column.id] = false;
+     })
+      setSelectedColumns(updatedColumns);
+  }, [columnsOptions]);
   const updateColumns = () => {
     const updatedColumns = columns.filter((column) => !selectedColumns[column.id]);
     const updatedSelectedColumns = { ...selectedColumns };
