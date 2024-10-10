@@ -151,7 +151,7 @@ useEffect(() => {
       lastSale: "last_sale",
       last_received: "last_received",
     };
-
+ 
     
 
     Object.entries(measureMappings).forEach(([key, value]) => {
@@ -239,7 +239,14 @@ useEffect(() => {
   };
 
 }, []);
-
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }) 
+};
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -337,7 +344,12 @@ useEffect(() => {
                           isNaN(parseFloat(row[col.id]))
                             ? "-"
                             : `$ ${parseFloat(row[col.id]).toFixed(2)}`
-                        ) : row[col.id] !== null &&
+                        ): row[col.id] !== null &&
+                        ["start_date_inventory","created","last_sale","start_date_inventory","first_sale"].includes(col.id) &&
+                        row[col.id] !== undefined &&
+                        row[col.id] !== "" ? (
+                          formatDate(row[col.id])
+                      )  : row[col.id] !== null &&
                           ["sell_through_rate", "avg_discount_percentage"].includes(col.id) &&
                           row[col.id] !== undefined &&
                           row[col.id] !== "" ? (
@@ -345,7 +357,7 @@ useEffect(() => {
                             ? "-"
                             : `${parseFloat(row[col.id]).toFixed(2)} %`
                         ) : row[col.id] !== null &&
-                          ["net_sale", "sale_margin", "avg_items_per_sale", "avg_sale_value", "cost_goods_sold"].includes(
+                          ["net_sale", "sale_margin", "sale_discounted","avg_items_per_sale", "avg_sale_value", "cost_goods_sold"].includes(
                             col.id
                           ) &&
                           row[col.id] !== undefined &&
