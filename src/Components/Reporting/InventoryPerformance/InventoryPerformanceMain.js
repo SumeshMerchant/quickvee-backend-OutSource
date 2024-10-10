@@ -5,30 +5,58 @@ import DashDateRangeComponent from "../../../reuseableComponents/DashDateRangeCo
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import { Grid } from "@mui/material";
 import InventoryTable from "../InventoryReport/InventoryTable";
+import axios from 'axios';
+import {useAuthDetails} from "../../../Common/cookiesHelper"
+import Config from "../../../Constants/Config";
+const getCurrentDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const endDate = `${year}-${month}-${day}`;
+  const pastDate = new Date();
+  pastDate.setDate(today.getDate() - 6);
+  const pastYear = pastDate.getFullYear();
+  const pastMonth = String(pastDate.getMonth() + 1).padStart(2, '0');
+  const pastDay = String(pastDate.getDate()).padStart(2, '0');
+  const startDate = `${pastYear}-${pastMonth}-${pastDay}`;
 
-const InventroyPerformanceMain = () => {
-  const [selectedDateRange, setSelectedDateRange] = useState(null);
-  const handleDateRangeChange = (dateRange) => {
-    setSelectedDateRange(dateRange);
+  return {
+    start_date: startDate,
+    end_date: endDate
   };
+};
+const InventroyPerformanceMain = () => {
+  const [selectedDateRange, setSelectedDateRange] = useState(getCurrentDate());
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const [loading, setLoading] = useState(false);
+  const [productListData, setProductListData] = useState([]);
+  const [page, setPage] = useState(1);
+ 
   const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
   const [selectedOrderType, setSelectedOrderType] =
     useState("All inventory");
 
-  const handleOptionClick = (option, dropdown) => {
-    switch (dropdown) {
-      case "orderSource":
-        setSelectedOrderSource(option.title);
+    const [hasMore, setHasMore] = useState(true);
+    const [initialColumns, setInitialColumns] = useState( [
+      { id: "sku", name: "Product" },
+      { id: "plus_after_sku", name: "+" },
+      { id: "closing_inventory", name: "Closing Inventory" },
+      { id: "items_sold_per_day", name: "Items sold per day" },
+      { id: "inventory_days_cover", name: "Days Cover" },
+      { id: "sell_through_rate", name: "Sell-through rate" },
+      { id: "revenue", name: "Revenue" },
+      { id: "gross_profit", name: "Gross Pro" },
+      { id: "plus_after_avg_cost", name: "+" },
+    ]);
+    const [reportType, setreportType] = useState([
+      { id: "brand", name: "Brand" },
+      { id: "vendor", name: "Vendor" },
+      { id: "category", name: "Category" },
+      { id: "tag", name: "Tag" }
+    ]);
 
-        break;
-      case "orderType":
-        setSelectedOrderType(option.title);
 
-        break;
-      default:
-        break;
-    }
-  };
   const showcat = 0;
   const reportTypeList = [
     "Product",
@@ -45,170 +73,123 @@ const InventroyPerformanceMain = () => {
     "All inventory",
   ];
 
-  const initialColumns = [
-    { id: "sku", name: "Product" },
-    { id: "plus_after_sku", name: "+" },
-    { id: "closing_inventory", name: "Closing Inventory" },
-    { id: "items_sold_per_day", name: "Items sold per day" },
-    { id: "inventory_days_cover", name: "Days Cover" },
-    { id: "sell_through_rate", name: "Sell-through rate" },
-    { id: "revenue", name: "Revenue" },
-    { id: "gross_profit", name: "Gross Pro" },
-    { id: "plus_after_avg_cost", name: "+" },
-  ];
-  const initialData = [
-    {
-      sku: "001",
-      name: "Product A",
-      closing_inventory: 100,
-      items_sold_per_day: 20,
-      inventory_days_cover: 5,
-      avg_cost: 10,
-      brand: "Brand A",
-      vendor: "Vendor A",
-      category: "Category A",
-      revenue: "$200",
-      gross_profit: "$12",
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      avg_items_per_sale: 70,
-      sale_discounted: 10,
-      avg_sale_value: 70,
-      cost_goods_sold: 90,
-      retail_value: 40,
-      current_inventory: 30,
-      start_date_inventory: "2023-02-01",
-      reorder_point: 10,
-      reorder_amount: 90,
-      return_count: 700,
-      inventory_days_cover: 30,
-      inventory_returns: 20,
-      inbound_inventory: 70,
-      items_sold_per_day: 60,
-      inventory_cost: 70,
-      avg_cost_measure: 12,
-      self_through_rate: 1.5,
-      created: "2023-01-01",
-      first_sale: "2023-02-01",
-      last_sale: "2023-03-01",
-      last_received: "2023-04-01",
-    },
-    {
-      sku: "002",
-      name: "Product B",
-      closing_inventory: 200,
-      items_sold_per_day: 30,
-      inventory_days_cover: 10,
-      sell_through_rate: 30,
-      avg_cost: 15,
-      brand: "Brand B",
-      vendor: "Vendor A",
-      category: "Category B",
-      revenue: "$400",
-      gross_profit: "$12",
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      inventory_cost: 70,
-      avg_items_per_sale: 70,
-      avg_sale_value: 70,
-      cost_goods_sold: 90,
-      retail_value: 40,
-      current_inventory: 30,
-      start_date_inventory: "2023-02-01",
-      reorder_point: 10,
-      reorder_amount: 90,
-      return_count: 700,
-      inventory_days_cover: 30,
-      inventory_returns: 20,
-      inbound_inventory: 70,
-      items_sold_per_day: 60,
-      sale_discounted: 10,
-      avg_cost_measure: 14,
-      self_through_rate: 2.0,
-      created: "2023-01-02",
-      first_sale: "2023-02-02",
-      last_sale: "2023-03-02",
-      last_received: "2023-04-02",
-    },
-    {
-      sku: "003",
-      name: "Product C",
-      closing_inventory: 200,
-      items_sold_per_day: 30,
-      inventory_days_cover: 10,
-      sell_through_rate: 30,
-      avg_cost: 15,
-      brand: "Brand B",
-      vendor: "Vendor A",
-      category: "Category B",
-      revenue: "$400",
-      gross_profit: "$12",
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      inventory_cost: 70,
-      avg_items_per_sale: 70,
-      avg_sale_value: 70,
-      cost_goods_sold: 90,
-      retail_value: 40,
-      current_inventory: 30,
-      start_date_inventory: "2023-02-01",
-      reorder_point: 10,
-      reorder_amount: 90,
-      return_count: 700,
-      inventory_days_cover: 30,
-      inventory_returns: 20,
-      inbound_inventory: 70,
-      items_sold_per_day: 60,
-      sale_discounted: 10,
-      avg_cost_measure: 14,
-      self_through_rate: 2.0,
-      created: "2023-01-02",
-      first_sale: "2023-02-02",
-      last_sale: "2023-03-02",
-      last_received: "2023-04-02",
-    },
-    {
-      sku: "004",
-      name: "Product D",
-      closing_inventory: 200,
-      items_sold_per_day: 30,
-      inventory_days_cover: 10,
-      sell_through_rate: 40,
-      avg_cost: 15,
-      vendor: "Vendor A",
-      supplier: "Supplier B",
-      category: "Category B",
-      revenue: "$400",
-      gross_profit: "$12",
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      inventory_cost: 70,
-      avg_items_per_sale: 70,
-      sale_discounted: 10,
-      avg_sale_value: 70,
-      cost_goods_sold: 90,
-      retail_value: 40,
-      current_inventory: 30,
-      start_date_inventory: "2023-02-01",
-      reorder_point: 10,
-      reorder_amount: 90,
-      return_count: 700,
-      inventory_days_cover: 30,
-      inventory_returns: 20,
-      inbound_inventory: 70,
-      items_sold_per_day: 60,
-      avg_cost_measure: 14,
-      self_through_rate: 2.0,
-      created: "2023-01-02",
-      first_sale: "2023-02-02",
-      last_sale: "2023-03-02",
-      last_received: "2023-04-02",
-    },
-  ];
+  const createPayload = (pageNum,measureType, dateRange) => ({
+    merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+    token_id: LoginGetDashBoardRecordJson?.token_id,
+    login_type: LoginGetDashBoardRecordJson?.login_type,
+    limit: 10,
+    page: pageNum,
+    start_date: dateRange.start_date,
+    end_date: dateRange.end_date,
+    measureType: measureType,
+  });
+
+  const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange) => {
+    const payload = createPayload(page,measureType, dateRange);
+    // Reorder_total_list
+    const response = await axios.post(
+      `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `${LoginGetDashBoardRecordJson?.token}`,
+        },
+      }
+    );
+    // console.log("=-=-=-response",response)
+  }
+
+  const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
+    try {
+      setLoading(true);
+      const payload = createPayload(page,measureType, dateRange);
+      const response = await axios.post(
+        // `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,Invenrory_report/Reorder_list
+        `${Config.BASE_URL}${Config.GET_REORDER_INVENTORY_LIST}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `${LoginGetDashBoardRecordJson?.token}`,
+          },
+        }
+      );
+
+      if(response?.data && !response?.data?.status){
+        setProductListData([])
+      }
+      const products = response?.data?.reorder_array;
+      if (products && products.length < 10) {
+        setHasMore(false); 
+      }
+      if (products && products.length > 0 && page == 1) {
+        setProductListData(products);
+      } else if (products && products.length > 0 && page != 1) {
+        setProductListData([...productListData, ...products]);
+      }
+      return products;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchMoreData = () => {
+    if (hasMore ) {
+      setPage((prevPage) => prevPage + 1);
+      const prevPage = page +1
+      // fetchProductsData();
+      fetchProductsData(prevPage,selectedOrderType,selectedDateRange);
+    }
+  };
+
+  const handleOptionClick = (option, dropdown) => {
+
+    switch (dropdown) {
+      case "orderSource":
+        setInitialColumns((prevColumns) => {
+          const updatedColumns = [...prevColumns];
+          if(option.title==="Product"){
+            updatedColumns[0] = { id: "name", name: "Product Name" };
+          }else if(option.title==="Outlet"){
+            updatedColumns[0] = { id: "outlet", name: "Outlet" };
+          }else{
+            updatedColumns[0] = { id: option.title.toLowerCase(), name: option.title };
+          } 
+          const dataArray = [
+            { id: "brand", name: "Brand" },
+            { id: "vendor", name: "Vendor" },
+            { id: "category", name: "Category" },
+            { id: "tag", name: "Tag" } 
+          ]
+          setreportType((prevReportType) =>
+          dataArray.filter((item) => item.id !== option.title.toLowerCase())
+        );
+          return updatedColumns;
+        });
+
+        setSelectedOrderSource(option.title);
+        break;
+      case "orderType":
+        setProductListData([])
+        setSelectedOrderType(option.title);
+        setPage(1);
+        fetchProductsData(1,option.title,selectedDateRange);
+        fetchRecordTotal(1,option.title,selectedDateRange)
+
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleDateRangeChange = (dateRange) => {
+    setPage(1);
+    setSelectedDateRange(dateRange); 
+    fetchProductsData(1,selectedOrderType,dateRange)
+    fetchRecordTotal(1,selectedOrderType,dateRange)
+  };
 
   return (
     <>
@@ -258,7 +239,14 @@ const InventroyPerformanceMain = () => {
       <Grid container sx={{}}>
         <DashDateRangeComponent onDateRangeChange={handleDateRangeChange} />
       </Grid>
-      <InventoryTable initialColumns={initialColumns} initialData={initialData} />
+      <InventoryTable
+        initialColumns={initialColumns}
+        initialData={productListData}
+        scrollForProduct={fetchMoreData}
+        hasMore={hasMore}
+        loading={loading}
+        reportType={reportType}
+              />
     </>
   );
 };
