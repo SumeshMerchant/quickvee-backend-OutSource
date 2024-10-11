@@ -83,8 +83,8 @@ const ReorderInventoryMain = () => {
     ...(limit !== null && { limit: limit }),  
     start_date: dateRange.start_date,
     end_date: dateRange.end_date,
-    measureType: measureType,
-    reportType:reportType
+    measure_type: measureType,
+    report_type:reportType
   });
 
   const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange,reportType="Product") => {
