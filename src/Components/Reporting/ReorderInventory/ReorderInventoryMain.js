@@ -180,9 +180,18 @@ const ReorderInventoryMain = () => {
             { id: "category", name: "Category" },
             { id: "tag", name: "Tag" } 
           ]
-          setreportType((prevReportType) =>
-          dataArray.filter((item) => item.id !== option.title.toLowerCase())
-        );
+        //   setreportType((prevReportType) =>
+        //   dataArray.filter((item) => item.id !== option.title.toLowerCase())
+        // );
+        setreportType((prevReportType) => {
+          const lowerCaseTitle = option.title.toLowerCase();
+            if (lowerCaseTitle === "brand" || lowerCaseTitle === "vendor") {
+            return dataArray.filter(
+              (item) => !["category", "tag",lowerCaseTitle].includes(item.id)
+            );
+          }
+          return dataArray.filter((item) => item.id !== lowerCaseTitle);
+        });
           return updatedColumns;
         });
 
