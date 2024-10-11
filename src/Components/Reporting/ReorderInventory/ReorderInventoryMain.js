@@ -72,10 +72,10 @@ const ReorderInventoryMain = () => {
   const handleDateRangeChange = (dateRange) => {
     setPage(1);
     setSelectedDateRange(dateRange); 
-    fetchProductsData(1,selectedOrderType,dateRange)
-    fetchRecordTotal(1,selectedOrderType,dateRange)
+    fetchProductsData(1,selectedOrderType,dateRange,selectedOrderSource)
+    fetchRecordTotal(1,selectedOrderType,dateRange,selectedOrderSource)
   };
-  const createPayload = (pageNum = null, limit = null, measureType, dateRange) => ({
+  const createPayload = (pageNum = null, limit = null, measureType, dateRange,reportType) => ({
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
     token_id: LoginGetDashBoardRecordJson?.token_id,
     login_type: LoginGetDashBoardRecordJson?.login_type,
@@ -83,12 +83,12 @@ const ReorderInventoryMain = () => {
     ...(limit !== null && { limit: limit }),  
     start_date: dateRange.start_date,
     end_date: dateRange.end_date,
-    measureType: measureType,
+    measure_type: measureType,
+    report_type:reportType
   });
 
-  const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange) => {
-    const payload = createPayload(0,0,measureType, dateRange);
-    // Reorder_total_list
+  const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange,reportType="Product") => {
+    const payload = createPayload(0,0,measureType, dateRange,reportType);
     try {
       setLoading(true);
     const totalApiResponse = await axios.post(
@@ -113,9 +113,9 @@ const ReorderInventoryMain = () => {
     }
   }
 
-  const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
+  const fetchProductsData = async (page=1,measureType="All inventory",dateRange,reportType="Product") => {
     try {
-      const payload = createPayload(page, 10,measureType, dateRange);
+      const payload = createPayload(page, 10,measureType, dateRange,reportType);
       if(page ==1){
         setLoading(true);
       }
@@ -196,13 +196,14 @@ const ReorderInventoryMain = () => {
         });
 
         setSelectedOrderSource(option.title);
+        fetchProductsData(1,selectedOrderType,selectedDateRange,option.title);
         break;
       case "orderType":
         setProductListData([])
         setSelectedOrderType(option.title);
         setPage(1);
-        fetchProductsData(1,option.title,selectedDateRange);
-        fetchRecordTotal(1,option.title,selectedDateRange)
+        fetchProductsData(1,option.title,selectedDateRange,selectedOrderSource);
+        fetchRecordTotal(1,option.title,selectedDateRange,selectedOrderSource)
 
         break;
       default:
@@ -212,8 +213,8 @@ const ReorderInventoryMain = () => {
 
   useEffect(() => {
     setSelectedOrderType("All inventory")
-    fetchRecordTotal(1,"All inventory",selectedDateRange)
-    fetchProductsData(1,"All inventory",selectedDateRange);
+    fetchRecordTotal(1,"All inventory",selectedDateRange,"Product")
+    fetchProductsData(1,"All inventory",selectedDateRange, "Product");
   }, []);
 
   return (
