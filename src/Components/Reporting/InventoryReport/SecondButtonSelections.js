@@ -32,8 +32,8 @@ const SecondButtonSelections = ({ selectedColumns, setSelectedColumns, applyMeas
       <label>
         <input
           type="checkbox"
-          name="selfThroughRate"
-          checked={selectedColumns.selfThroughRate}
+          name="sell_through_rate"
+          checked={selectedColumns.sell_through_rate}
           onChange={handleCheckboxChange}
         />
         Self Through Rate
