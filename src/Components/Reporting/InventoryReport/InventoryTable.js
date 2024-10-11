@@ -404,7 +404,7 @@ const formatDate = (dateString) => {
                                       ? `$ ${parseFloat(totalRecords.inventory_cost).toFixed(2)}`
                                       : col.id === "retail_value" && totalRecords?.retail_value !== undefined
                                       ? `$ ${parseFloat(totalRecords.retail_value).toFixed(2)}`
-                                      : col.id === "times_sold" && totalRecords?.item_sold !== undefined
+                                      : col.id === "items_sold" && totalRecords?.item_sold !== undefined
                                       ? `${parseFloat(totalRecords.item_sold).toFixed(2)}`
                                       : col.id === "gross_profit" && totalRecords?.gross_profit !== undefined
                                       ? `$ ${parseFloat(totalRecords.gross_profit).toFixed(2)}`

@@ -155,7 +155,12 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
           <Grid item xs={12} sm={4} md={3}>
             <Grid container sx={{ display: "flex", gap: 1.5 }}>
               <Grid item>
-                <input type="checkbox" />
+              <input
+                  type="checkbox"
+                  name="items_sold"
+                  checked={selectedColumns?.items_sold}
+                  onChange={handleCheckboxChange}
+                />
               </Grid>
               <Grid item xs={10}>
                 <h6 className="form-title">Items sold</h6>
@@ -558,8 +563,8 @@ const InventoryTableColumns = ({ open, handleClose , selectedColumns, setSelecte
               <Grid item>
               <input
                     type="checkbox"
-                    name="lastReceived"
-                    checked={selectedColumns?.lastReceived}
+                    name="last_received"
+                    checked={selectedColumns?.last_received}
                     onChange={handleCheckboxChange}
                   />
               </Grid>
