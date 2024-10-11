@@ -115,7 +115,7 @@ const ReorderInventoryMain = () => {
 
   const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
     try {
-      const payload = createPayload(page, 50,measureType, dateRange);
+      const payload = createPayload(page, 10,measureType, dateRange);
       if(page ==1){
         setLoading(true);
       }
