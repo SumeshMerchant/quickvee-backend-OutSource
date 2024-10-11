@@ -37,7 +37,7 @@ const ReorderInventoryMain = () => {
     { id: "plus_after_sku", name: "+" },
     { id: "closing_inventory", name: "Closing Inventory" },
     { id: "items_sold_per_day", name: "Items sold per day" },
-    { id: "times_sold", name: "Items sold" },
+    { id: "items_sold", name: "Items sold" },
     { id: "inbound_inventory", name: "Inbound Inventory" },
     { id: "inventory_days_cover", name: "Days Cover" },
     { id: "avg_cost", name: "Avg. cost" },
