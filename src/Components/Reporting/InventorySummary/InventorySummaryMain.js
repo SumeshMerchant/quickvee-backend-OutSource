@@ -55,17 +55,15 @@ const InventorySummaryMain = () => {
   const showcat = 0;
   const reportTypeList = [
     "Product",
-    "SKU name",
     "Brand",
-    "Outlet",
-    "Supplier",
+    "Vendor",
     "Category",
   ];
   const measureTypeList = [
+    "All inventory",
     "On-hand-inventory",
     "Low Inventory",
-    "Out of stock",
-    "All inventory"
+    "Out of stock"
   ];
   const handleDateRangeChange = (dateRange) => {
     setPage(1);

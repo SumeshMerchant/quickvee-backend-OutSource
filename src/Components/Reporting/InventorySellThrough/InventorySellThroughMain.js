@@ -31,7 +31,7 @@ const InventorySellThroughMain = () => {
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [hasMore, setHasMore] = useState(true);
   const [initialColumns, setInitialColumns] = useState([
-    { id: "sku", name: "Prodcut Category" },
+    { id: "name", name: "Prodcut" },
     { id: "plus_after_sku", name: "+" },
     { id: "closing_inventory", name: "Closing Inventory" },
     { id: "items_sold_per_day", name: "Items sold per day" },
@@ -55,16 +55,14 @@ const InventorySellThroughMain = () => {
   const showcat = 0;
   const reportTypeList = [
     "Product",
-    "SKU name",
     "Brand",
-    "Outlet",
-    "Supplier",
+    "Vendor",
     "Category",
   ];
   const measureTypeList = [
+    "All inventory",
     "On-hand-inventory",
     "Low Inventory",
-    "All inventory",
     "Out of stock"
   ];
   const handleDateRangeChange = (dateRange) => {

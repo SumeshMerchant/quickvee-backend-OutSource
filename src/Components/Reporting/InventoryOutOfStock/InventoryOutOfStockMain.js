@@ -31,8 +31,7 @@ const InventoryOutOfStockMain = () => {
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [hasMore, setHasMore] = useState(true);
   const [initialColumns, setInitialColumns] = useState([
-    { id: "sku", name: "SKU name" },
-    { id: "outlet", name: "Outlet" },
+    { id: "name", name: "Product Name" },
     { id: "plus_after_sku", name: "+" },
     { id: "closing_inventory", name: "Closing Inventory" },
     { id: "items_sold", name: "Items sold" },
@@ -64,16 +63,14 @@ const InventoryOutOfStockMain = () => {
   const showcat = 0;
   const reportTypeList = [
     "Product",
-    "SKU name",
     "Brand",
-    "Outlet",
-    "Supplier",
+    "Vendor",
     "Category",
   ];
   const measureTypeList = [
+    "All inventory",
     "On-hand-inventory",
     "Low Inventory",
-    "All inventory",
     "Out of stock"
   ];
 

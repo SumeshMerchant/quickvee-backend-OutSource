@@ -59,7 +59,6 @@ const ReorderInventoryMain = () => {
   const reportTypeList = [
     "Product",
     "Brand",
-    "Outlet",
     "Vendor",
     "Category",
   ];

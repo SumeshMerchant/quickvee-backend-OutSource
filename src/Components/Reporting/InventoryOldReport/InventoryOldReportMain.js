@@ -30,7 +30,7 @@ const InventoryOldReportMain = () => {
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [hasMore, setHasMore] = useState(true);
   const [initialColumns, setInitialColumns] = useState([
-    { id: "sku", name: "SKU name" },
+    { id: "name", name: "Product Name" },
     { id: "plus_after_sku", name: "+" },
     { id: "closing_inventory", name: "Closing Inventory" },
     { id: "sell_through_rate", name: "Sell-through rate" },
@@ -50,191 +50,23 @@ const InventoryOldReportMain = () => {
   const [page, setPage] = useState(1);
   const [productListData, setProductListData] = useState([]);
   const [totalRecords, setTotalRecords] = useState(null);
-
-
-
-
-
-
-
-
-
-
-
-
-  const [selectedOrderSource, setSelectedOrderSource] = useState("SKU Name");
+  const [selectedOrderSource, setSelectedOrderSource] = useState("Product");
   const [selectedOrderType, setSelectedOrderType] =
     useState("On-hand-inventory");
   const showcat = 0;
   const reportTypeList = [
     "Product",
-    "SKU Name",
     "Brand",
-    "Outlet",
-    "Supplier",
-    "Product category",
+    "Vendor",
+    "Category",
   ];
   const measureTypeList = [
+    "All inventory",
     "On-hand-inventory",
     "Low Inventory",
-    "Out of stock",
-    "All inventory"
+    "Out of stock"
+    
   ];
-
-  const initialData = [
-    {
-      sku: "001",
-      name: "Product A",
-      closing_inventory: 100,
-      items_sold: 20,
-      days_cover: 5,
-      avg_cost: 10,
-      brand: "Brand A",
-      vendor: "Vendor A",
-      category: "Category A",
-      revenue: 200,
-      gross_profit: 12,
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      avg_items_per_sale: 70,
-      sale_discounted: 10,
-      avg_sale_value: 70,
-      cost_goods_sold: 90,
-      retail_value:200,
-      current_inventory: 30,
-      start_date_inventory: "2023-02-01",
-      reorder_point: 10,
-      reorder_amount: 90,
-      return_count: 700,
-      inventory_days_cover: 30,
-      inventory_returns: 20,
-      inbound_inventory: 70,
-      items_sold_per_day: 60,
-      inventory_cost: 70,
-      avg_cost_measure: 12,
-      self_through_rate: 1.5,
-      created: "2023-01-01",
-      first_sale: "2023-02-01",
-      last_sale: "Sep 15",
-      last_received: "2023-04-01",
-    },
-    {
-      sku: "002",
-      name: "Product B",
-      closing_inventory: 200,
-      items_sold: 30,
-      days_cover: 10,
-      sell_through_rate: 30,
-      avg_cost: 15,
-      brand: "Brand B",
-      vendor: "Vendor A",
-      category: "Category B",
-      revenue: 400,
-      gross_profit: 12,
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      inventory_cost: 70,
-      avg_items_per_sale: 70,
-      avg_sale_value: 70,
-      cost_goods_sold: 90,
-      retail_value: 200,
-      current_inventory: 30,
-      start_date_inventory: "2023-02-01",
-      reorder_point: 10,
-      reorder_amount: 90,
-      return_count: 700,
-      inventory_days_cover: 30,
-      inventory_returns: 20,
-      inbound_inventory: 70,
-      items_sold_per_day: 60,
-      sale_discounted: 10,
-      avg_cost_measure: 14,
-      self_through_rate: 2.0,
-      created: "2023-01-02",
-      first_sale: "2023-02-02",
-      last_sale: "Sep 15",
-      last_received: "2023-04-02",
-    },
-    {
-      sku: "003",
-      name: "Product C ",
-      closing_inventory: 200,
-      items_sold: 30,
-      days_cover: 10,
-      sell_through_rate: 30,
-      avg_cost: 15,
-      brand: "Brand B",
-      vendor: "Vendor A",
-      category: "Category B",
-      revenue: 400,
-      gross_profit: 12,
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      inventory_cost: 70,
-      avg_items_per_sale: 70,
-      avg_sale_value: 70,
-      cost_goods_sold: 90,
-      retail_value:200,
-      current_inventory: 30,
-      start_date_inventory: "2023-02-01",
-      reorder_point: 10,
-      reorder_amount: 90,
-      return_count: 700,
-      inventory_days_cover: 30,
-      inventory_returns: 20,
-      inbound_inventory: 70,
-      items_sold_per_day: 60,
-      sale_discounted: 10,
-      avg_cost_measure: 14,
-      self_through_rate: 2.0,
-      created: "2023-01-02",
-      first_sale: "2023-02-02",
-      last_sale: "Sep 15",
-      last_received: "2023-04-02",
-    },
-    {
-      sku: "004",
-      name: "Product D",
-      closing_inventory: 200,
-      items_sold: 30,
-      days_cover: 10,
-      sell_through_rate: 40,
-      avg_cost: 15,
-      brand: "Brand B",
-      vendor: "Vendor A",
-      category: "Category B",
-      revenue: 400,
-      gross_profit: 12,
-      sale_margin: 10,
-      customer_count: 20,
-      sale_count: 50,
-      inventory_cost: 70,
-      avg_items_per_sale: 70,
-      sale_discounted: 10,
-      avg_sale_value: 70,
-      cost_goods_sold: 90,
-      retail_value: 200,
-      current_inventory: 30,
-      start_date_inventory: "2023-02-01",
-      reorder_point: 10,
-      reorder_amount: 90,
-      return_count: 700,
-      inventory_days_cover: 30,
-      inventory_returns: 20,
-      inbound_inventory: 70,
-      items_sold_per_day: 60,
-      avg_cost_measure: 14,
-      self_through_rate: 2.0,
-      created: "2023-01-02",
-      first_sale: "2023-02-02",
-      last_sale: "Sep 15",
-      last_received: "2023-04-02",
-    },
-  ];
-
   const handleDateRangeChange = (dateRange) => {
     setPage(1);
     setSelectedDateRange(dateRange); 
