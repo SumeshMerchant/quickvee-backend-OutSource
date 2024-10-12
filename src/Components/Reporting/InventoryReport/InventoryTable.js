@@ -343,7 +343,7 @@ const formatDate = (dateString) => {
                           row[col.id] !== "" ? (
                           isNaN(parseFloat(row[col.id]))
                             ? "-"
-                            : `$ ${parseFloat(row[col.id]).toFixed(2)}`
+                            : `$${parseFloat(row[col.id]).toFixed(2)}`
                         ): row[col.id] !== null &&
                         ["start_date_inventory","created","last_sale","start_date_inventory","first_sale"].includes(col.id) &&
                         row[col.id] !== undefined &&
@@ -415,59 +415,57 @@ const formatDate = (dateString) => {
                                       : ""
                               } */}
 
-{
-  col.id === "avg_cost" && totalRecords?.avg_cost !== undefined
-    ? `$ ${parseFloat(totalRecords.avg_cost).toFixed(2)}`
-    : col.id === "inventory_cost" && totalRecords?.inventory_cost !== undefined
-    ? `$ ${parseFloat(totalRecords.inventory_cost).toFixed(2)}`
-    : col.id === "retail_value" && totalRecords?.retail_value !== undefined
-    ? `$ ${parseFloat(totalRecords.retail_value).toFixed(2)}`
-    : col.id === "times_sold" && totalRecords?.item_sold !== undefined
-    ? `${parseFloat(totalRecords.item_sold).toFixed(0)}` // Changed to fixed(0) for whole number
-    : col.id === "gross_profit" && totalRecords?.gross_profit !== undefined
-    ? `$ ${parseFloat(totalRecords.gross_profit).toFixed(2)}`
-    : col.id === "items_sold_per_day" && totalRecords?.items_sold_per_day !== undefined
-    ? `${parseFloat(totalRecords.items_sold_per_day).toFixed(2)}`
-    : col.id === "current_inventory" && totalRecords?.current_inventory !== undefined
-    ? `${parseFloat(totalRecords.current_inventory).toFixed(0)}` // Changed to fixed(0) for whole number
-    : col.id === "closing_inventory" && totalRecords?.closing_inventory !== undefined
-    ? `${parseFloat(totalRecords.closing_inventory).toFixed(0)}` // Whole number
-    : col.id === "inbound_inventory" && totalRecords?.inbound_inventory !== undefined
-    ? `${parseFloat(totalRecords.inbound_inventory).toFixed(0)}` // Whole number
-    : col.id === "inventory_days_cover" && totalRecords?.inventory_days_cover !== undefined
-    ? `${parseFloat(totalRecords.inventory_days_cover).toFixed(0)}` // Whole number
-    : col.id === "net_sale" && totalRecords?.net_sale !== undefined
-    ? `$ ${parseFloat(totalRecords.net_sale).toFixed(2)}`
-    : col.id === "sale_margin" && totalRecords?.sale_margin !== undefined
-    ? `$ ${parseFloat(totalRecords.sale_margin).toFixed(2)}`
-    : col.id === "customer_count" && totalRecords?.customer_count !== undefined
-    ? `${parseFloat(totalRecords.customer_count).toFixed(0)}` // Whole number
-    : col.id === "sale_count" && totalRecords?.sale_count !== undefined
-    ? `${parseFloat(totalRecords.sale_count).toFixed(0)}` // Whole number
-    : col.id === "avg_items_per_sale" && totalRecords?.avg_items_per_sale !== undefined
-    ? `${parseFloat(totalRecords.avg_items_per_sale).toFixed(2)}`
-    : col.id === "sale_discount" && totalRecords?.sale_discount !== undefined
-    ? `$ ${parseFloat(totalRecords.sale_discount).toFixed(2)}`
-    : col.id === "sale_discounted" && totalRecords?.sale_discounted !== undefined
-    ? `$ ${parseFloat(totalRecords.sale_discounted).toFixed(2)}`
-    : col.id === "avg_sale_value" && totalRecords?.avg_sale_value !== undefined
-    ? `$ ${parseFloat(totalRecords.avg_sale_value).toFixed(2)}`
-    : col.id === "cost_goods_sold" && totalRecords?.cost_goods_sold !== undefined
-    ? `$ ${parseFloat(totalRecords.cost_goods_sold).toFixed(2)}`
-    : col.id === "reorder_point" && totalRecords?.reorder_point !== undefined
-    ? `${parseFloat(totalRecords.reorder_point).toFixed(0)}` // Whole number
-    : col.id === "reorder_qty" && totalRecords?.reorder_qty !== undefined
-    ? `${parseFloat(totalRecords.reorder_qty).toFixed(0)}` // Whole number
-    : col.id === "reorder_cost" && totalRecords?.reorder_cost !== undefined
-    ? `$ ${parseFloat(totalRecords.reorder_cost).toFixed(2)}`
-    : col.id === "return_count" && totalRecords?.return_count !== undefined
-    ? `${parseFloat(totalRecords.return_count).toFixed(0)}` // Whole number
-    : col.id === "inventory_returns" && totalRecords?.inventory_returns !== undefined
-    ? `${parseFloat(totalRecords.inventory_returns).toFixed(0)}` // Whole number
-    : col.id === "sell_through_rate" && totalRecords?.sell_through_rate !== undefined
-    ? `${parseFloat(totalRecords.sell_through_rate).toFixed(2)}`
-    : ""
-}
+                              {
+                                col.id === "avg_cost" && totalRecords?.avg_cost !== undefined
+                                  ? `$ ${parseFloat(totalRecords.avg_cost).toFixed(2)}`
+                                  : col.id === "inventory_cost" && totalRecords?.inventory_cost !== undefined
+                                  ? `$ ${parseFloat(totalRecords.inventory_cost).toFixed(2)}`
+                                  : col.id === "retail_value" && totalRecords?.retail_value !== undefined
+                                  ? `$ ${parseFloat(totalRecords.retail_value).toFixed(2)}`
+                                  : col.id === "times_sold" && totalRecords?.item_sold !== undefined
+                                  ? `${parseFloat(totalRecords.item_sold).toFixed(0)}` // Changed to fixed(0) for whole number
+                                  : col.id === "gross_profit" && totalRecords?.gross_profit !== undefined
+                                  ? `$ ${parseFloat(totalRecords.gross_profit).toFixed(2)}`
+                                  : col.id === "items_sold_per_day" && totalRecords?.items_sold_per_day !== undefined
+                                  ? `${parseFloat(totalRecords.items_sold_per_day).toFixed(2)}`
+                                  : col.id === "current_inventory" && totalRecords?.current_inventory !== undefined
+                                  ? `${parseFloat(totalRecords.current_inventory).toFixed(0)}`
+                                  : col.id === "closing_inventory" && totalRecords?.closing_inventory !== undefined
+                                  ? `${parseFloat(totalRecords.closing_inventory).toFixed(0)}` // Whole number
+                                  : col.id === "inbound_inventory" && totalRecords?.inbound_inventory !== undefined
+                                  ? `${parseFloat(totalRecords.inbound_inventory).toFixed(0)}` 
+                                  : col.id === "net_sale" && totalRecords?.net_sale !== undefined
+                                  ? `$ ${parseFloat(totalRecords.net_sale).toFixed(2)}`
+                                  : col.id === "sale_margin" && totalRecords?.sale_margin !== undefined
+                                  ? `$ ${parseFloat(totalRecords.sale_margin).toFixed(2)}`
+                                  : col.id === "customer_count" && totalRecords?.customer_count !== undefined
+                                  ? `${parseFloat(totalRecords.customer_count).toFixed(0)}` // Whole number
+                                  : col.id === "sale_count" && totalRecords?.sale_count !== undefined
+                                  ? `${parseFloat(totalRecords.sale_count).toFixed(0)}` // Whole number
+                                  : col.id === "avg_items_per_sale" && totalRecords?.avg_items_per_sale !== undefined
+                                  ? `${parseFloat(totalRecords.avg_items_per_sale).toFixed(2)}`
+                                  : col.id === "sale_discount" && totalRecords?.sale_discount !== undefined
+                                  ? `$ ${parseFloat(totalRecords.sale_discount).toFixed(2)}`
+                                  : col.id === "sale_discounted" && totalRecords?.sale_discounted !== undefined
+                                  ? `$ ${parseFloat(totalRecords.sale_discounted).toFixed(2)}`
+                                  : col.id === "avg_sale_value" && totalRecords?.avg_sale_value !== undefined
+                                  ? `$ ${parseFloat(totalRecords.avg_sale_value).toFixed(2)}`
+                                  : col.id === "cost_goods_sold" && totalRecords?.cost_goods_sold !== undefined
+                                  ? `$ ${parseFloat(totalRecords.cost_goods_sold).toFixed(2)}`
+                                  : col.id === "reorder_point" && totalRecords?.reorder_point !== undefined
+                                  ? `${parseFloat(totalRecords.reorder_point).toFixed(0)}` // Whole number
+                                  : col.id === "reorder_qty" && totalRecords?.reorder_qty !== undefined
+                                  ? `${parseFloat(totalRecords.reorder_qty).toFixed(0)}` // Whole number
+                                  : col.id === "reorder_cost" && totalRecords?.reorder_cost !== undefined
+                                  ? `$ ${parseFloat(totalRecords.reorder_cost).toFixed(2)}`
+                                  : col.id === "return_count" && totalRecords?.return_count !== undefined
+                                  ? `${parseFloat(totalRecords.return_count).toFixed(0)}` // Whole number
+                                  : col.id === "inventory_returns" && totalRecords?.inventory_returns !== undefined
+                                  ? `${parseFloat(totalRecords.inventory_returns).toFixed(0)}` // Whole number
+                                  : col.id === "sell_through_rate" && totalRecords?.sell_through_rate !== undefined
+                                  ? `${parseFloat(totalRecords.sell_through_rate).toFixed(2)}`
+                                  : ""
+                              }
                               
 
                           </div>
