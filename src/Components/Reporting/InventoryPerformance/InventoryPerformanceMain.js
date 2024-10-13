@@ -165,13 +165,13 @@ const InventroyPerformanceMain = () => {
     switch (dropdown) {
       case "orderSource":
         setInitialColumns((prevColumns) => {
-          const updatedColumns = [...prevColumns];
+          let updatedColumns = [...prevColumns];
           if(option.title==="Product"){
             updatedColumns[0] = { id: "name", name: "Product Name" };
-          }else if(option.title==="Outlet"){
-            updatedColumns[0] = { id: "outlet", name: "Outlet" };
+            updatedColumns.splice(1, 0,{ id: "plus_after_sku", name: "+" });
           }else{
             updatedColumns[0] = { id: option.title.toLowerCase(), name: option.title };
+            updatedColumns = updatedColumns.filter(item => item.id !== "plus_after_sku");
           } 
           const dataArray = [
             { id: "brand", name: "Brand" },

@@ -165,32 +165,29 @@ const ReorderInventoryMain = () => {
     switch (dropdown) {
       case "orderSource":
         setInitialColumns((prevColumns) => {
-          const updatedColumns = [...prevColumns];
-          if(option.title==="Product"){
+          let updatedColumns = [...prevColumns];
+          if (option.title === "Product") {
             updatedColumns[0] = { id: "name", name: "Product Name" };
-          }else if(option.title==="Outlet"){
-            updatedColumns[0] = { id: "outlet", name: "Outlet" };
-          }else{
+            updatedColumns.splice(1, 0,{ id: "plus_after_sku", name: "+" });
+          } else {
             updatedColumns[0] = { id: option.title.toLowerCase(), name: option.title };
-          } 
+            updatedColumns = updatedColumns.filter(item => item.id !== "plus_after_sku");
+          }
           const dataArray = [
             { id: "brand", name: "Brand" },
             { id: "vendor", name: "Vendor" },
             { id: "category", name: "Category" },
-            { id: "tag", name: "Tag" } 
+            { id: "tag", name: "Tag" }
           ]
-        //   setreportType((prevReportType) =>
-        //   dataArray.filter((item) => item.id !== option.title.toLowerCase())
-        // );
-        setreportType((prevReportType) => {
-          const lowerCaseTitle = option.title.toLowerCase();
+          setreportType((prevReportType) => {
+            const lowerCaseTitle = option.title.toLowerCase();
             if (lowerCaseTitle === "brand" || lowerCaseTitle === "vendor") {
-            return dataArray.filter(
-              (item) => !["category", "tag",lowerCaseTitle].includes(item.id)
-            );
-          }
-          return dataArray.filter((item) => item.id !== lowerCaseTitle);
-        });
+              return dataArray.filter(
+                (item) => !["category", "tag", lowerCaseTitle].includes(item.id)
+              );
+            }
+            return dataArray.filter((item) => item.id !== lowerCaseTitle);
+          });
           return updatedColumns;
         });
 
