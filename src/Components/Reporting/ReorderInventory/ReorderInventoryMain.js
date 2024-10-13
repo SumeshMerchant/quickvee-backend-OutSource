@@ -89,7 +89,7 @@ const ReorderInventoryMain = () => {
   const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange,reportType="Product") => {
     const payload = createPayload(0,0,measureType, dateRange,reportType);
     try {
-      setLoading(true);
+      // setLoading(true);
     const totalApiResponse = await axios.post(
       `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
       payload,
@@ -108,7 +108,7 @@ const ReorderInventoryMain = () => {
       console.error("Error fetching totals:", error); 
        
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   }
 

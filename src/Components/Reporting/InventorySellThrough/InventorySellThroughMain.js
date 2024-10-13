@@ -86,7 +86,7 @@ const InventorySellThroughMain = () => {
     const payload = createPayload(0,0,measureType, dateRange);
     // Reorder_total_list
     try {
-      setLoading(true);
+      // setLoading(true);
     const totalApiResponse = await axios.post(
       `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
       payload,
@@ -105,13 +105,13 @@ const InventorySellThroughMain = () => {
       console.error("Error fetching totals:", error); 
        
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   }
 
   const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
     try {
-      const payload = createPayload(page, 50,measureType, dateRange);
+      const payload = createPayload(page, 10,measureType, dateRange);
       if(page ==1){
         setLoading(true);
       }

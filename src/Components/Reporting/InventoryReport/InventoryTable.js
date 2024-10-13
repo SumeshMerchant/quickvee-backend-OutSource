@@ -12,7 +12,6 @@ const InventoryTable = ({ initialColumns, initialData, scrollForProduct, hasMore
   const [colWidths, setColWidths] = useState([]);
   const [columns, setColumns] = useState(initialColumns);
   const [open, setOpen] = useState(false);
-  
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -246,7 +245,8 @@ const formatDate = (dateString) => {
     day: 'numeric',
     year: 'numeric',
   }) 
-};
+  };
+ 
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -308,83 +308,84 @@ const formatDate = (dateString) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {loading ? (
+                  {loading && initialData.length == 0 ? (
                     <tr>
                       <td colSpan={columns.length}>
                         <div className="custom-table">{renderLoader()} </div>
                       </td>
                     </tr>
                   
-                ) : initialData?.length === 0 ? (
-                  <tr>
-                    <td colSpan={columns.length} style={{ border: "none" }}>
-                      
-                      <NoDataFound message="No Data Found" />
-                    </td>
-                  </tr>
-                ) : (
-                initialData.map((row, index) => (
-                  <tr key={row.id}>
-                    {columns.map((col) => (
-                      <td key={col.id}>
-                        {col.id === "sku" ? (
-                          <>
-                            <div>{row.name}</div>
-                            <div style={{ fontSize: "0.9em", color: "gray" }}>
-                              {row.sku === "revenue" ? `$ ${row.sku}` : row.sku}
-                            </div>
-                          </>
-                        ) : col.id === "plus_after_sku" ||
-                          col.id === "plus_after_avg_cost" ? (
-                          "" // Skip rendering for these columns
-                        ) : row[col.id] !== null &&
-                          ["avg_cost", "gross_profit", "revenue", "inventory_cost"].includes(col.id) &&
-                          row[col.id] !== undefined &&
-                          row[col.id] !== "" ? (
-                          isNaN(parseFloat(row[col.id]))
-                            ? "-"
-                            : `$${parseFloat(row[col.id]).toFixed(2)}`
-                        ): row[col.id] !== null &&
-                        ["start_date_inventory","created","last_sale","start_date_inventory","first_sale"].includes(col.id) &&
-                        row[col.id] !== undefined &&
-                        row[col.id] !== "" ? (
-                          formatDate(row[col.id])
-                      )  : row[col.id] !== null &&
-                          ["sell_through_rate", "avg_discount_percentage"].includes(col.id) &&
-                          row[col.id] !== undefined &&
-                          row[col.id] !== "" ? (
-                          isNaN(parseFloat(row[col.id]))
-                            ? "-"
-                            : `${parseFloat(row[col.id]).toFixed(2)} %`
-                        ) : row[col.id] !== null &&
-                          ["net_sale", "sale_margin", "sale_discounted","avg_items_per_sale", "avg_sale_value", "cost_goods_sold"].includes(
-                            col.id
-                          ) &&
-                          row[col.id] !== undefined &&
-                          row[col.id] !== "" ? (
-                          isNaN(parseFloat(row[col.id]))
-                            ? "-"
-                            : `${parseFloat(row[col.id]).toFixed(2)}`
-                        ) : row[col.id] !== null &&
-                          col.id === "name" &&
-                          row[col.id] !== undefined &&
-                          row[col.id] !== "" ? (
-                          row[col.id]
-                            ? row[col.id].charAt(0).toUpperCase() +
-                              row[col.id].slice(1).toLowerCase()
-                            : "-"
-                        ) : row[col.id] !== null &&
-                          row[col.id] !== undefined &&
-                          row[col.id] !== "" ? (
-                          row[col.id]
-                        ) : (
-                          "-" // Display "-" for other empty fields
-                        )}
+                  ) : (
+                    initialData?.map((row, index) => (
+                      <tr key={row.id}>
+                        {columns.map((col) => (
+                          <td key={col.id}>
+                            {col.id === "sku" ? (
+                              <>
+                                <div>{row.name}</div>
+                                <div style={{ fontSize: "0.9em", color: "gray" }}>
+                                  {row.sku === "revenue" ? `$ ${row.sku}` : row.sku}
+                                </div>
+                              </>
+                            ) : col.id === "plus_after_sku" ||
+                              col.id === "plus_after_avg_cost" ? (
+                              "" // Skip rendering for these columns
+                            ) : row[col.id] !== null &&
+                              ["avg_cost", "gross_profit", "revenue", "inventory_cost"].includes(col.id) &&
+                              row[col.id] !== undefined &&
+                              row[col.id] !== "" ? (
+                              isNaN(parseFloat(row[col.id]))
+                                ? "-"
+                                : `$${parseFloat(row[col.id]).toFixed(2)}`
+                            ) : row[col.id] !== null &&
+                              ["start_date_inventory", "created", "last_sale", "start_date_inventory", "first_sale"].includes(col.id) &&
+                              row[col.id] !== undefined &&
+                              row[col.id] !== "" ? (
+                              formatDate(row[col.id])
+                            ) : row[col.id] !== null &&
+                              ["sell_through_rate", "avg_discount_percentage"].includes(col.id) &&
+                              row[col.id] !== undefined &&
+                              row[col.id] !== "" ? (
+                              isNaN(parseFloat(row[col.id]))
+                                ? "-"
+                                : `${parseFloat(row[col.id]).toFixed(2)} %`
+                            ) : row[col.id] !== null &&
+                              ["net_sale", "sale_margin", "sale_discounted", "avg_items_per_sale", "avg_sale_value", "cost_goods_sold"].includes(
+                                col.id
+                              ) &&
+                              row[col.id] !== undefined &&
+                              row[col.id] !== "" ? (
+                              isNaN(parseFloat(row[col.id]))
+                                ? "-"
+                                : `${parseFloat(row[col.id]).toFixed(2)}`
+                            ) : row[col.id] !== null &&
+                              col.id === "name" &&
+                              row[col.id] !== undefined &&
+                              row[col.id] !== "" ? (
+                              row[col.id]
+                                ? row[col.id].charAt(0).toUpperCase() +
+                                row[col.id].slice(1).toLowerCase()
+                                : "-"
+                            ) : row[col.id] !== null &&
+                              row[col.id] !== undefined &&
+                              row[col.id] !== "" ? (
+                              row[col.id]
+                            ) : (
+                              "-" // Display "-" for other empty fields
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    ))
+                  )}
+                  {initialData?.length == 0 && loading == false && (
+                    <tr>
+                      <td colSpan={columns.length} style={{ border: "none" }}>
+                        
+                        <NoDataFound message="No Data Found" />
                       </td>
-                    ))}
-                  </tr>
-                ))
-            )}
+                    </tr>
+                  )}
           </tbody>
                 
                   <tfoot>
@@ -397,24 +398,7 @@ const formatDate = (dateString) => {
                       {columns.slice(1).map((col, index) => (
                         <td key={col.id}>
                           <div style={{ width: colWidths[index + 1] }}>
-                              {/* {
-                                  col.id === "avg_cost" && totalRecords?.avg_cost !== undefined
-                                      ? `$ ${parseFloat(totalRecords.avg_cost).toFixed(2)}`
-                                      : col.id === "inventory_cost" && totalRecords?.inventory_cost !== undefined
-                                      ? `$ ${parseFloat(totalRecords.inventory_cost).toFixed(2)}`
-                                      : col.id === "retail_value" && totalRecords?.retail_value !== undefined
-                                      ? `$ ${parseFloat(totalRecords.retail_value).toFixed(2)}`
-                                      : col.id === "items_sold" && totalRecords?.item_sold !== undefined
-                                      ? `${parseFloat(totalRecords.item_sold).toFixed(2)}`
-                                      : col.id === "gross_profit" && totalRecords?.gross_profit !== undefined
-                                      ? `$ ${parseFloat(totalRecords.gross_profit).toFixed(2)}`
-                                      : col.id === "items_sold_per_day" && totalRecords?.items_sold_per_day !== undefined
-                                      ? `${parseFloat(totalRecords.items_sold_per_day).toFixed(2)}`
-                                      : col.id === "current_inventory" && totalRecords?.current_inventory !== undefined
-                                      ? `${parseFloat(totalRecords.current_inventory).toFixed(2)}`
-                                      : ""
-                              } */}
-
+                             
                               {
                                 col.id === "avg_cost" && totalRecords?.avg_cost !== undefined
                                   ? `$${parseFloat(totalRecords.avg_cost).toFixed(2)}`
