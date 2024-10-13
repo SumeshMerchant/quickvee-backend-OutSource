@@ -203,41 +203,73 @@ useEffect(() => {
 useEffect(()=>{
 setcolumnsOptions(reportType)
 },[columnsOptions,reportType])
-useEffect(() => {
-  const tableContainer = document.querySelector(".custom-table");
-  const tfootContainer = document.querySelector(".tfoot-scrollable-container");
+// useEffect(() => {
+//   const tableContainer = document.querySelector(".custom-table");
+//   const tfootContainer = document.querySelector(".tfoot-scrollable-container");
 
-  // Sync scroll between table and tfoot (from table to tfoot)
-  const syncScrollFromTable = () => {
-    if(tableContainer){
-      tfootContainer.scrollLeft = tableContainer.scrollLeft;
+//   // Sync scroll between table and tfoot (from table to tfoot)
+//   const syncScrollFromTable = () => {
+//     if(tableContainer){
+//       tfootContainer.scrollLeft = tableContainer.scrollLeft;
+//     }
+//   };
+
+//   // Sync scroll from tfoot to table (from footer to table)
+//   const syncScrollFromFooter = () => {
+//     if(tableContainer){
+//       tableContainer.scrollLeft = tfootContainer.scrollLeft;
+//     }
+//   };
+
+//   // Add scroll event listeners
+//   if(tableContainer && tfootContainer){
+//     tableContainer.addEventListener("scroll", syncScrollFromTable);
+//     tfootContainer.addEventListener("scroll", syncScrollFromFooter);
+//   }
+
+//   // Cleanup event listeners on component unmount
+//   return () => {
+//     if(tableContainer){
+//     tableContainer.removeEventListener("scroll", syncScrollFromTable);
+//     }
+//     if(tfootContainer){
+//       tfootContainer.removeEventListener("scroll", syncScrollFromFooter);
+//     }
+//   };
+
+  // }, []);
+  
+  // Sync scroll between the table and tfoot (no wrapper div required)
+  useEffect(() => {
+    const tableContainer = document.querySelector(".custom-table");
+    const tfootContainer = document.querySelector("tfoot");
+
+    const syncScrollFromTable = () => {
+      if (tfootContainer) {
+        tfootContainer.scrollLeft = tableContainer.scrollLeft;
+      }
+    };
+
+    const syncScrollFromFooter = () => {
+      if (tableContainer) {
+        tableContainer.scrollLeft = tfootContainer.scrollLeft;
+      }
+    };
+
+    if (tableContainer && tfootContainer) {
+      tableContainer.addEventListener("scroll", syncScrollFromTable);
+      tfootContainer.addEventListener("scroll", syncScrollFromFooter);
     }
-  };
 
-  // Sync scroll from tfoot to table (from footer to table)
-  const syncScrollFromFooter = () => {
-    if(tableContainer){
-      tableContainer.scrollLeft = tfootContainer.scrollLeft;
-    }
-  };
-
-  // Add scroll event listeners
-  if(tableContainer && tfootContainer){
-    tableContainer.addEventListener("scroll", syncScrollFromTable);
-    tfootContainer.addEventListener("scroll", syncScrollFromFooter);
-  }
-
-  // Cleanup event listeners on component unmount
-  return () => {
-    if(tableContainer){
-    tableContainer.removeEventListener("scroll", syncScrollFromTable);
-    }
-    if(tfootContainer){
-      tfootContainer.removeEventListener("scroll", syncScrollFromFooter);
-    }
-  };
-
-}, []);
+    return () => {
+      if (tableContainer) {
+        tableContainer.removeEventListener("scroll", syncScrollFromTable);
+      }
+      if (tfootContainer) {
+        tfootContainer.removeEventListener("scroll", syncScrollFromFooter);
+      }
+    };
+  }, []);
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-US', {
@@ -278,13 +310,14 @@ const formatDate = (dateString) => {
                               selectedColumns={selectedColumns}
                               setSelectedColumns={setSelectedColumns}
                               applyColumns={applyColumns}
+                              dataLength={initialData.length}
                             />
                           </th>
                         );
                       } else if (col.id === "plus_after_avg_cost") {
                         return (
                           <th key={col.id} className="right-sticky">
-                            <div onClick={handleClickOpen}>
+                            <div onClick={() => initialData.length > 0 && handleClickOpen()}>
                               <img
                                 style={{ height: "40px", width: "40px" }}
                                 src={plusIcon}
@@ -388,8 +421,8 @@ const formatDate = (dateString) => {
                   )}
           </tbody>
                 
-                  <tfoot>
-                  <div className="tfoot-scrollable-container">
+                  <tfoot className="tfoot-scrollable-container">
+                  
                   {initialData && initialData.length > 0 && totalRecords && (
                     <tr>
                       <td>
@@ -455,7 +488,7 @@ const formatDate = (dateString) => {
                       ))}
                       </tr>
                     )}
-                  </div>
+                  
                 </tfoot>
               
                 

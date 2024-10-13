@@ -5,10 +5,9 @@ import { Checkbox, Grid } from "@mui/material";
 import plusIcon from "../../../Assests/Products/plusIcon.svg";
 import Grow from '@mui/material/Grow';
 
-const FirstButtonSelections = ({ columnsOptions, selectedColumns, setSelectedColumns, applyColumns }) => {
+const FirstButtonSelections = ({ columnsOptions, selectedColumns, setSelectedColumns, applyColumns, dataLength }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectAllColumns, setSelectAllColumns] = useState(false);
-
   // Open/Close popover
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -44,7 +43,7 @@ const FirstButtonSelections = ({ columnsOptions, selectedColumns, setSelectedCol
 
   return (
     <>
-      <div aria-describedby={id} onClick={handleClick}>
+      <div aria-describedby={id} onClick={dataLength > 0 ? handleClick : null}>
         <img
           style={{ height: "40px", width: "40px" }}
           src={plusIcon}
