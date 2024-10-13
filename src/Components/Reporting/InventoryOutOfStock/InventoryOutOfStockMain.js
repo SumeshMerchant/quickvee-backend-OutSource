@@ -220,7 +220,7 @@ const InventoryOutOfStockMain = () => {
             <Grid item xs={12} sm={6} md={showcat != 0 ? 4 : 4}>
               <label
                 className="q-details-page-label"
-                htmlFor="orderSourceFilter"
+                
               >
                 Report Type
               </label>
@@ -236,7 +236,7 @@ const InventoryOutOfStockMain = () => {
             <Grid item xs={12} sm={6} md={showcat != 0 ? 4 : 4}>
               <label
                 className="q-details-page-label"
-                htmlFor="orderSourceFilter"
+                
               >
                 Measure
               </label>

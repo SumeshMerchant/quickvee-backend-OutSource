@@ -265,18 +265,23 @@ const DashDateRangeComponent = ({
      
           </Grid>
           <Grid item xs={6} sm={12} md={3} className="date-range-custom">
-            <label className="q-details-page-label" style={{marginBlockEnd: 2, marginTop: 0, display: "inline-block"}} htmlFor="storetoFilter">
-                Outlet
-                </label>
-                <SelectDropDown
-                    
-                    listItem={selectReportList}
-                    onClickHandler={handleOptionClick}
-                    selectedOption={selectedReportList}
-                    dropdownFor={"reportList"}
-                    title={"title"}
-                />
-            </Grid>
+            <label 
+              className="q-details-page-label" 
+              style={{ marginBlockEnd: 2, marginTop: 0, display: "inline-block" }} 
+              
+            >
+              Outlet
+            </label>
+            <SelectDropDown
+              
+              listItem={selectReportList}
+              onClickHandler={handleOptionClick}
+              selectedOption={selectedReportList}
+              dropdownFor={"reportList"}
+              title={"title"}
+            />
+          </Grid>
+
 
           <Grid item alignSelf={"center"} >
             <div className="pt-4" style={{float:"inline-end"}}>
