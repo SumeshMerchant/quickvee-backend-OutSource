@@ -403,7 +403,8 @@
 }
 .q_input_details:focus {
   border-color: black;
-  border: 2px solid black;
+  border: 1px solid black;
+  outline: auto;
 }
 
 /* .q_date_range_start{
