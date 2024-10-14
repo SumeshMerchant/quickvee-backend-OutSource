@@ -157,14 +157,14 @@ const ReorderInventoryMain = () => {
       setPage((prevPage) => prevPage + 1);
       const prevPage = page +1
       // fetchProductsData();
-      fetchProductsData(prevPage,selectedOrderType,selectedDateRange);
+      fetchProductsData(prevPage,selectedOrderType,selectedDateRange,selectedOrderSource );
     }
   };
   const handleOptionClick = (option, dropdown) => {
 
     switch (dropdown) {
       case "orderSource":
-        setInitialColumns((prevColumns) => {
+      setInitialColumns((prevColumns) => {
           let updatedColumns = [...prevColumns];
           if (option.title === "Product") {
             updatedColumns[0] = { id: "name", name: "Product Name" };
@@ -193,6 +193,7 @@ const ReorderInventoryMain = () => {
 
         setSelectedOrderSource(option.title);
         fetchProductsData(1,selectedOrderType,selectedDateRange,option.title);
+        fetchRecordTotal(1,option.title,selectedDateRange,selectedOrderSource)
         break;
       case "orderType":
         setProductListData([])

@@ -70,10 +70,10 @@ const InventoryOldReportMain = () => {
   const handleDateRangeChange = (dateRange) => {
     setPage(1);
     setSelectedDateRange(dateRange); 
-    fetchProductsData(1,selectedOrderType,dateRange)
-    fetchRecordTotal(1,selectedOrderType,dateRange)
+    fetchProductsData(1,selectedOrderType,dateRange,selectedOrderSource)
+    fetchRecordTotal(1,selectedOrderType,dateRange,selectedOrderSource)
   };
-  const createPayload = (pageNum = null, limit = null, measureType, dateRange) => ({
+  const createPayload = (pageNum = null, limit = null, measureType, dateRange,reportType) => ({
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
     token_id: LoginGetDashBoardRecordJson?.token_id,
     login_type: LoginGetDashBoardRecordJson?.login_type,
@@ -81,12 +81,12 @@ const InventoryOldReportMain = () => {
     ...(limit !== null && { limit: limit }),  
     start_date: dateRange.start_date,
     end_date: dateRange.end_date,
-    measureType: measureType,
+    measure_type: measureType,
+    report_type:reportType
   });
 
-  const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange) => {
-    const payload = createPayload(0,0,measureType, dateRange);
-    // Reorder_total_list
+  const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange,reportType="Product") => {
+    const payload = createPayload(0,0,measureType, dateRange,reportType);
     try {
       setLoading(true);
     const totalApiResponse = await axios.post(
@@ -111,9 +111,9 @@ const InventoryOldReportMain = () => {
     }
   }
 
-  const fetchProductsData = async (page=1,measureType="All inventory",dateRange) => {
+  const fetchProductsData = async (page=1,measureType="All inventory",dateRange,reportType="Product") => {
     try {
-      const payload = createPayload(page, 50,measureType, dateRange);
+      const payload = createPayload(page, 10,measureType, dateRange,reportType);
       if(page ==1){
         setLoading(true);
       }
@@ -156,42 +156,50 @@ const InventoryOldReportMain = () => {
       setPage((prevPage) => prevPage + 1);
       const prevPage = page +1
       // fetchProductsData();
-      fetchProductsData(prevPage,selectedOrderType,selectedDateRange);
+      fetchProductsData(prevPage,selectedOrderType,selectedDateRange,selectedOrderSource );
     }
   };
   const handleOptionClick = (option, dropdown) => {
 
     switch (dropdown) {
       case "orderSource":
-        setInitialColumns((prevColumns) => {
+      setInitialColumns((prevColumns) => {
           let updatedColumns = [...prevColumns];
-          if(option.title==="Product"){
+          if (option.title === "Product") {
             updatedColumns[0] = { id: "name", name: "Product Name" };
             updatedColumns.splice(1, 0,{ id: "plus_after_sku", name: "+" });
-          }else{
+          } else {
             updatedColumns[0] = { id: option.title.toLowerCase(), name: option.title };
             updatedColumns = updatedColumns.filter(item => item.id !== "plus_after_sku");
-          } 
+          }
           const dataArray = [
             { id: "brand", name: "Brand" },
             { id: "vendor", name: "Vendor" },
             { id: "category", name: "Category" },
-            { id: "tag", name: "Tag" } 
+            { id: "tag", name: "Tag" }
           ]
-          setreportType((prevReportType) =>
-          dataArray.filter((item) => item.id !== option.title.toLowerCase())
-        );
+          setreportType((prevReportType) => {
+            const lowerCaseTitle = option.title.toLowerCase();
+            if (lowerCaseTitle === "brand" || lowerCaseTitle === "vendor") {
+              return dataArray.filter(
+                (item) => !["category", "tag", lowerCaseTitle].includes(item.id)
+              );
+            }
+            return dataArray.filter((item) => item.id !== lowerCaseTitle);
+          });
           return updatedColumns;
         });
 
         setSelectedOrderSource(option.title);
+        fetchProductsData(1,selectedOrderType,selectedDateRange,option.title);
+        fetchRecordTotal(1,option.title,selectedDateRange,selectedOrderSource)
         break;
       case "orderType":
         setProductListData([])
         setSelectedOrderType(option.title);
         setPage(1);
-        fetchProductsData(1,option.title,selectedDateRange);
-        fetchRecordTotal(1,option.title,selectedDateRange)
+        fetchProductsData(1,option.title,selectedDateRange,selectedOrderSource);
+        fetchRecordTotal(1,option.title,selectedDateRange,selectedOrderSource)
 
         break;
       default:
@@ -201,8 +209,8 @@ const InventoryOldReportMain = () => {
 
   useEffect(() => {
     setSelectedOrderType("All inventory")
-    fetchRecordTotal(1,"All inventory",selectedDateRange)
-    fetchProductsData(1,"All inventory",selectedDateRange);
+    fetchRecordTotal(1,"All inventory",selectedDateRange,"Product")
+    fetchProductsData(1,"All inventory",selectedDateRange, "Product");
   }, []);
 
   return (
