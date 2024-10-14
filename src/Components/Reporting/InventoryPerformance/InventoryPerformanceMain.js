@@ -95,7 +95,7 @@ const InventroyPerformanceMain = () => {
   const fetchRecordTotal = async (page=1,measureType="All inventory",dateRange,reportType="Product") => {
     const payload = createPayload(0,0,measureType, dateRange,reportType);
     try {
-      setLoading(true);
+      // setLoading(true);
     const totalApiResponse = await axios.post(
       `${Config.BASE_URL}${Config.REORDER_TOTAL_LIST}`,
       payload,
@@ -114,7 +114,7 @@ const InventroyPerformanceMain = () => {
       console.error("Error fetching totals:", error); 
        
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   }
 
@@ -233,7 +233,7 @@ const InventroyPerformanceMain = () => {
             <Grid item xs={12} sm={6} md={showcat != 0 ? 4 : 4}>
               <label
                 className="q-details-page-label"
-                htmlFor="orderSourceFilter"
+                
               >
                 Report Type
               </label>
@@ -249,7 +249,7 @@ const InventroyPerformanceMain = () => {
             <Grid item xs={12} sm={6} md={showcat != 0 ? 4 : 4}>
               <label
                 className="q-details-page-label"
-                htmlFor="orderSourceFilter"
+                
               >
                 Measure
               </label>

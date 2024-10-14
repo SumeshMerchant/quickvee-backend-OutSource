@@ -129,7 +129,7 @@
             display: table-cell;
             padding: 8px 16px;
             // max-width: 200px;
-             min-width: 130px;
+             min-width: 150px;
             font-family: CircularSTDBook;
 
         }
@@ -159,6 +159,24 @@
           border-left: 1px solid rgba(224, 224, 224, 1);
 
         }
+        .left-sticky + th {
+          position: relative;
+          &:after, &:before {
+            content: "";
+            border-right: 1px solid #444E51;
+            position: absolute;
+            
+            height: 20px;
+            top: 50%;
+            transform: translate(-50%, -50%);
+          }
+          &:after {
+            right: 0;
+          }
+          &:before {
+            left: 0;
+          }
+        }
         .left-sticky {
             position: sticky;
             width: 60px;
@@ -168,16 +186,7 @@
             cursor: pointer;
             width: 50px;
             padding-right: 6px;
-            &:after {
-                content: "";
-                border-right: 1px solid #444E51;
-                position: absolute;
-                right: 0;
-                height: 20px;
-                top: 50%;
-                right: 0;
-                transform: translate(-50%, -50%);
-            }
+            
             img {
                 filter: brightness(0) saturate(100%) invert(100%) sepia(1%) saturate(5800%) hue-rotate(260deg) brightness(103%) contrast(101%);
             }
@@ -340,14 +349,14 @@
     color: #000;
     z-index: 4;
     left: 17rem;
-    right: 17px;
+    right: 16px;
     display: block;
     height: auto;
     // padding-bottom: 10px; /* Optional space */
   }
   .tfoot-scrollable-container {
     overflow-x: auto; /* Enables horizontal scroll */
-    width: 100%; /* Ensures full width */
+    // width: 100%; /* Ensures full width */
     tr {
       td {
         padding-left: 0;
@@ -355,7 +364,7 @@
         border-top: 1px solid rgb(224, 224, 224);
         border-bottom: none;
         div {
-          padding-inline: 8px;
+          padding-inline: 16px;
         }
       }
     }
