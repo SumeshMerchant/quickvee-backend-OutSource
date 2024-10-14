@@ -203,6 +203,15 @@
             text-align: center;
             background-color: #253338;
             cursor: pointer;
+            &:after{
+              position: absolute;
+              content: "";
+              background-color: #fff;
+              width: 30px;
+              right: 0;
+              height: 100vh;
+              top: 100%;
+            }
             img {
                 filter: brightness(0) saturate(100%) invert(100%) sepia(1%) saturate(5800%) hue-rotate(260deg) brightness(103%) contrast(101%);
             }
