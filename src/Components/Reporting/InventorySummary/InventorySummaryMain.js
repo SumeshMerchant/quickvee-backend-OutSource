@@ -158,7 +158,7 @@ const InventorySummaryMain = () => {
     }
   };
   const handleOptionClick = (option, dropdown) => {
-
+    setPage(1);
     switch (dropdown) {
       case "orderSource":
       setInitialColumns((prevColumns) => {

@@ -317,7 +317,7 @@ const formatDate = (dateString) => {
                       } else if (col.id === "plus_after_avg_cost") {
                         return (
                           <th key={col.id} className="right-sticky">
-                            <div onClick={() => initialData.length > 0 && handleClickOpen()}>
+                            <div onClick={() => handleClickOpen()}>
                               <img
                                 style={{ height: "40px", width: "40px" }}
                                 src={plusIcon}
@@ -364,7 +364,7 @@ const formatDate = (dateString) => {
                               col.id === "plus_after_avg_cost" ? (
                               "" // Skip rendering for these columns
                             ) : row[col.id] !== null &&
-                              ["avg_cost", "gross_profit", "revenue", "inventory_cost"].includes(col.id) &&
+                              ["avg_cost", "gross_profit", "revenue", "inventory_cost", "net_sale","sale_discounted", "avg_sale_value","cost_goods_sold","retail_value"].includes(col.id) &&
                               row[col.id] !== undefined &&
                               row[col.id] !== "" ? (
                               isNaN(parseFloat(row[col.id]))
@@ -383,7 +383,7 @@ const formatDate = (dateString) => {
                                 ? "-"
                                 : `${parseFloat(row[col.id]).toFixed(2)} %`
                             ) : row[col.id] !== null &&
-                              ["net_sale", "sale_margin", "sale_discounted", "avg_items_per_sale", "avg_sale_value", "cost_goods_sold"].includes(
+                              ["net_sale", "sale_margin", "sale_discounted", "avg_items_per_sale", "avg_sale_value", "cost_goods_sold", "closing_inventory", "items_sold_per_day", "inbound_inventory", "current_inventory", "inventory_returns"].includes(
                                 col.id
                               ) &&
                               row[col.id] !== undefined &&
@@ -391,8 +391,10 @@ const formatDate = (dateString) => {
                               isNaN(parseFloat(row[col.id]))
                                 ? "-"
                                 : `${parseFloat(row[col.id]).toFixed(2)}`
-                            ) : row[col.id] !== null &&
-                              col.id === "name" &&
+                                      ) : row[col.id] !== null &&
+                                ["name", "brand", "vendor", "category"].includes(
+                                  col.id
+                                ) &&
                               row[col.id] !== undefined &&
                               row[col.id] !== "" ? (
                               row[col.id]
@@ -414,8 +416,9 @@ const formatDate = (dateString) => {
                   {initialData?.length == 0 && loading == false && (
                     <tr>
                       <td colSpan={columns.length} style={{ border: "none" }}>
-                        
-                        <NoDataFound message="No Data Found" />
+                        <div className="inv-no-record">
+                          <NoDataFound message="No Data Found" />
+                        </div>
                       </td>
                     </tr>
                   )}

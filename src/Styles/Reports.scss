@@ -47,6 +47,10 @@
     max-width: 100%;
     overflow: auto;
     position: relative;
+    .inv-no-record {
+      width: calc(100vw - 21rem);
+      // margin: 0 auto;
+    }
     .doubale-header-table {
       tr {
         th:first-child {

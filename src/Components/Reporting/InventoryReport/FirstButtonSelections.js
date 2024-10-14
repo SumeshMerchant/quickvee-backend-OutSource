@@ -43,7 +43,7 @@ const FirstButtonSelections = ({ columnsOptions, selectedColumns, setSelectedCol
 
   return (
     <>
-      <div aria-describedby={id} onClick={dataLength > 0 ? handleClick : null}>
+      <div aria-describedby={id} onClick={handleClick}>
         <img
           style={{ height: "40px", width: "40px" }}
           src={plusIcon}
