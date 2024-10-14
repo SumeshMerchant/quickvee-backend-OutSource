@@ -442,8 +442,8 @@ const formatDate = (dateString) => {
                                   ? `$${parseFloat(totalRecords.inventory_cost).toFixed(2)}`
                                   : col.id === "retail_value" && totalRecords?.retail_value !== undefined
                                   ? `$${parseFloat(totalRecords.retail_value).toFixed(2)}`
-                                  : col.id === "times_sold" && totalRecords?.item_sold !== undefined
-                                  ? `${parseFloat(totalRecords.item_sold).toFixed(0)}` // Changed to fixed(0) for whole number
+                                  : col.id === "items_sold" && totalRecords?.items_sold !== undefined
+                                  ? `${parseFloat(totalRecords.items_sold).toFixed(0)}` // Changed to fixed(0) for whole number
                                   : col.id === "gross_profit" && totalRecords?.gross_profit !== undefined
                                   ? `$${parseFloat(totalRecords.gross_profit).toFixed(2)}`
                                   : col.id === "current_inventory" && totalRecords?.current_inventory !== undefined
@@ -457,7 +457,7 @@ const formatDate = (dateString) => {
                                   : col.id === "sale_margin" && totalRecords?.sale_margin !== undefined
                                   ? `$${parseFloat(totalRecords.sale_margin).toFixed(2)}`
                                   : col.id === "customer_count" && totalRecords?.customer_count !== undefined
-                                  ? `${parseFloat(totalRecords.customer_count).toFixed(0)}` // Whole number
+                                  ? `${parseFloat(totalRecords.customer_count).toFixed(0)}` // Whole number  
                                   : col.id === "sale_count" && totalRecords?.sale_count !== undefined
                                   ? `${parseFloat(totalRecords.sale_count).toFixed(0)}` // Whole number
                                   : col.id === "avg_items_per_sale" && totalRecords?.avg_items_per_sale !== undefined
@@ -482,6 +482,8 @@ const formatDate = (dateString) => {
                                   ? `${parseFloat(totalRecords.inventory_returns).toFixed(0)}` // Whole number
                                   : col.id === "sell_through_rate" && totalRecords?.sell_through_rate !== undefined
                                   ? `${parseFloat(totalRecords.sell_through_rate).toFixed(2)}`
+                                   : col.id === "inventory_days_cover" && totalRecords?.inventory_days_cover !== undefined
+                                  ? `${parseFloat(totalRecords.inventory_days_cover).toFixed(2)}`
                                   : ""
                               }
                               
