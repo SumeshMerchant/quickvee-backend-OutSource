@@ -371,7 +371,7 @@ const formatDate = (dateString) => {
                                 ? "-"
                                 : `$${parseFloat(row[col.id]).toFixed(2)}`
                             ) : row[col.id] !== null &&
-                              ["start_date_inventory", "created", "last_sale", "start_date_inventory", "first_sale"].includes(col.id) &&
+                              ["created", "last_sale","first_sale"].includes(col.id) &&
                               row[col.id] !== undefined &&
                               row[col.id] !== "" ? (
                               formatDate(row[col.id])
@@ -383,7 +383,7 @@ const formatDate = (dateString) => {
                                 ? "-"
                                 : `${parseFloat(row[col.id]).toFixed(2)} %`
                             ) : row[col.id] !== null &&
-                              ["net_sale", "sale_margin", "sale_discounted", "avg_items_per_sale", "avg_sale_value", "cost_goods_sold", "closing_inventory", "items_sold_per_day", "inbound_inventory", "current_inventory", "inventory_returns", "inventory_days_cover"].includes(
+                              ["start_date_inventory","net_sale", "sale_margin", "sale_discounted", "avg_items_per_sale", "avg_sale_value", "cost_goods_sold", "closing_inventory", "items_sold_per_day", "inbound_inventory", "current_inventory", "inventory_returns", "inventory_days_cover"].includes(
                                 col.id
                               ) &&
                               row[col.id] !== undefined &&
