@@ -34,7 +34,6 @@ const InventorySummaryMain = () => {
     { id: "sku", name: "Product" },
     { id: "plus_after_sku", name: "+" },
     { id: "closing_inventory", name: "Closing Inventory" },
-    { id: "revenue", name: "Revenue" },
     { id: "inventory_cost", name: "Inventory Cost" },
     { id: "plus_after_avg_cost", name: "+" },
   ]);

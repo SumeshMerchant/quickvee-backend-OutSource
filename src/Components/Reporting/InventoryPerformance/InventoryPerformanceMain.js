@@ -47,7 +47,6 @@ const InventroyPerformanceMain = () => {
       { id: "items_sold", name: "Items sold" },
       { id: "inventory_days_cover", name: "Days Cover" },
       { id: "sell_through_rate", name: "Sell-through rate" },
-      { id: "revenue", name: "Revenue" },
       { id: "gross_profit", name: "Gross Pro" },
       { id: "plus_after_avg_cost", name: "+" },
     ]);

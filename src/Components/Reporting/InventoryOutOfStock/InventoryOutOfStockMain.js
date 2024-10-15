@@ -37,7 +37,6 @@ const InventoryOutOfStockMain = () => {
     { id: "items_sold", name: "Items sold" },
     { id: "inbound_inventory", name: "Inbound inventory" },
     { id: "last_sale", name: "Last Sale" },
-    { id: "revenue", name: "Revenue" },
     { id: "current_inventory", name: "Current Inventory" },
     { id: "plus_after_avg_cost", name: "+" },
   ]);
